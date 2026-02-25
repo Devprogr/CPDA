@@ -9,8 +9,6 @@ from supabase import Client, create_client
 import httpx
 
 
-
-
 app = Flask(__name__)
 app.secret_key = 'cpda_secret_key'
 
@@ -116,17 +114,21 @@ def region():
 @app.route('/contact-us', methods=['GET', 'POST'])
 def contact_us():
     contact_form = ContactForm()
+
     if contact_form.validate_on_submit():
         try:
-            response = supabase.table("contact_messages").insert({
+            supabase.table("contact_messages").insert({
                 "name": contact_form.name.data,
                 "email": contact_form.email.data,
                 "message": contact_form.message.data
             }).execute()
+
             flash("Your message has been sent successfully!", "success")
-        except httpx.HTTPStatusError as e:
-            flash(f"Failed to send message: {e.response.text}", "danger")
-        return redirect(url_for('contact_us'))
+            return redirect(url_for('contact_us'))
+
+        except Exception as e:
+            print("Supabase Error:", e)
+            flash("Something went wrong. Please try again later.", "danger")
 
     return render_template('contact-us.html', form=contact_form)
 
