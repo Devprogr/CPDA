@@ -1,0 +1,1 @@
+from app import app  # app.py must expose: app = Flask(__name__)
