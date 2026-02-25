@@ -3,7 +3,8 @@
 {% block content %}
 
 <header class="header-2">
-  <div class="page-header min-vh-100 relative" style="background-image: url('{{ url_for('static', filename='assets/img/about-us-2.jpg') }}')">
+  <div class="page-header min-vh-100 relative"
+       style="background-image: url('{{ url_for('static', filename='assets/img/about-us-2.jpg') }}')">
     <span class="mask bg-gradient-info opacity-8"></span>
     <div class="container">
       <div class="row justify-content-center">
@@ -40,9 +41,10 @@
       <div class="col-lg-8">
         <h2 class="text-gradient text-primary">Why CPDA Matters</h2>
         <p class="lead">Our work strengthens regional collaboration and enhances quality of life through:</p>
+
         <div class="row text-start justify-content-center">
           <div class="col-md-8">
-            <ul class="list-unstyled">
+            <ul class="list-unstyled" style="font-size:14px;">
               <li class="mb-3">&#9632; <strong>Unified Regional Advocacy</strong> for economic growth and more</li>
               <li class="mb-3">&#9632; <strong>Regional Housing & Workforce Planning</strong></li>
               <li class="mb-3">&#9632; <strong>Access to Services</strong> (Childcare, Health, Legal)</li>
@@ -51,6 +53,7 @@
             </ul>
           </div>
         </div>
+
       </div>
     </div>
   </div>
@@ -76,15 +79,6 @@
     height: 500px;
     width: 100%;
     border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  }
-  .cpda-town-btn {
-    transition: transform 0.2s;
-    border: 1px solid #dee2e6;
-  }
-  .cpda-town-btn:hover {
-    transform: translateY(-2px);
-    background-color: #f8f9fa;
   }
 </style>
 
@@ -102,61 +96,62 @@
         <div id="cpda-map"></div>
       </div>
     </div>
-
-    {% set towns_list = [
-      {'name': 'Langenburg', 'url': 'https://langenburg.ca', 'lat': 51.8501, 'lng': -101.7002},
-      {'name': 'Esterhazy', 'url': 'https://townofesterhazy.ca', 'lat': 50.6501, 'lng': -102.0667},
-      {'name': 'Stockholm', 'url': 'https://stockholmsask.com', 'lat': 50.8833, 'lng': -102.2833},
-      {'name': 'Grayson', 'url': 'https://villageofgrayson.com/', 'lat': 50.6333, 'lng': -102.6833},
-      {'name': 'Melville', 'url': 'https://melville.ca', 'lat': 50.9333, 'lng': -102.8000},
-      {'name': 'RM of Saltcoats', 'url': 'https://rmsaltcoats.ca/', 'lat': 51.6333, 'lng': -102.3333},
-      {'name': 'Yorkton', 'url': 'https://www.yorkton.ca/en/index.aspx', 'lat': 51.2139, 'lng': -102.4628},
-      {'name': 'Springside', 'url': 'https://townofspringside.ca/', 'lat': 51.4667, 'lng': -102.5667},
-      {'name': 'Sheho', 'url': './', 'lat': 51.4833, 'lng': -103.0167},
-      {'name': 'Sturgis', 'url': 'https://townofsturgis.ca/', 'lat': 51.9500, 'lng': -102.5333},
-      {'name': 'Hyas', 'url': 'https://www.villageofhyas.com/', 'lat': 51.9833, 'lng': -102.2833},
-      {'name': 'Cote 64', 'url': './', 'lat': 51.9000, 'lng': -102.4000},
-      {'name': 'Ituna', 'url': 'https://ituna.ca/', 'lat': 51.6333, 'lng': -103.3833},
-      {'name': 'Ituna Bon Accord no. 256', 'url': 'https://www.municipality-canada.com/en/rural-municipality-ituna-bon-accord.html', 'lat': 51.6500, 'lng': -103.4000},
-      {'name': 'Foam Lake', 'url': 'https://foamlake.com', 'lat': 51.6500, 'lng': -103.5333},
-      {'name': 'Buchanan', 'url': 'https://www.saskatchewan.ca/government/municipal-administration/municipal-directory?s=%7Bf74a076b-cd2b-4068-9baa-95dc4a4c0d94%7D', 'lat': 51.7000, 'lng': -102.8833}
-    ] %}
-
-    <div class="row justify-content-center mt-5">
-      <div class="col-lg-10 text-center">
-        <h5 class="mb-4" style="color:#23254a; font-weight:700; font-size:2rem;">CPDA Member Communities</h5>
-        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-3 justify-content-center">
-          {% for town in towns_list|sort(attribute='name') %}
-            <div class="col d-flex justify-content-center">
-              <a href="{{ town.url }}" target="_blank" class="btn cpda-town-btn mb-2 w-100 shadow-sm">
-                <i class="fas fa-map-marker-alt me-2"></i>{{ town.name }}
-              </a>
-            </div>
-          {% endfor %}
-        </div>
-      </div>
-    </div>
   </div>
 </section>
 
+{% set towns = [
+  {'name': 'Langenburg', 'url': 'https://langenburg.ca'},
+  {'name': 'Esterhazy', 'url': 'https://townofesterhazy.ca'},
+  {'name': 'Stockholm', 'url': 'https://stockholmsask.com'},
+  {'name': 'Grayson', 'url': 'https://villageofgrayson.com/'},
+  {'name': 'Melville', 'url': 'https://melville.ca'},
+  {'name': 'RM of Saltcoats', 'url': 'https://rmsaltcoats.ca/'},
+  {'name': 'Yorkton', 'url': 'https://www.yorkton.ca/en/index.aspx'},
+  {'name': 'Springside', 'url': 'https://townofspringside.ca/'},
+  {'name': 'Sheho', 'url': './'},
+  {'name': 'Sturgis', 'url': 'https://townofsturgis.ca/'},
+  {'name': 'Hyas', 'url': 'https://www.villageofhyas.com/'},
+  {'name': 'Cote 64', 'url': './'},
+  {'name': 'Ituna', 'url': 'https://ituna.ca/'},
+  {'name': 'Ituna Bon Accord no. 256', 'url': 'https://www.municipality-canada.com/en/rural-municipality-ituna-bon-accord.html'},
+  {'name': 'Foam Lake', 'url': 'https://foamlake.com'},
+  {'name': 'Buchanan', 'url': 'https://www.saskatchewan.ca/government/municipal-administration/municipal-directory?s=%7Bf74a076b-cd2b-4068-9baa-95dc4a4c0d94%7D'}
+] %}
+
+<div class="row justify-content-center mt-4">
+  <div class="col-lg-10 text-center">
+    <h5 class="mb-3" style="color:#23254a; font-weight:700; font-size:2rem;">CPDA Member Communities</h5>
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-3 justify-content-center">
+      {% for town in towns|sort(attribute='name') %}
+        <div class="col d-flex justify-content-center">
+          <a href="{{ town.url }}" target="_blank" class="btn cpda-town-btn mb-2 w-100">
+            <i class="fas fa-map-marker-alt me-2"></i>{{ town.name }}
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
 <script>
-  // Initialize the Map
-  var map = L.map('cpda-map').setView([51.4, -102.6], 8);
+  // Map
+  var map = L.map('cpda-map').setView([51.5, -102.5], 7);
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
   }).addTo(map);
 
-  // List of communities that have paid their fees
+  // Paid members (pins should be a different colour)
+  // You said: Yorkton, Ituna, RM of Bon Accord
   var paidMembers = new Set([
     "Yorkton",
     "Ituna",
     "Ituna Bon Accord no. 256"
   ]);
 
-  // Icons Definition
-  var greenIcon = new L.Icon({
-    iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png",
+  // Gold icon for paid, Red icon for unpaid
+  var paidIcon = new L.Icon({
+    iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-gold.png",
     shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
     iconSize: [25, 41],
     iconAnchor: [12, 41],
@@ -164,7 +159,7 @@
     shadowSize: [41, 41]
   });
 
-  var redIcon = new L.Icon({
+  var defaultIcon = new L.Icon({
     iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
     shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
     iconSize: [25, 41],
@@ -173,36 +168,44 @@
     shadowSize: [41, 41]
   });
 
-  // Data passed from Jinja or defined here for JS
-  var townsData = {{ towns_list | tojson }};
+  // Town marker data
+  var towns = [
+    {name: 'Langenburg', url: 'https://langenburg.ca', lat: 51.8501, lng: -101.7002},
+    {name: 'Esterhazy', url: 'https://townofesterhazy.ca', lat: 50.6501, lng: -102.0667},
+    {name: 'Stockholm', url: 'https://stockholmsask.com', lat: 50.8833, lng: -102.2833},
+    {name: 'Grayson', url: 'https://villageofgrayson.com/', lat: 50.6333, lng: -102.6833},
+    {name: 'Melville', url: 'https://melville.ca', lat: 50.9333, lng: -102.8000},
+    {name: 'RM of Saltcoats', url: 'https://rmsaltcoats.ca/', lat: 51.6333, lng: -102.3333},
+    {name: 'Yorkton', url: 'https://www.yorkton.ca/en/index.aspx', lat: 51.2139, lng: -102.4628},
+    {name: 'Springside', url: 'https://townofspringside.ca/', lat: 51.4667, lng: -102.5667},
+    {name: 'Sheho', url: './', lat: 51.4833, lng: -103.0167},
+    {name: 'Sturgis', url: 'https://townofsturgis.ca/', lat: 51.9500, lng: -102.5333},
+    {name: 'Hyas', url: 'https://www.villageofhyas.com/', lat: 51.9833, lng: -102.2833},
+    {name: 'Cote 64', url: './', lat: 51.9000, lng: -102.4000},
+    {name: 'Ituna', url: 'https://ituna.ca/', lat: 51.6333, lng: -103.3833},
+    {name: 'Ituna Bon Accord no. 256', url: 'https://www.municipality-canada.com/en/rural-municipality-ituna-bon-accord.html', lat: 51.6500, lng: -103.4000},
+    {name: 'Foam Lake', url: 'https://foamlake.com', lat: 51.6500, lng: -103.5333},
+    {name: 'Buchanan', url: 'https://www.saskatchewan.ca/government/municipal-administration/municipal-directory?s=%7Bf74a076b-cd2b-4068-9baa-95dc4a4c0d94%7D', lat: 51.7000, lng: -102.8833}
+  ];
 
-  townsData.forEach(function(town) {
-    if (town.lat && town.lng) {
-      // Logic to decide pin color
-      var iconToUse = paidMembers.has(town.name) ? greenIcon : redIcon;
+  towns.forEach(function(town) {
+    if (!town.lat || !town.lng) return;
 
-      var marker = L.marker([town.lat, town.lng], { icon: iconToUse }).addTo(map);
+    var iconToUse = paidMembers.has(town.name) ? paidIcon : defaultIcon;
 
-      // Popup Content
-      var popupContent = `
-        <div style="text-align: center;">
-          <a href="${town.url}" target="_blank" style="color:#23254a; font-weight:700; text-decoration:none;">
-            <i class="fas fa-map-marker-alt"></i> ${town.name}
-          </a>
-          <br/>
-          <small>Click to visit website</small>
-        </div>`;
+    var marker = L.marker([town.lat, town.lng], { icon: iconToUse }).addTo(map);
 
-      marker.bindPopup(popupContent);
-      marker.bindTooltip(town.name, { permanent: false, direction: 'top' });
+    marker.bindPopup(
+      `<a href="${town.url}" target="_blank" style="color:#ed4c1c; font-weight:600; text-decoration:none;">
+        <i class="fas fa-map-marker-alt"></i> ${town.name}
+      </a>`
+    );
 
-      // Action on Click
-      marker.on('click', function() {
-        if(town.url !== './') {
-          window.open(town.url, '_blank');
-        }
-      });
-    }
+    marker.bindTooltip(town.name, { permanent: false, direction: 'top' });
+
+    marker.on('click', function() {
+      window.open(town.url, '_blank');
+    });
   });
 </script>
 
