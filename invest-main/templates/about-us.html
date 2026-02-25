@@ -279,8 +279,9 @@ That first meeting took place on a frigid December morning in Canora in 2025, wi
     {name: 'Foam Lake', url: 'https://foamlake.com', lat: 51.6500, lng: -103.5333},
     {name: 'Buchanan', url: 'https://www.saskatchewan.ca/government/municipal-administration/municipal-directory?s=%7Bf74a076b-cd2b-4068-9baa-95dc4a4c0d94%7D', lat: 51.7000, lng: -102.8833}
   ];
+</script>
 
-  <script>
+<script>
   var paidMembers = new Set([
     "Yorkton",
     "Ituna",
@@ -304,8 +305,7 @@ That first meeting took place on a frigid December morning in Canora in 2025, wi
     popupAnchor: [1, -34],
     shadowSize: [41, 41]
   });
-</script>
-  
+
   towns.forEach(function(town) {
   if (town.lat && town.lng) {
     var iconToUse = paidMembers.has(town.name) ? paidIcon : defaultIcon;
