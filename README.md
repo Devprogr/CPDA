@@ -1,2 +1,2 @@
 # CPDA
-This is the source codes for the CPDA website
+This center for praries devlopment website for the CPDA website
