@@ -1,0 +1,82 @@
+<div class="col-md-6 col-12">
+        <div class="card shadow-sm h-100">
+          <div class="card-body text-center">
+            <h5 class="card-title mb-3" style="color: #23254a;">Regional Exports</h5>
+            <div class="chart-responsive">
+              <canvas id="regionalExportsChart" height="350"></canvas>
+            </div>
+            <script>
+              new Chart(document.getElementById('regionalExportsChart').getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                  labels: [
+                    "Non-metallic mineral mining and quarrying",
+                    "Grain and oilseed milling",
+                    "Rail transportation",
+                    "Meat product manufacturing",
+                    "Provincial and territorial public administration",
+                    "Farms",
+                    "Elementary and secondary schools",
+                    "Local, municipal and regional public administration",
+                    "General medical and surgical hospitals",
+                    "Depository credit intermediation",
+                    "Other"
+                  ],
+                  datasets: [{
+                    data: [
+                      1139509289,   // Non-metallic mineral mining and quarrying
+                      431500411,    // Grain and oilseed milling
+                      241737500,    // Rail transportation
+                      168089592,    // Meat product manufacturing
+                      116983821,    // Provincial and territorial public administration
+                      111175195,    // Farms
+                      86502440,     // Elementary and secondary schools
+                      75458320,     // Local, municipal and regional public administration
+                      56712951,     // General medical and surgical hospitals
+                      50701304,     // Depository credit intermediation
+                      1183826102    // Other
+                    ],
+                    backgroundColor: [
+                      "#29597d", "#f47c4c", "#22c55e", "#818cf8", "#f43f5e", "#fbbf24", "#a21caf", "#64748b", "#eab308", "#7c3aed", "#8b5cf6"
+                    ],
+                    borderWidth: 0
+                  }]
+                },
+                options: {
+                  cutout: '70%',
+                  plugins: {
+                    legend: { display: true, position: 'bottom' },
+                    title: {
+                      display: true,
+                      text: 'Central Prairie Development Alliance Regional Exports 2022',
+                      font: { size: 18, weight: 'bold' },
+                      color: '#444',
+                      padding: { top: 10, bottom: 20 }
+                    },
+                    tooltip: {
+                      callbacks: {
+                        label: function (context) {
+                          const value = context.parsed;
+                          const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                          const percent = ((value / total) * 100).toFixed(1);
+                          return `${context.label}, $${value.toLocaleString()}, ${percent}%`;
+                        }
+                      }
+                    },
+                    datalabels: {
+                      color: 'white',
+                      font: { weight: 'bold', size: 14 },
+                      formatter: function (value, context) {
+                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                        const percent = ((value / total) * 100).toFixed(1);
+                        return percent > 3 ? `${percent}%` : '';
+                      }
+                    }
+                  }
+                },
+                plugins: [ChartDataLabels]
+              });
+            </script>
+          </div>
+        </div>
+      </div>

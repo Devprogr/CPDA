@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+  
+{% block content %}
+
+<header class="header-2">
+  <div class="page-header min-vh-100 relative" style="background-image: url('{{ url_for('static', filename='assets/img/priorities.jpg') }}')">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-7 text-end mx-auto">
+          <h1 class="text-white pt-3 mt-n5 text-dark" style="text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);">
+            Our Priorities
+          </h1>
+          <p class="lead text-white mt-3" style="text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);">
+            Building a Stronger, Connected, and Inclusive Region
+          </p>
+        </div>
+      </div>
+    </div>    
+  </div>
+</header>
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <ul class="list-group list-group-flush mb-4">
+        <li class="list-group-item"><strong>Affordable housing strategy</strong></li>
+        <li class="list-group-item"><strong>Better access to services</strong></li>
+        <li class="list-group-item"><strong>Transport connectivity</strong></li>
+        <li class="list-group-item"><strong>Regional branding</strong></li>
+        <li class="list-group-item"><strong>Investment attraction</strong></li>
+        <li class="list-group-item"><strong>Joint RFPs for Infrastructure</strong></li>
+        <li class="list-group-item"><strong>Cultural and lifestyle investment</strong></li>
+        <li class="list-group-item"><strong>Advocacy and innovation</strong></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

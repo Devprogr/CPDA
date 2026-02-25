@@ -1,0 +1,71 @@
+<div class="col-md-6 col-12">
+        <div class="card shadow-sm h-100">
+          <div class="card-body text-center">
+            <h5 class="card-title mb-3" style="color: #23254a;">Industry Regional Requirements</h5>
+            <div class="chart-responsive">
+              <canvas id="industryRegionalRequirementsChart" height="350"></canvas>
+            </div>
+            <script>
+              new Chart(document.getElementById('industryRegionalRequirementsChart').getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                  labels: [
+                    "Demand met In-region",
+                    "Demand met by Imports"
+                  ],
+                  datasets: [{
+                    data: [
+                      4251209990,   // Demand met In-region
+                      1157611990    // Demand met by Imports
+                    ],
+                    backgroundColor: [
+                      "#29597d", "#f47c4c"
+                    ],
+                    borderWidth: 0
+                  }]
+                },
+                options: {
+                  cutout: '70%',
+                  plugins: {
+                    legend: {
+                      display: true,
+                      position: 'bottom',
+                      labels: {
+                        color: '#222',
+                        font: { size: 14 }
+                      }
+                    },
+                    title: {
+                      display: true,
+                      text: 'Central Prairie Development Alliance Industry Regional Requirements 2022',
+                      font: { size: 18, weight: 'bold' },
+                      color: '#444',
+                      padding: { top: 10, bottom: 20 }
+                    },
+                    tooltip: {
+                      callbacks: {
+                        label: function (context) {
+                          const value = context.parsed;
+                          const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                          const percent = ((value / total) * 100).toFixed(1);
+                          return `$${value.toLocaleString()}, ${percent}%`;
+                        }
+                      }
+                    },
+                    datalabels: {
+                      color: 'white',
+                      font: { weight: 'bold', size: 16 },
+                      formatter: function (value, context) {
+                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                        const percent = ((value / total) * 100).toFixed(1);
+                        return percent + '%';
+                      }
+                    }
+                  }
+                },
+                plugins: [ChartDataLabels]
+              });
+            </script>
+          </div>
+        </div>
+      </div>

@@ -1,0 +1,144 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Poppins:wght@600;700&display=swap');
+
+:root {
+  --color-primary: #1E2D49;
+  --color-accent: #FF9900;
+  --color-background: #F9FAFB;
+  --color-text: #2E2E2E;
+  --color-card: #E6ECF2;
+
+  --font-heading: 'Poppins', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: var(--font-heading);
+  color: var(--color-primary);
+}
+
+nav {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+
+button, .btn-primary {
+  background-color: var(--color-primary);
+  color: #fff;
+  font-family: var(--font-body);
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-accent);
+}
+
+.btn-accent {
+  background-color: var(--color-accent);
+  color: #fff;
+}
+
+.card {
+  background-color: var(--color-card);
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+footer {
+  background-color: var(--color-primary);
+  color: #fff;
+  font-family: var(--font-body);
+}
+
+.custom-navbar-container {
+  max-width: 100vw; /* or any value you want */
+  width: 100%;
+}
+
+.top-full {
+  width: 100vw;
+  min-height: 0px; /* Adjust as needed */
+  padding: 0;
+  margin: 0;
+}
+
+.navbar-full {
+  width: 100vw;
+  min-height: 50px; /* Adjust as needed */
+  left: 0;
+  right: 0;
+  top: 0;
+  margin: 0;
+  border-radius: 0;
+  margin-left: 100px;
+}
+
+.custom-arrow {
+  width: 48px;
+  height: 48px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.4);
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+.custom-arrow i {
+  color: #fff;
+}
+
+.carousel-control-prev {
+  left: 16px;
+}
+
+.carousel-control-next {
+  right: 16px;
+}
+
+@media (max-width: 576px) {
+  .custom-arrow {
+    width: 36px;
+    height: 36px;
+  }
+
+  .carousel-control-prev {
+    left: 8px;
+  }
+  
+  .carousel-control-next {
+    right: 8px;
+  }
+}
+
+.cpda-town-btn {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #ed4c1c;
+  border: 2px solid #ed4c1c;
+  background: #fff;
+  border-radius: 12px;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(232,76,28,0.07);
+  padding: 0.75rem 1.2rem;
+}
+.cpda-town-btn:hover, .cpda-town-btn:focus {
+  background: #ed4c1c;
+  color: #fff;
+  text-decoration: none;
+  box-shadow: 0 4px 16px rgba(232,76,28,0.15);
+}

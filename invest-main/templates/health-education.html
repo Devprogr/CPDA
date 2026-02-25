@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block content %}
+
+<header class="header-2">
+  <div class="page-header min-vh-100 relative"
+       style="background-image: url('{{ url_for('static', filename='assets/img/health-education.jpg') }}'); background-size: cover; background-position: center;">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 mx-auto text-center">
+          <div style="background: rgba(20,20,30,0.70); border-radius: 1rem; display:inline-block; padding: 2rem 2.5rem;">
+            <h1 class="text-white mb-2" style="text-shadow: 3px 3px 12px rgba(0,0,0,0.7);">Healthcare &amp; Education</h1>
+            <p class="lead text-white mb-0" style="text-shadow: 3px 3px 12px rgba(0,0,0,0.7);">
+              Regional services that support families, workforce attraction, and long-term community growth.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-9">
+
+      <div class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h4 class="mb-2" style="color:#23254a; font-weight:700;">Healthcare</h4>
+          <p class="mb-0">
+            Yorkton is served by regional healthcare facilities, including the Yorkton Regional Health Centre,
+            supported by the Saskatchewan Health Authority.
+          </p>
+        </div>
+      </div>
+
+      <div class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h4 class="mb-2" style="color:#23254a; font-weight:700;">Education & training</h4>
+          <p class="mb-0">
+            Education and workforce development support business growth through training, trades, and career pathways.
+          </p>
+        </div>
+      </div>
+
+      <div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
+        <div class="col">
+          <div class="card h-100 shadow-sm">
+            <div class="card-body">
+              <h5 class="mb-2" style="color:#23254a; font-weight:700;">What’s strong here</h5>
+              <ul class="mb-0">
+                <li>Regional healthcare access for residents and workers</li>
+                <li>Training pathways that support trades and industry</li>
+                <li>Room for partnerships (employers + training + recruitment)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card h-100 shadow-sm">
+            <div class="card-body">
+              <h5 class="mb-2" style="color:#23254a; font-weight:700;">Opportunities</h5>
+              <ul class="mb-0">
+                <li>Workforce attraction and retention initiatives</li>
+                <li>Industry-aligned training programs</li>
+                <li>Community wellness and support services</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h4 class="mb-3" style="color:#23254a; font-weight:700;">Major organizations to highlight</h4>
+          <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-outline-primary" href="https://www.yorkton.ca/en/your-city/healthcare-and-wellness.aspx" target="_blank" rel="noopener">Yorkton Healthcare Info</a>
+            <a class="btn btn-outline-primary" href="https://siit.ca/" target="_blank" rel="noopener">SIIT</a>
+            <a class="btn btn-outline-primary" href="http://www.parklandcollege.sk.ca" target="_blank" rel="noopener">Parkland College</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between mt-4">
+        <a href="{{ url_for('industries') }}" class="btn btn-outline-primary">&larr; Back to Industry Page</a>
+        <a href="https://www.yorkton.ca/en/build-invest-and-grow/start-a-business.aspx" target="_blank" rel="noopener"
+           class="btn btn-primary" style="background-color:#ed4c1c; border-color:#ed4c1c;">
+          View Business Opportunities
+        </a>
+      </div>
+
+      <div class="card mt-5 shadow-sm">
+        <div class="card-body text-center">
+          <a href="{{ url_for('contact_us') }}" class="btn" style="font-size:15px;">CONTACT US</a>
+          <p class="mb-0 text-muted" style="font-size:14px;">
+            Want to feature specific programs, clinics, or community services? Send your list and I’ll format it cleanly.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

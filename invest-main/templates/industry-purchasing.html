@@ -1,0 +1,64 @@
+<div class="col-md-6 col-12">
+        <div class="card shadow-sm h-100">
+          <div class="card-body text-center">
+            <h5 class="card-title mb-3" style="color: #23254a;">Industry Purchasing</h5>
+            <div class="chart-responsive">
+              <canvas id="industryPurchasingChart" height="300"></canvas>
+            </div>
+            <script>
+              const ctxIndustry = document.getElementById('industryPurchasingChart').getContext('2d');
+              new Chart(ctxIndustry, {
+                type: 'doughnut',
+                data: {
+                  labels: ['In-region Purchases', 'Imported Purchases'],
+                  datasets: [{
+                    data: [531215547, 1342876330],
+                    backgroundColor: ['#29597d', '#f47c4c'],
+                    borderWidth: 0
+                  }]
+                },
+                options: {
+                  cutout: '70%',
+                  plugins: {
+                    legend: {
+                      display: true,
+                      position: 'bottom',
+                      labels: {
+                        color: '#222',
+                        font: { size: 14 }
+                      }
+                    },
+                    title: {
+                      display: true,
+                      text: 'Central Prairie Development Alliance\nIndustry Purchasing 2022',
+                      font: { size: 18, weight: 'bold' },
+                      color: '#444',
+                      padding: { top: 10, bottom: 20 }
+                    },
+                    tooltip: {
+                      callbacks: {
+                        label: function (context) {
+                          const value = context.parsed;
+                          const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                          const percent = ((value / total) * 100).toFixed(1);
+                          return `${value.toLocaleString()} (${percent}%)`;
+                        }
+                      }
+                    },
+                    datalabels: {
+                      color: '#fff',
+                      font: { weight: 'bold', size: 16 },
+                      formatter: function (value, context) {
+                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                        const percent = ((value / total) * 100).toFixed(1);
+                        return percent + '%';
+                      }
+                    }
+                  }
+                },
+                plugins: [ChartDataLabels]
+              });
+            </script>
+          </div>
+        </div>
+      </div>

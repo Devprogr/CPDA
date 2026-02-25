@@ -1,0 +1,57 @@
+<div class="col-12">
+        <div class="card shadow-sm h-100 mt-4">
+          <div class="card-body text-center">
+            <h5 class="card-title mb-3" style="color: #23254a;">Age Group</h5>
+            <div class="chart-responsive">
+              <canvas id="ageGroupChart"></canvas>
+            </div>
+            <script>
+              const ctxPyramid = document.getElementById('ageGroupChart').getContext('2d');
+              const pyramidChart = new Chart(ctxPyramid, {
+                type: 'bar',
+                data: {
+                  labels: {{ age_groups | tojson }},
+                  datasets: [
+                    {
+                      label: 'Men+',
+                      data: {{ men | tojson }},
+                      backgroundColor: 'blue'
+                    },
+                    {
+                      label: 'Women+',
+                      data: {{ women | tojson }},
+                      backgroundColor: 'red'
+                    }
+                  ]
+                },
+                options: {
+                  indexAxis: 'y',
+                  responsive: true,
+                  plugins: {
+                    tooltip: {
+                      callbacks: {
+                        label: function(context) {
+                          return Math.abs(context.parsed.x);
+                        }
+                      }
+                    }
+                  },
+                  scales: {
+                    x: {
+                      stacked: true,
+                      ticks: {
+                        callback: function(value) {
+                          return Math.abs(value);
+                        }
+                      }
+                    },
+                    y: {
+                      stacked: true
+                    }
+                  }
+                }
+              });
+            </script>
+          </div>
+        </div>
+      </div>

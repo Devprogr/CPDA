@@ -1,0 +1,105 @@
+<style>
+  #map {
+    height: 500px;
+    width: 100%;
+  }
+</style>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIzK44bFuZm-Q3EVBHXyz2X3tAiuqYHtE"></script>
+<script>
+  function initMap() {
+    // var myLatLng = { lat: 51.21744873885869, lng: -102.4762084027682 }; // Example: Ottawa 51.21744873885869, -102.4762084027682
+
+     var locations = [
+      { lat: 51.21744873885869, lng: -102.4762084027682, title: "Yorton " },
+      { lat: 50.933401391776776, lng: -102.8115160633681, title: "Melville" },
+      { lat: 51.04370276714749, lng: -102.17989400349337, title: "Saltcoats" },
+      { lat: 51.70490419388218, lng: -102.74767203586863, title: "Buchanan" },
+      { lat: 51.6433663663445, lng: -101.90233315529343, title: "Cote First Nation" },
+      { lat: 50.65819553707204, lng: -102.05648705126022, title: "Esterhazy" },
+      { lat: 51.64062487299124, lng: -103.52911976143636, title: "Foam Lake" },
+      { lat: 51.168459401810324, lng: -103.49283378758582, title: "Ituna" },
+      { lat: 50.933401391776776, lng: -102.8115160633681, title: "Langenburg" },
+      { lat: 51.63414698354715, lng: -102.43477685965925, title: "Suncrest College in Canora" },
+      { lat: 50.65662607763497, lng: -102.05767447014446, title: "Suncrest College in Esterhazy" },
+      { lat: 51.56203444388745, lng:  -101.89919589910347, title: "Suncrest College in Kamsack" },
+      { lat: 50.934831483381345, lng:  -102.79729482358456, title: "Suncrest College in Melville" },
+      { lat: 51.2171026480262, lng: -102.47548956976267, title: "Suncrest College in Yorkton" },
+      { lat: 51.19923996349229, lng: -102.44944303086434, title: "Yorkton Chamber Of Commerce" },
+      { lat: 51.20310276516555, lng: -102.45720109236976, title: "Yorkton Tribal Council" }
+    ];
+
+    var customStyle = [
+      {
+        "featureType": "water",
+        "stylers": [{ "color": "#0e171d" }]
+      },
+      {
+        "featureType": "landscape",
+        "stylers": [{ "color": "#1e303d" }]
+      },
+      {
+        "featureType": "road",
+        "stylers": [{ "color": "#1e303d" }]
+      },
+      {
+        "featureType": "poi.park",
+        "stylers": [{ "color": "#1e303d" }]
+      },
+      {
+        "featureType": "transit",
+        "stylers": [{ "color": "#182731" }, { "visibility": "simplified" }]
+      },
+      {
+        "featureType": "poi",
+        "elementType": "labels.icon",
+        "stylers": [{ "color": "#f0c514" }, { "visibility": "off" }]
+      },
+      {
+        "featureType": "poi",
+        "elementType": "labels.text.stroke",
+        "stylers": [{ "color": "#1e303d" }, { "visibility": "off" }]
+      },
+      {
+        "featureType": "transit",
+        "elementType": "labels.text.fill",
+        "stylers": [{ "color": "#e77e24" }, { "visibility": "off" }]
+      },
+      {
+        "featureType": "road",
+        "elementType": "labels.text.fill",
+        "stylers": [{ "color": "#94a5a6" }]
+      },
+      {
+        "featureType": "administrative",
+        "elementType": "labels",
+        "stylers": [{ "visibility": "simplified" }, { "color": "#e84c3c" }]
+      },
+      {
+        "featureType": "poi",
+        "stylers": [{ "color": "#e84c3c" }, { "visibility": "off" }]
+      }
+    ];
+
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 9,
+      center: locations[0],
+      styles: customStyle
+    });
+
+    // new google.maps.Marker({
+    //   position: myLatLng,
+    //   map: map,
+    //   title: 'My Custom Marker!'
+    // });
+
+    locations.forEach(function(loc) {
+      new google.maps.Marker({
+        position: { lat: loc.lat, lng: loc.lng },
+        map: map,
+        title: loc.title
+      });
+    });
+  }
+</script>
+
+<div id="map"></div>

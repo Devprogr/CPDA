@@ -1,0 +1,94 @@
+<div class="col-12">
+        <div class="card shadow-sm h-100 mt-4">
+          <div class="card-body text-center">
+            <h5 class="card-title mb-3" style="color: #23254a;">Total Consumer Spending Estimates</h5>
+            <div class="chart-responsive" style="max-width:800px; margin:0 auto;">
+              <canvas id="consumerSpendingChart" height="600"></canvas>
+            </div>
+            <script>
+              new Chart(document.getElementById('consumerSpendingChart').getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                  labels: [
+                    "Income taxes",
+                    "Miscellaneous expenditures",
+                    "Games of chance",
+                    "Tobacco products and alcoholic beverages",
+                    "Reading materials and other printed matter",
+                    "Education",
+                    "Recreation",
+                    "Personal care",
+                    "Health care",
+                    "Transportation",
+                    "Clothing and accessories",
+                    "Household furnishings and equipment",
+                    "Household operations",
+                    "Shelter",
+                    "Food expenditures",
+                    "Gifts of money, support payments and charitable contributions",
+                    "Personal insurance payments and pension contributions"
+                  ],
+                  datasets: [{
+                    data: [
+                      236848531,   // Income taxes
+                      28059469,    // Miscellaneous expenditures
+                      36281710,    // Games of chance
+                      37706786,    // Tobacco products and alcoholic beverages
+                      32270393,    // Reading materials and other printed matter
+                      21577097,    // Education
+                      58549240,    // Recreation
+                      29531921,    // Personal care
+                      506568503,   // Health care
+                      170866475,   // Transportation
+                      32225169,    // Clothing and accessories
+                      42518532,    // Household furnishings and equipment
+                      590601765,   // Household operations
+                      529751120,   // Shelter
+                      188579792,   // Food expenditures
+                      303745256,   // Gifts of money, support payments and charitable contributions
+                      881041907    // Personal insurance payments and pension contributions
+                    ],
+                    backgroundColor: [
+                      "#3b82f6", "#06b6d4", "#f59e42", "#22c55e", "#818cf8", "#f43f5e", "#fbbf24", "#a21caf", "#64748b", "#eab308", "#7c3aed", "#8b5cf6", "#f87171", "#16a34a", "#facc15", "#6366f1", "#db2777"
+                    ],
+                    borderWidth: 0
+                  }]
+                },
+                options: {
+                  cutout: '70%',
+                  plugins: {
+                    legend: { display: true, position: 'bottom' },
+                    title: {
+                      display: true,
+                      text: 'Total Consumer Spending Estimates Central Prairie Development Alliance',
+                      font: { size: 18, weight: 'bold' },
+                      color: '#444',
+                      padding: { top: 10, bottom: 20 }
+                    },
+                    tooltip: {
+                      callbacks: {
+                        label: function (context) {
+                          const value = context.parsed;
+                          const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                          const percent = ((value / total) * 100).toFixed(1);
+                          return `${context.label}, $${value.toLocaleString()}, ${percent}%`;
+                        }
+                      }
+                    },
+                    datalabels: {
+                      color: 'white',
+                      font: { weight: 'bold', size: 12 },
+                      formatter: function (value, context) {
+                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                        const percent = ((value / total) * 100).toFixed(1);
+                        return percent > 3 ? `${percent}%` : '';
+                      }
+                    }
+                  }
+                },
+                plugins: [ChartDataLabels]
+              });
+            </script>
+          </div>
+        </div>
+      </div>

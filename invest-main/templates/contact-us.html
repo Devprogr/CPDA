@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Navbar -->
+
+<!-- -------- START HEADER 8 w/ card over right bg image ------- -->
+<header>
+  <div class="page-header min-vh-85">
+    <div>
+      <img
+        class="position-absolute fixed-top ms-auto w-50 h-100 z-index-0 d-none d-sm-none d-md-block border-radius-section border-top-end-radius-0 border-top-start-radius-0 border-bottom-end-radius-0"
+        src="{{ url_for('static', filename='assets/img/curved-images/curved15.jpeg') }}" alt="image">
+
+    </div>
+    <div class="container">
+
+      <div class="row">
+        <div class="col-lg-7 d-flex justify-content-center flex-column">
+          <div class="card d-flex blur justify-content-center p-4 shadow-lg my-sm-0 my-sm-6 mt-8 mb-5">
+            <div class="text-center">
+              {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+              <div class="mb-3">
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                  {{ message }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+              </div>
+              {% endif %}
+              {% endwith %}
+              <h3 class="text-gradient text-primary">Contact us</h3>
+              <p class="mb-0">
+                For further questions, including partnership opportunities, please email hello@creative-tim.com
+                or contact using our contact form.
+              </p>
+            </div>
+            <form id="contact-form" method="POST" autocomplete="off">
+              {{ form.hidden_tag() }}
+              <div class="card-body pb-2">
+                <div class="row">
+                  <div class="col-md-6">
+                    <label for="{{ form.name.id }}">Full Name</label>
+                    <div class="input-group mb-4">
+                      {{ form.name(class="form-control", placeholder="Full Name") }}
+                      {% if form.name.errors %}
+                      <div class="text-danger small">
+                        {{ form.name.errors[0] }}
+                      </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="col-md-6 ps-md-2">
+                    <label for="{{ form.email.id }}">Email</label>
+                    <div class="input-group">
+                      {{ form.email(class="form-control", placeholder="hello@gmail.com") }}
+                      {% if form.email.errors %}
+                      <div class="text-danger small">
+                        {{ form.email.errors[0] }}
+                      </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group mb-0 mt-md-0 mt-4">
+                  <label for="{{ form.message.id }}">How can we help you?</label>
+                  {{ form.message(class="form-control", rows=6, placeholder="Describe your problem in at least 10 characters") }}
+                  {% if form.message.errors %}
+                  <div class="text-danger small">
+                    {{ form.message.errors[0] }}
+                  </div>
+                  {% endif %}
+                </div>
+                <div class="row">
+                  <div class="col-md-12 text-center">
+                    {{ form.submit(class="btn btn-primary mt-3 mb-0") }}
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="col-lg-5">
+          <div class="card p-4 shadow-lg my-sm-0 my-sm-6 mt-8 mb-5">
+            <h4>Need Help?</h4>
+            <ul>
+              <li>Phone number: 306-786-7310</li>
+              <li>Inquiries: cpda.info@suncrestcollege.ca </li>
+            </ul>
+            <div class="mt-4">
+              <h5>Follow us</h5>
+              <a href="https://facebook.com" target="_blank" class="me-1 text-info">
+                <i class="fab fa-facebook fa-2x"></i>
+              </a>
+              <a href="https://instagram.com" target="_blank" class="me-2 text-info">
+                <i class="fab fa-instagram fa-2x"></i>
+              </a>
+              <a href="https://linkedin.com" target="_blank" class="me-3 text-info">
+                <i class="fab fa-linkedin fa-2x"></i>
+              </a>
+              <a href="https://twitter.com" target="_blank" class="me-4 text-info">
+                <i class="fab fa-twitter fa-2x"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!--   Core JS Files   -->
+
+<script src="../assets/js/core/popper.min.js" type="text/javascript"></script>
+<script src="../assets/js/core/bootstrap.min.js" type="text/javascript"></script>
+<script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
+<!--  Plugin for Parallax, full documentation here: https://github.com/wagerfield/parallax  -->
+<script src="../assets/js/plugins/parallax.min.js"></script>
+<!-- Control Center for Soft UI Kit: parallax effects, scripts for the example pages etc -->
+<!--  Google Maps Plugin    -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTTfWur0PDbZWPr7Pmq8K3jiDp0_xUziI"></script>
+<script src="../assets/js/soft-design-system.min.js?v=1.1.0" type="text/javascript"></script>
+{% endblock %}

@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+{% block content %}
+
+<header class="header-2">
+  <div class="page-header min-vh-100 relative"
+       style="background-image: url('{{ url_for('static', filename='assets/img/agriculture.jpg') }}'); 
+              background-size: cover; 
+              background-position: center; 
+              display:flex; 
+              align-items:center;">
+
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6">
+
+          <div style="
+              background: linear-gradient(90deg, rgba(12,22,32,0.85) 0%, rgba(12,22,32,0.65) 60%, rgba(12,22,32,0) 100%);
+              border-radius: 1rem;
+              padding: 3rem;">
+
+            <h1 class="text-white mb-3"
+                style="font-size: 52px; font-weight:700;">
+                Agriculture
+            </h1>
+
+            <p class="text-light"
+               style="font-size:19px; line-height:1.6;">
+              A strong production base supported by modern storage, processing, and a growing value-added ecosystem around the CPDA region.
+            </p>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</header>
+
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+
+      <!-- Sector Snapshot -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h4 class="mb-2" style="color:#23254a; font-weight:700;">Sector snapshot</h4>
+          <p class="mb-0">
+            The CPDA region sits in a productive prairie area with strong grain and oilseed activity, supported by equipment/service providers,
+            storage and handling, and major value-added processing investments in and around Yorkton.
+          </p>
+        </div>
+      </div>
+
+      <!-- Strength + Opportunities -->
+      <div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
+        <div class="col">
+          <div class="card h-100 shadow-sm">
+            <div class="card-body">
+              <h5 class="mb-2" style="color:#23254a; font-weight:700;">What’s strong here</h5>
+              <ul class="mb-0">
+                <li>Commodity production with established farm services and supply chain</li>
+                <li>Grain handling, storage, and trucking/rail connectivity</li>
+                <li>Value-added processing momentum (oilseed + plant protein + ingredients)</li>
+                <li>Workforce and training supports across the broader region</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card h-100 shadow-sm">
+            <div class="card-body">
+              <h5 class="mb-2" style="color:#23254a; font-weight:700;">Investment opportunities</h5>
+              <ul class="mb-0">
+                <li>Storage, logistics, and commodity handling expansion</li>
+                <li>Specialty crops, cleaning, and contract services</li>
+                <li>Ag technology and precision services (equipment + data + advisory)</li>
+                <li>Value-added processing and ingredient manufacturing partnerships</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Key Sub-sectors -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h4 class="mb-3" style="color:#23254a; font-weight:700;">Key sub-sectors</h4>
+
+          <div class="row row-cols-1 row-cols-md-3 g-3">
+            <div class="col">
+              <div class="card h-100 border-0" style="background:#f6f8fb;">
+                <div class="card-body">
+                  <h6 class="mb-2" style="color:#23254a; font-weight:700;">Grains & oilseeds</h6>
+                  <p class="mb-0 text-muted" style="font-size:14px;">
+                    Strong prairie production supported by local storage, procurement, and processing.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card h-100 border-0" style="background:#f6f8fb;">
+                <div class="card-body">
+                  <h6 class="mb-2" style="color:#23254a; font-weight:700;">Value-added processing</h6>
+                  <p class="mb-0 text-muted" style="font-size:14px;">
+                    Oilseed crushing, ingredient milling, and plant protein growth are key regional strengths.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card h-100 border-0" style="background:#f6f8fb;">
+                <div class="card-body">
+                  <h6 class="mb-2" style="color:#23254a; font-weight:700;">Ag services ecosystem</h6>
+                  <p class="mb-0 text-muted" style="font-size:14px;">
+                    Equipment, agronomy, inputs, fuel, retail, and logistics that support farm operations.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Featured Businesses -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h4 class="mb-1" style="color:#23254a; font-weight:700;">Featured businesses </h4>
+          <p class="text-muted mb-3" style="font-size:14px;">
+            A selection of major employers and value-added operators that help shape the regional agriculture economy.
+          </p>
+
+          <div class="row row-cols-1 row-cols-md-2 g-3">
+
+            <!-- Richardson -->
+            <div class="col">
+              <div class="card h-100">
+                <div class="card-body">
+                  <h6 class="mb-2" style="color:#23254a; font-weight:700;">Richardson (Yorkton)</h6>
+                  <p class="text-muted mb-3" style="font-size:14px;">
+                    A major canola crushing operation in Yorkton supporting value-added processing and export supply chains.
+                  </p>
+                  <a class="btn btn-outline-primary btn-sm"
+                     href="https://www.richardson.ca/"
+                     target="_blank" rel="noopener">Learn more</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Louis Dreyfus Company -->
+            <div class="col">
+              <div class="card h-100">
+                <div class="card-body">
+                  <h6 class="mb-2" style="color:#23254a; font-weight:700;">Louis Dreyfus Company (Yorkton)</h6>
+                  <p class="text-muted mb-3" style="font-size:14px;">
+                    Yorkton industrial complex with canola processing and new investment in pea protein production capacity.
+                  </p>
+                  <a class="btn btn-outline-primary btn-sm"
+                     href="https://www.ldc.com/"
+                     target="_blank" rel="noopener">Learn more</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Grain Millers -->
+            <div class="col">
+              <div class="card h-100">
+                <div class="card-body">
+                  <h6 class="mb-2" style="color:#23254a; font-weight:700;">Grain Millers (Yorkton)</h6>
+                  <p class="text-muted mb-3" style="font-size:14px;">
+                    Oat milling presence in Yorkton, sourcing directly from farms and supporting regional processing activity.
+                  </p>
+                  <a class="btn btn-outline-primary btn-sm"
+                     href="https://www.grainmillers.com/"
+                     target="_blank" rel="noopener">Learn more</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- TA Foods -->
+            <div class="col">
+              <div class="card h-100">
+                <div class="card-body">
+                  <h6 class="mb-2" style="color:#23254a; font-weight:700;">TA Foods (Yorkton)</h6>
+                  <p class="text-muted mb-3" style="font-size:14px;">
+                    Ingredient processing and packaging with multiple facilities in and around Yorkton (flax, oilseed, milling, storage).
+                  </p>
+                  <a class="btn btn-outline-primary btn-sm"
+                     href="https://www.tafoods.ca/"
+                     target="_blank" rel="noopener">Learn more</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Legacy Co-op -->
+            <div class="col">
+              <div class="card h-100">
+                <div class="card-body">
+                  <h6 class="mb-2" style="color:#23254a; font-weight:700;">Legacy Co-op (Yorkton & area)</h6>
+                  <p class="text-muted mb-3" style="font-size:14px;">
+                    A member-owned co-operative serving the region with products and services that support local communities and the rural economy.
+                  </p>
+                  <a class="btn btn-outline-primary btn-sm"
+                     href="https://www.legacyco-op.crs/"
+                     target="_blank" rel="noopener">Learn more</a>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom buttons -->
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mt-4">
+        <a href="{{ url_for('industries') }}" class="btn btn-outline-primary">&larr; Back to Industry Page</a>
+
+        <div class="d-flex gap-2">
+          <a href="{{ url_for('contact_us') }}" class="btn btn-outline-secondary">Request an update</a>
+          <a href="https://www.yorkton.ca/en/build-invest-and-grow/start-a-business.aspx"
+             target="_blank" rel="noopener"
+             class="btn btn-primary" style="background-color:#ed4c1c; border-color:#ed4c1c;">
+            View Business Opportunities
+          </a>
+        </div>
+      </div>
+
+      <div class="card mt-5 shadow-sm">
+        <div class="card-body text-center">
+          <p class="mb-0 text-muted" style="font-size:14px;">
+            Have a verified agriculture or value-added business in the CPDA region? Contact us to be considered for listing.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+  
+{% block content %}
+
+<header class="header-2">
+  <div class="page-header min-vh-100 relative" style="background-image: url('{{ url_for('static', filename='assets/img/news-updates.jpg') }}')">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-7 text-end mx-auto">
+          <h1 class="text-white pt-3 mt-n5 text-dark" style="text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);">NEWS & UPDATES</h1>
+          <!-- <p class="lead text-white mt-3" style="text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);">Working Together to Build a Stronger Future for Our Region</p> -->
+        </div>
+      </div>
+    </div>    
+  </div>
+</header>
+
+<div class="container mt-5 mb-5">
+  <div class="row justify-content-center mb-4">
+    <div class="col-lg-9 text-center">
+      <h2 class="mb-2">News & Updates</h2>
+      <p class="text-muted mb-0">Latest announcements, upcoming events, and progress across the region.</p>
+    </div>
+  </div>
+
+  <div class="row g-4">
+
+    <!-- Events (FULL WIDTH) -->
+    <div class="col-12">
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <div class="d-flex align-items-center mb-3">
+            <span class="badge bg-success me-2">Events</span>
+            <h4 class="mb-0" style="color:#1e2d49;">Upcoming</h4>
+          </div>
+
+          <div class="row g-3 align-items-start">
+            <div class="col-lg-7">
+              <div class="mb-3 p-3 rounded" style="background:#f8f9fa;">
+                <div class="d-flex justify-content-between flex-wrap">
+                  <strong>Next Meeting</strong>
+                  <span class="text-muted">March 10 • 10:00–12:00</span>
+                </div>
+                <div class="text-muted">Cote First Nation</div>
+              </div>
+
+              <div class="p-3 rounded" style="background:#f8f9fa;">
+                <div class="d-flex justify-content-between flex-wrap">
+                  <strong>Community Builders Workshop (Peter Kenyon)</strong>
+                  <span class="text-muted">May 8 • 9:00am–4:00pm</span>
+                </div>
+                <div class="text-muted mb-2">Melville</div>
+                <small class="text-muted">
+                  Sponsored by Suncrest College, City of Melville, CIC Sask, SEDA
+                </small>
+              </div>
+            </div>
+
+            <!-- Poster (RIGHT SIDE, CLEAN SIZE) -->
+            <div class="col-lg-5">
+              <div class="p-3 rounded" style="background:#f8f9fa;">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <strong>Workshop Poster</strong>
+                  <a class="btn btn-sm btn-outline-dark"
+                     href="{{ url_for('static', filename='assets/img/community_workshop_melville.jpg') }}"
+                     target="_blank">
+                    View full size
+                  </a>
+                </div>
+
+                <a href="{{ url_for('static', filename='assets/img/community_workshop_melville.jpg') }}" target="_blank">
+                  <img
+                    src="{{ url_for('static', filename='assets/img/community_workshop_melville.jpg') }}"
+                    alt="Community Builders Workshop poster - Peter Kenyon"
+                    class="img-fluid rounded shadow-sm"
+                    style="width:100%; max-height:280px; object-fit:cover; object-position:top;"
+                  />
+                </a>
+
+                <small class="text-muted d-block mt-2">
+                  Tip: Click “View full size” to read details and scan the QR code.
+                </small>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Announcements -->
+    <div class="col-md-6">
+      <div class="card shadow-sm h-100 border-0">
+        <div class="card-body">
+          <div class="d-flex align-items-center mb-3">
+            <span class="badge bg-primary me-2">Announcements</span>
+            <h4 class="mb-0" style="color:#1e2d49;">Important</h4>
+          </div>
+
+          <div class="p-3 rounded" style="background:#f8f9fa;">
+            <strong>Annual Membership Fees:</strong> now due — contact
+            <a href="mailto:cpda.info@suncrestcollege.ca">cpda.info@suncrestcollege.ca</a> for invoice.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progress Reports -->
+    <div class="col-md-6">
+      <div class="card shadow-sm h-100 border-0">
+        <div class="card-body">
+          <div class="d-flex align-items-center mb-3">
+            <span class="badge bg-warning text-dark me-2">Progress</span>
+            <h4 class="mb-0" style="color:#1e2d49;">Reports</h4>
+          </div>
+
+          <div class="p-3 rounded" style="background:#f8f9fa;">
+            <strong>Build Canada Homes Program (Regional Application):</strong>
+            For information, contact
+            <a href="mailto:cpda.info@suncrestcollege.ca">cpda.info@suncrestcollege.ca</a>
+            or the <strong>Yorkton Tribal Council</strong>.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+{% endblock %}

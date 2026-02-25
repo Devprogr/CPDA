@@ -1,0 +1,85 @@
+<div class="col-md-6 col-12">
+        <div class="card shadow-sm h-100">
+          <div class="card-body text-center">
+            <h5 class="card-title mb-3" style="color: #23254a;">Total Industry Purchases (2022)</h5>
+            <div class="chart-responsive">
+              <canvas id="totalIndustryPurchasesChart" height="350"></canvas>
+            </div>
+            <script>
+              new Chart(document.getElementById('totalIndustryPurchasesChart').getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                  labels: [
+                    "Farms",
+                    "Professional, scientific and technical services",
+                    "Petroleum and coal product manufacturing",
+                    "Food manufacturing",
+                    "Administrative and support services",
+                    "Chemical manufacturing",
+                    "Truck transportation",
+                    "Fabricated metal product manufacturing",
+                    "Credit intermediation and related activities",
+                    "Utilities",
+                    "Other"
+                  ],
+                  datasets: [{
+                    data: [
+                      335395524,    // Farms
+                      130154146,    // Professional, scientific and technical services
+                      110184169,    // Petroleum and coal product manufacturing
+                      98857377,     // Food manufacturing
+                      64565567,     // Administrative and support services
+                      56123137,     // Chemical manufacturing
+                      50576903,     // Truck transportation
+                      49785899,     // Fabricated metal product manufacturing
+                      48389199,     // Credit intermediation and related activities
+                      42470404,     // Utilities
+                      882511565     // Other
+                    ],
+                    backgroundColor: [
+                      "#3b82f6", "#06b6d4", "#f59e42", "#22c55e", "#818cf8", "#f43f5e", "#fbbf24", "#a21caf", "#64748b", "#eab308", "#7c3aed"
+                    ],
+                    borderWidth: 0
+                  }]
+                },
+                options: {
+                  cutout: '70%',
+                  plugins: {
+                    legend: { 
+                      display: true, 
+                      position: 'bottom'
+                    },
+                    title: {
+                      display: true,
+                      text: 'Central Prairie Development Alliance Total Industry Purchases from 2022',
+                      font: { size: 18, weight: 'bold' },
+                      color: '#444',
+                      padding: { top: 10, bottom: 20 }
+                    },
+                    tooltip: {
+                      callbacks: {
+                        label: function (context) {
+                          const value = context.parsed;
+                          const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                          const percent = ((value / total) * 100).toFixed(1);
+                          return `${context.label}, $${value.toLocaleString()}, ${percent}%`;
+                        }
+                      }
+                    },
+                    datalabels: {
+                      color: 'white',
+                      font: { weight: 'bold', size: 14 },
+                      formatter: function (value, context) {
+                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                        const percent = ((value / total) * 100).toFixed(1);
+                        return percent > 3 ? `${percent}%` : '';
+                      }
+                    }
+                  }
+                },
+                plugins: [ChartDataLabels]
+              });
+            </script>
+          </div>
+        </div>
+      </div>

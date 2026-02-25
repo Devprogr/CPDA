@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+  }
+  .chart-responsive {
+    width: 100%;
+    overflow-x: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+  }
+  .chart-responsive canvas {
+    width: 100% !important;
+    height: auto !important;
+    max-width: 700px;
+    min-width: 250px;
+    margin: 0 auto;
+    display: block;
+  }
+  @media (max-width: 768px) {
+    h1, h2, h3, h4, h5 {
+      font-size: 1.1rem;
+    }
+    .card-title {
+      font-size: 1rem;
+    }
+    .container {
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+    .chart-responsive canvas {
+      max-width: 100%;
+      min-width: 180px;
+    }
+  }
+  @media (max-width: 480px) {
+    .chart-responsive canvas {
+      max-width: 98%;
+      min-width: 120px;
+    }
+    .container {
+      padding-left: 2px;
+      padding-right: 2px;
+    }
+  }
+</style>
+
+<header class="header-2">
+  <div class="page-header min-vh-100 relative"
+    style="background-image: url('{{ url_for('static', filename='assets/img/region.jpg') }}')">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 mx-auto text-center">
+          <h1 class="text-white" style="text-shadow: 2px 2px 8px rgba(0,0,0,0.7);">The Region in Depth</h1>
+          <p class="lead text-white opacity-8" style="text-shadow: 2px 2px 8px rgba(0,0,0,0.7);">
+            Explore the demographics and economic flows that shape our region.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="container my-4">
+  <!-- Demographics Section -->
+  <div class="mb-5">
+    <h2 class="mb-4 text-primary">Demographics</h2>
+    <div class="row g-4">
+      {% include 'population-chart.html' %}
+      {% include 'age-chart.html' %}
+      {% include 'income-distribution.html' %}
+    </div>
+  </div>
+
+  <!-- Economic Flow Section -->
+  <div>
+    <h2 class="mb-4 text-success">Economic Flow</h2>
+    <div class="row g-4">
+      {% include 'industry-purchasing.html' %}
+      {% include 'total-industry-purchase.html' %}
+      {% include 'regional-exports.html' %}
+      {% include 'industry-regional-requirements.html' %}
+      {% include 'total-consumer-spending-est.html' %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}

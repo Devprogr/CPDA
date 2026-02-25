@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+  
+{% block content %}
+
+<header class="header-2">
+  <div class="page-header min-vh-100 relative" style="background-image: url('{{ url_for('static', filename='assets/img/vision.jpg') }}')">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-7 text-center mx-auto">
+          <h1 class="text-white pt-3 mt-n5 text-dark" style="text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.8);">
+            Our Vision
+          </h1>
+          <p class="lead text-white mt-3" style="text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);">
+            The Region that works together to facilitate enhanced:
+            <br>Prosperity
+            <br>Economic activity
+            <br>Wellbeing for people and the environment
+          </p>
+        </div>
+      </div>
+    </div>    
+  </div>
+</header>
+
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+     <!-- Challenges Block -->
+    <div class="col-lg-6 mb-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h3 class="mb-4 color: #1e2d49">Challenges We're Addressing</h3>
+          <ul class="list-unstyled fs-5">
+            <li class="mb-3">&#9632; How to increase economic activity</li>
+            <li class="mb-3">&#9632; Housing shortages</li>
+            <li class="mb-3">&#9632; Limited childcare</li>
+            <li class="mb-3">&#9632; Transportation gaps</li>
+            <li class="mb-3">&#9632; Service accessibility</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- Opportunities Block -->
+    <div class="col-lg-6 mb-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h3 class="mb-4 text-success">Opportunities for Growth</h3>
+          <ul class="list-unstyled fs-5">
+            <li class="mb-3">&#9632; Talent attraction</li>
+            <li class="mb-3">&#9632; Economic collaboration</li>
+            <li class="mb-3">&#9632; Community development</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- CTA Box -->
+  <div class="row justify-content-center">
+    <!-- <div class="col-lg-8"> -->
+      <div class="text-center fs-5 mt-4" role="alert">
+        Want to help define the roadmap?
+        <br>
+        <br>
+        <a href="/get-involved" class="btn btn-primary btn-lg ms-3">Join the Conversation</a>
+      </div>
+    </div>
+  </div>
+</div>
+      <!-- <div class="d-flex justify-content-center mb-5">
+        <a href="/get-involved" class="btn btn-primary btn-lg">Join the Conversation</a>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+{% endblock %}

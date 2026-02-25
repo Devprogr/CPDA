@@ -1,0 +1,57 @@
+<div class="col-12">
+        <div class="card shadow-sm h-100 mt-4">
+          <div class="card-body text-center">
+            <h5 class="card-title mb-3" style="color: #23254a;">Population</h5>
+            <div class="chart-responsive">
+              <canvas id="populationChart"></canvas>
+            </div>
+            <script>
+              const ctx = document.getElementById('populationChart').getContext('2d');
+              const populationChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                  labels: {{ years | tojson }},
+                  datasets: [{
+                    label: 'Population',
+                    data: {{ populations | tojson }},
+                    backgroundColor: '#1f5a78',
+                    borderWidth: 0
+                  }]
+                },
+                options: {
+                  indexAxis: 'y',
+                  responsive: true,
+                  plugins: {
+                    legend: { display: true },
+                    tooltip: { enabled: true },
+                    datalabels: {
+                      anchor: 'end',
+                      align: 'right',
+                      color: '#1f5a78',
+                      font: { weight: 'bold', size: 14 },
+                      formatter: function(value) {
+                        return value.toLocaleString();
+                      }
+                    }
+                  },
+                  scales: {
+                    x: {
+                      min: 1000,
+                      max: 100000,
+                      ticks: {
+                        callback: function(value) {
+                          return value.toLocaleString();
+                        }
+                      }
+                    },
+                    y: {
+                      ticks: { font: { weight: 'bold' } }
+                    }
+                  }
+                },
+                plugins: [ChartDataLabels]
+              });
+            </script>
+          </div>
+        </div>
+      </div>

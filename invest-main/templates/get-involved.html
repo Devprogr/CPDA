@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+  
+{% block content %}
+
+<header class="header-2">
+  <div class="page-header min-vh-100 relative" style="background-image: url('{{ url_for('static', filename='assets/img/get-involved.jpg') }}')">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-7 text-end mx-auto">
+          <h1 class="text-white pt-3 mt-n5 text-dark" style="text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);">
+            Get Involved
+          </h1>
+          <p class="lead text-white mt-3" style="text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);">
+            Working Together to Build a Stronger Future for Our Region
+          </p>
+        </div>
+      </div>
+    </div>    
+  </div>
+</header>
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <h2 class="mb-4 text-center">Who Can Join?</h2>
+      <ul class="list-group list-group-flush mb-4">
+        <li class="list-group-item">Local leaders</li>
+        <li class="list-group-item">Residents</li>
+        <li class="list-group-item">Businesses</li>
+        <li class="list-group-item">Indigenous communities</li>
+      </ul>
+      <h3 class="mb-3 text-center">Why Join?</h3>
+      <p class="text-center mb-4">
+        Influence the region's future and help shape a vibrant, inclusive community for generations to come.
+      </p>
+      <div class="d-flex justify-content-center gap-3 mb-5">
+        <a href="/join" class="btn btn-primary btn-lg">Join Us</a>
+        <a href="/contact-us" class="btn btn-outline-primary btn-lg">Subscribe to Updates</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block content %}
+
+<header class="header-2">
+  <div class="page-header min-vh-100 relative"
+       style="background-image: url('{{ url_for('static', filename='assets/img/tourism.jpg') }}'); background-size: cover; background-position: center;">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 mx-auto text-center">
+          <div style="background: rgba(20,20,30,0.70); border-radius: 1rem; display:inline-block; padding: 2rem 2.5rem;">
+            <h1 class="text-white mb-2" style="text-shadow: 3px 3px 12px rgba(0,0,0,0.7);">Tourism</h1>
+            <p class="lead text-white mb-0" style="text-shadow: 3px 3px 12px rgba(0,0,0,0.7);">
+              Lakes, beaches, family-friendly recreation, and seasonal events that bring visitors to the region.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-9">
+
+      <div class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h4 class="mb-2" style="color:#23254a; font-weight:700;">Regional highlights</h4>
+          <ul class="mb-0">
+            <li><strong>Good Spirit Lake Provincial Park:</strong> a major draw near Yorkton with beach, camping, and sand dunes.</li>
+            <li><strong>Local recreation & events:</strong> sports, facilities, and community activities that support visitor spending.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
+        <div class="col">
+          <div class="card h-100 shadow-sm">
+            <div class="card-body">
+              <h5 class="mb-2" style="color:#23254a; font-weight:700;">What’s strong here</h5>
+              <ul class="mb-0">
+                <li>Day-trip and weekend tourism base</li>
+                <li>Campgrounds, beach recreation, water activities</li>
+                <li>Room for package experiences (events + lodging + dining)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card h-100 shadow-sm">
+            <div class="card-body">
+              <h5 class="mb-2" style="color:#23254a; font-weight:700;">Investment opportunities</h5>
+              <ul class="mb-0">
+                <li>Seasonal services and rentals</li>
+                <li>Experience tourism (guided activities, events)</li>
+                <li>Food + retail partnerships for visitors</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h4 class="mb-3" style="color:#23254a; font-weight:700;">Useful visitor links</h4>
+          <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-outline-primary" href="https://tourismyorkton.com/" target="_blank" rel="noopener">Tourism Yorkton</a>
+            <a class="btn btn-outline-primary" href="https://en.wikipedia.org/wiki/Good_Spirit_Lake_Provincial_Park" target="_blank" rel="noopener">Good Spirit Lake Provincial Park</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between mt-4">
+        <a href="{{ url_for('industries') }}" class="btn btn-outline-primary">&larr; Back to Industry Page</a>
+        <a href="https://www.yorkton.ca/en/build-invest-and-grow/start-a-business.aspx" target="_blank" rel="noopener"
+           class="btn btn-primary" style="background-color:#ed4c1c; border-color:#ed4c1c;">
+          View Business Opportunities
+        </a>
+      </div>
+
+      <div class="card mt-5 shadow-sm">
+        <div class="card-body text-center">
+          <a href="{{ url_for('contact_us') }}" class="btn" style="font-size:15px;">CONTACT US</a>
+          <p class="mb-0 text-muted" style="font-size:14px;">
+            We can add a “Top 10 Visitor Experiences” list once you confirm which communities CPDA wants to spotlight.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

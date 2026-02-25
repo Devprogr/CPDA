@@ -1,0 +1,56 @@
+<div class="col-12">
+        <div class="card shadow-sm h-100 mt-4">
+          <div class="card-body text-center">
+            <h5 class="card-title mb-3" style="color: #23254a;">Income Distribution</h5>
+            <div class="chart-responsive">
+              <canvas id="incomeChart"></canvas>
+            </div>
+            <script>
+              const ctxIncome = document.getElementById('incomeChart').getContext('2d');
+              new Chart(ctxIncome, {
+                type: 'bar',
+                data: {
+                  labels: {{ income_labels | tojson }},
+                  datasets: [{
+                    label: 'Number of Households',
+                    data: {{ households_2024 | tojson }},
+                    backgroundColor: '#1f5a78'
+                  }]
+                },
+                options: {
+                  indexAxis: 'y',
+                  responsive: true,
+                  plugins: {
+                    legend: { display: true },
+                    tooltip: {
+                      callbacks: {
+                        label: function (context) {
+                          return context.parsed.x.toLocaleString();
+                        }
+                      }
+                    },
+                    datalabels: {
+                      color: '#fff',
+                      anchor: 'center',
+                      align: 'center',
+                      formatter: function (value) {
+                        return value.toLocaleString();
+                      }
+                    }
+                  },
+                  scales: {
+                    x: {
+                      ticks: {
+                        callback: function (value) {
+                          return value.toLocaleString();
+                        }
+                      }
+                    }
+                  }
+                },
+                plugins: [ChartDataLabels]
+              });
+            </script>
+          </div>
+        </div>
+      </div>
