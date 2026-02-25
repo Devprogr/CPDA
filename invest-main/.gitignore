@@ -1,3 +1,22 @@
-__pycache__/
-.venv/
+# Environment variables
+.env
+*.env
+
+# Virtual environment
 venv/
+ENV/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Flask instance folder
+instance/
+
+# Vercel local folder
+.vercel/
+
+# VS Code settings
+.vscode/
