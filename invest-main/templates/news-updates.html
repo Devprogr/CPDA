@@ -1,165 +1,442 @@
 {% extends "base.html" %}
-  
 {% block content %}
 
-<header class="header-2">
-  <div class="page-header min-vh-100 relative" style="background-image: url('{{ url_for('static', filename='assets/img/news-updates.jpg') }}')">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-7 text-end mx-auto">
-          <h1 class="text-white pt-3 mt-n5 text-dark" style="text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);">NEWS & UPDATES</h1>
-          <!-- <p class="lead text-white mt-3" style="text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);">Working Together to Build a Stronger Future for Our Region</p> -->
+<style>
+  /* --- Modern look without changing global theme --- */
+  .nu-hero {
+    position: relative;
+    min-height: 60vh;
+    background-image: url('{{ url_for('static', filename='assets/img/news-updates.jpg') }}');
+    background-size: cover;
+    background-position: center;
+    border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 24px;
+    overflow: hidden;
+  }
+  .nu-hero::after{
+    content:"";
+    position:absolute; inset:0;
+    background: linear-gradient(120deg, rgba(10,22,44,.78), rgba(10,22,44,.35));
+  }
+  .nu-hero-inner{
+    position:relative;
+    z-index:2;
+    padding: 5.5rem 0 3.5rem;
+  }
+  .nu-kpi{
+    background: rgba(255,255,255,.14);
+    border: 1px solid rgba(255,255,255,.22);
+    backdrop-filter: blur(6px);
+    border-radius: 18px;
+  }
+  .nu-kpi .num{ font-size: 1.35rem; font-weight: 800; }
+  .nu-card{
+    border: 0;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.06);
+  }
+  .nu-soft{
+    background:#f7f9fc;
+    border-radius: 18px;
+  }
+  .nu-pill{
+    border-radius: 999px;
+    padding: .35rem .75rem;
+    font-weight: 600;
+    font-size: .85rem;
+  }
+  .nu-sticky{
+    position: sticky;
+    top: 86px; /* adjust if your navbar is taller */
+    z-index: 20;
+  }
+  .nu-tab{
+    border-radius: 999px !important;
+    font-weight: 700;
+  }
+  .nu-item{
+    transition: transform .18s ease, box-shadow .18s ease;
+  }
+  .nu-item:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 14px 34px rgba(0,0,0,.10);
+  }
+  .nu-date{
+    font-size: .9rem;
+    color:#6b7280;
+    white-space: nowrap;
+  }
+  .nu-dot{
+    width:10px; height:10px; border-radius:50%;
+    background:#1e2d49;
+    box-shadow: 0 0 0 6px rgba(30,45,73,.10);
+    margin-top: 7px;
+  }
+  .nu-line{
+    width:2px;
+    background: rgba(30,45,73,.12);
+    flex: 0 0 2px;
+  }
+  .nu-qr{
+    max-width: 170px;
+    border-radius: 14px;
+    box-shadow: 0 10px 22px rgba(0,0,0,.10);
+  }
+  .nu-muted{ color:#6b7280; }
+  .nu-badge-events{ background:#16a34a; }
+  .nu-badge-announce{ background:#2563eb; }
+  .nu-badge-progress{ background:#f59e0b; color:#111827; }
+  .nu-fade-in{ animation: nuFade .35s ease; }
+  @keyframes nuFade{ from{opacity:.2; transform:translateY(6px)} to{opacity:1; transform:translateY(0)} }
+</style>
+
+<!-- HERO -->
+<section class="nu-hero">
+  <div class="container nu-hero-inner">
+    <div class="row align-items-end g-4">
+      <div class="col-lg-7 text-white">
+        <div class="d-inline-flex align-items-center gap-2 mb-2">
+          <span class="nu-pill" style="background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.25);">
+            CPDA Updates
+          </span>
+          <span class="nu-pill" style="background:rgba(22,163,74,.22); border:1px solid rgba(22,163,74,.35);">
+            New
+          </span>
+        </div>
+
+        <h1 class="mb-2" style="font-weight:900; letter-spacing:.5px;">News & Updates</h1>
+        <p class="mb-0" style="max-width: 52ch; opacity:.95;">
+          Latest announcements, upcoming events, and progress across the region — in one place.
+        </p>
+      </div>
+
+      <div class="col-lg-5">
+        <div class="row g-3">
+          <div class="col-4">
+            <div class="nu-kpi text-white p-3 text-center">
+              <div class="num" id="kpiAll">—</div>
+              <div style="opacity:.9; font-size:.85rem;">Total</div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="nu-kpi text-white p-3 text-center">
+              <div class="num" id="kpiEvents">—</div>
+              <div style="opacity:.9; font-size:.85rem;">Events</div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="nu-kpi text-white p-3 text-center">
+              <div class="num" id="kpiAnn">—</div>
+              <div style="opacity:.9; font-size:.85rem;">Alerts</div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>    
-  </div>
-</header>
 
-<div class="container mt-5 mb-5">
-  <div class="row justify-content-center mb-4">
-    <div class="col-lg-9 text-center">
-      <h2 class="mb-2">News & Updates</h2>
-      <p class="text-muted mb-0">Latest announcements, upcoming events, and progress across the region.</p>
+    </div>
+  </div>
+</section>
+
+<div class="container my-5">
+
+  <!-- FILTER BAR -->
+  <div class="nu-sticky mb-4">
+    <div class="nu-card p-3">
+      <div class="row g-3 align-items-center">
+        <div class="col-lg-7">
+          <div class="btn-group flex-wrap" role="group" aria-label="filters">
+            <button class="btn btn-outline-dark nu-tab active" data-filter="all">All</button>
+            <button class="btn btn-outline-dark nu-tab" data-filter="events">Events</button>
+            <button class="btn btn-outline-dark nu-tab" data-filter="announcements">Announcements</button>
+            <button class="btn btn-outline-dark nu-tab" data-filter="progress">Progress</button>
+          </div>
+        </div>
+
+        <div class="col-lg-5">
+          <input id="nuSearch" class="form-control" placeholder="Search updates (e.g., March 10, membership, housing)…" />
+          <div class="small nu-muted mt-2">Tip: You can filter + search at the same time.</div>
+        </div>
+      </div>
     </div>
   </div>
 
+  <!-- FEATURED EVENT -->
+  <div class="nu-card p-4 mb-4 nu-item nu-fade-in" data-type="events" data-search="next esap cpda quarterly session march 10 cote first nation rsvp register">
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-2">
+      <div class="d-flex align-items-center gap-2">
+        <span class="badge nu-badge-events nu-pill text-white">Featured Event</span>
+        <span class="nu-date">March 10 • 10:00–12:00</span>
+      </div>
+      <span class="nu-pill" style="background:#eef2ff; border:1px solid #e5e7eb;">Cote First Nation</span>
+    </div>
+
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-8">
+        <h3 class="mb-2" style="color:#1e2d49; font-weight:900;">Next ESAP & CPDA Quarterly Session</h3>
+        <p class="nu-muted mb-3" style="max-width: 65ch;">
+          To register for the March 10th meeting at Cote First Nation, please use the RSVP link below or scan the QR code.
+        </p>
+
+        <div class="d-flex flex-wrap gap-2">
+          <a class="btn btn-primary btn-lg" href="https://forms.office.com/r/xHXBVihBJF" target="_blank">
+            Register / RSVP
+          </a>
+          <button class="btn btn-outline-dark btn-lg" type="button" data-bs-toggle="modal" data-bs-target="#qrModal">
+            View QR Code
+          </button>
+        </div>
+
+        <div class="small nu-muted mt-2">Secure Microsoft Forms registration.</div>
+      </div>
+
+      <div class="col-lg-4 text-center">
+        <img
+          src="{{ url_for('static', filename='assets/img/esap_cpda_march10_qr.jpg') }}"
+          alt="QR Code for March 10 RSVP"
+          class="img-fluid nu-qr"
+        />
+        <div class="small nu-muted mt-2">Scan to register</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN GRID -->
   <div class="row g-4">
 
-    <!-- Events (FULL WIDTH) -->
-    <div class="col-12">
-      <div class="card shadow-sm border-0">
-        <div class="card-body">
-          <div class="d-flex align-items-center mb-3">
-            <span class="badge bg-success me-2">Events</span>
-            <h4 class="mb-0" style="color:#1e2d49;">Upcoming</h4>
+    <!-- LEFT: Timeline Feed -->
+    <div class="col-lg-8">
+
+      <div class="nu-card p-4 mb-4">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h4 class="mb-0" style="color:#1e2d49; font-weight:900;">Updates Feed</h4>
+          <span class="nu-muted small">Newest items on top</span>
+        </div>
+
+        <!-- Timeline item: Workshop -->
+        <div class="d-flex gap-3 mb-4 nu-item p-3 rounded nu-soft nu-fade-in"
+             data-type="events"
+             data-search="community builders workshop peter kenyon melville may 8 sponsored suncrest college city cic sask seda">
+          <div class="d-flex flex-column align-items-center">
+            <div class="nu-dot" style="background:#16a34a;"></div>
+            <div class="nu-line flex-grow-1 mt-2"></div>
           </div>
 
-          <div class="mb-3 p-4 rounded shadow-sm" style="background:#f8f9fa; border-left:4px solid #1e2d49;">
-          <div class="d-flex justify-content-between flex-wrap align-items-center mb-2">
-            <h5 class="mb-0" style="color:#1e2d49;">Next ESAP & CPDA Quarterly Session</h5>
-            <span class="badge bg-success">March 10 • 10:00–12:00</span>
-          </div>
-
-          <div class="text-muted mb-3">
-            Location: <strong>Cote First Nation</strong>
-          </div>
-
-          <p class="mb-3">
-            To register for the March 10th meeting at Cote First Nation, please use the link below or scan the QR code.
-          </p>
-
-          <div class="row align-items-center">
-            
-            <!-- RSVP Button -->
-            <div class="col-md-7 mb-3 mb-md-0">
-              <a href="https://forms.office.com/r/xHXBVihBJF"
-                target="_blank"
-                class="btn btn-primary btn-lg shadow-sm">
-                Register / RSVP Now
-              </a>
-              <div class="small text-muted mt-2">
-                Secure Microsoft Forms registration
+          <div class="w-100">
+            <div class="d-flex justify-content-between flex-wrap gap-2">
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge nu-badge-events nu-pill text-white">Event</span>
+                <strong>Community Builders Workshop (Peter Kenyon)</strong>
               </div>
+              <span class="nu-date">May 8 • 9:00am–4:00pm</span>
             </div>
-
-            <!-- QR Code -->
-            <div class="col-md-5 text-center">
-              <img 
-                src="{{ url_for('static', filename='assets/img/esap_cpda_march10_qr.jpg') }}" 
-                alt="QR Code for March 10 RSVP"
-                class="img-fluid rounded shadow-sm"
-                style="max-width:160px;"
-              />
-              <div class="small text-muted mt-2">
-                Scan to register
-              </div>
+            <div class="nu-muted">Melville</div>
+            <div class="small nu-muted mt-2">
+              Sponsored by Suncrest College, City of Melville, CIC Sask, SEDA
             </div>
-
           </div>
         </div>
 
-              <div class="p-3 rounded" style="background:#f8f9fa;">
-                <div class="d-flex justify-content-between flex-wrap">
-                  <strong>Community Builders Workshop (Peter Kenyon)</strong>
-                  <span class="text-muted">May 8 • 9:00am–4:00pm</span>
-                </div>
-                <div class="text-muted mb-2">Melville</div>
-                <small class="text-muted">
-                  Sponsored by Suncrest College, City of Melville, CIC Sask, SEDA
-                </small>
-              </div>
-            </div>
-
-            <!-- Poster (RIGHT SIDE, CLEAN SIZE) -->
-            <div class="col-lg-5">
-              <div class="p-3 rounded" style="background:#f8f9fa;">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                  <strong>Workshop Poster</strong>
-                  <a class="btn btn-sm btn-outline-dark"
-                     href="{{ url_for('static', filename='assets/img/community_workshop_melville.jpg') }}"
-                     target="_blank">
-                    View full size
-                  </a>
-                </div>
-
-                <a href="{{ url_for('static', filename='assets/img/community_workshop_melville.jpg') }}" target="_blank">
-                  <img
-                    src="{{ url_for('static', filename='assets/img/community_workshop_melville.jpg') }}"
-                    alt="Community Builders Workshop poster - Peter Kenyon"
-                    class="img-fluid rounded shadow-sm"
-                    style="width:100%; max-height:280px; object-fit:cover; object-position:top;"
-                  />
-                </a>
-
-                <small class="text-muted d-block mt-2">
-                  Tip: Click “View full size” to read details and scan the QR code.
-                </small>
-              </div>
-            </div>
+        <!-- Timeline item: Membership -->
+        <div class="d-flex gap-3 mb-4 nu-item p-3 rounded nu-soft nu-fade-in"
+             data-type="announcements"
+             data-search="annual membership fees invoice cpda info suncrestcollege">
+          <div class="d-flex flex-column align-items-center">
+            <div class="nu-dot" style="background:#2563eb;"></div>
+            <div class="nu-line flex-grow-1 mt-2"></div>
           </div>
 
+          <div class="w-100">
+            <div class="d-flex justify-content-between flex-wrap gap-2">
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge nu-badge-announce nu-pill text-white">Announcement</span>
+                <strong>Annual Membership Fees</strong>
+              </div>
+              <span class="nu-date">Now Due</span>
+            </div>
+            <div class="nu-muted mt-1">
+              Please contact
+              <a href="mailto:cpda.info@suncrestcollege.ca">cpda.info@suncrestcollege.ca</a>
+              for your invoice.
+            </div>
+          </div>
         </div>
+
+        <!-- Timeline item: Progress -->
+        <div class="d-flex gap-3 nu-item p-3 rounded nu-soft nu-fade-in"
+             data-type="progress"
+             data-search="build canada homes program regional application yorkton tribal council cpda info">
+          <div class="d-flex flex-column align-items-center">
+            <div class="nu-dot" style="background:#f59e0b;"></div>
+          </div>
+
+          <div class="w-100">
+            <div class="d-flex justify-content-between flex-wrap gap-2">
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge nu-badge-progress nu-pill">Progress</span>
+                <strong>Build Canada Homes Program (Regional Application)</strong>
+              </div>
+              <span class="nu-date">In Progress</span>
+            </div>
+            <div class="nu-muted mt-1">
+              For information, contact
+              <a href="mailto:cpda.info@suncrestcollege.ca">cpda.info@suncrestcollege.ca</a>
+              or the <strong>Yorkton Tribal Council</strong>.
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
-    <!-- Announcements -->
-    <div class="col-md-6">
-      <div class="card shadow-sm h-100 border-0">
-        <div class="card-body">
-          <div class="d-flex align-items-center mb-3">
-            <span class="badge bg-primary me-2">Announcements</span>
-            <h4 class="mb-0" style="color:#1e2d49;">Important</h4>
-          </div>
+    <!-- RIGHT: Poster + Quick Links -->
+    <div class="col-lg-4">
 
-          <div class="p-3 rounded" style="background:#f8f9fa;">
-            <strong>Annual Membership Fees:</strong> now due — contact
-            <a href="mailto:cpda.info@suncrestcollege.ca">cpda.info@suncrestcollege.ca</a> for invoice.
-          </div>
+      <!-- Poster -->
+      <div class="nu-card p-4 mb-4 nu-item nu-fade-in" data-type="events" data-search="workshop poster community builders melville peter kenyon view full size qr">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h5 class="mb-0" style="color:#1e2d49; font-weight:900;">Workshop Poster</h5>
+          <a class="btn btn-sm btn-outline-dark"
+             href="{{ url_for('static', filename='assets/img/community_workshop_melville.jpg') }}"
+             target="_blank">
+            View full size
+          </a>
+        </div>
+
+        <a href="{{ url_for('static', filename='assets/img/community_workshop_melville.jpg') }}" target="_blank">
+          <img
+            src="{{ url_for('static', filename='assets/img/community_workshop_melville.jpg') }}"
+            alt="Community Builders Workshop poster - Peter Kenyon"
+            class="img-fluid rounded"
+            style="width:100%; max-height:320px; object-fit:cover; object-position:top;"
+          />
+        </a>
+
+        <div class="small nu-muted mt-2">
+          Click “View full size” to read details and scan the poster QR code.
         </div>
       </div>
-    </div>
 
-    <!-- Progress Reports -->
-    <div class="col-md-6">
-      <div class="card shadow-sm h-100 border-0">
-        <div class="card-body">
-          <div class="d-flex align-items-center mb-3">
-            <span class="badge bg-warning text-dark me-2">Progress</span>
-            <h4 class="mb-0" style="color:#1e2d49;">Reports</h4>
-          </div>
+      <!-- Quick Actions -->
+      <div class="nu-card p-4 nu-fade-in">
+        <h5 class="mb-3" style="color:#1e2d49; font-weight:900;">Quick Actions</h5>
+        <div class="d-grid gap-2">
+          <a class="btn btn-outline-dark" href="https://forms.office.com/r/xHXBVihBJF" target="_blank">
+            RSVP: March 10 Session
+          </a>
+          <a class="btn btn-outline-dark" href="mailto:cpda.info@suncrestcollege.ca">
+            Email CPDA
+          </a>
+          <a class="btn btn-outline-dark" href="{{ url_for('contact') if 'contact' in globals() else '/contact' }}">
+            Contact Page
+          </a>
+        </div>
 
-          <div class="p-3 rounded" style="background:#f8f9fa;">
-            <strong>Build Canada Homes Program (Regional Application):</strong>
-            For information, contact
-            <a href="mailto:cpda.info@suncrestcollege.ca">cpda.info@suncrestcollege.ca</a>
-            or the <strong>Yorkton Tribal Council</strong>.
-          </div>
+        <hr class="my-3"/>
+
+        <div class="small nu-muted">
+          Looking for something specific? Use the search bar above.
         </div>
       </div>
-    </div>
 
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <div id="nuEmpty" class="nu-card p-4 mt-4 text-center d-none">
+    <h5 class="mb-1" style="color:#1e2d49; font-weight:900;">No results found</h5>
+    <div class="nu-muted">Try another keyword or switch the filter.</div>
+  </div>
+
+</div>
+
+<!-- QR Modal -->
+<div class="modal fade" id="qrModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border-radius:18px;">
+      <div class="modal-header">
+        <h5 class="modal-title" style="color:#1e2d49; font-weight:900;">March 10 RSVP QR Code</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <img
+          src="{{ url_for('static', filename='assets/img/esap_cpda_march10_qr.jpg') }}"
+          alt="QR Code for March 10 RSVP"
+          class="img-fluid rounded shadow-sm"
+          style="max-width:260px;"
+        />
+        <div class="small nu-muted mt-2">Scan to register</div>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-primary" href="https://forms.office.com/r/xHXBVihBJF" target="_blank">Open RSVP Link</a>
+        <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
   </div>
 </div>
 
+<script>
+  (function(){
+    const tabs = document.querySelectorAll('[data-filter]');
+    const items = document.querySelectorAll('[data-type]');
+    const search = document.getElementById('nuSearch');
+    const empty = document.getElementById('nuEmpty');
+
+    let activeFilter = 'all';
+    let q = '';
+
+    function matches(item){
+      const type = item.getAttribute('data-type');
+      const text = (item.getAttribute('data-search') || '').toLowerCase();
+      const filterOk = (activeFilter === 'all') || (type === activeFilter);
+      const searchOk = !q || text.includes(q);
+      return filterOk && searchOk;
+    }
+
+    function apply(){
+      let shown = 0;
+      items.forEach(el => {
+        const ok = matches(el);
+        el.classList.toggle('d-none', !ok);
+        if(ok) shown++;
+      });
+      empty.classList.toggle('d-none', shown !== 0);
+      updateKPI();
+    }
+
+    function updateKPI(){
+      const all = Array.from(items).filter(el => !el.classList.contains('d-none')).length;
+      const events = Array.from(items).filter(el => !el.classList.contains('d-none') && el.getAttribute('data-type')==='events').length;
+      const ann = Array.from(items).filter(el => !el.classList.contains('d-none') && el.getAttribute('data-type')==='announcements').length;
+
+      const kAll = document.getElementById('kpiAll');
+      const kEv = document.getElementById('kpiEvents');
+      const kAn = document.getElementById('kpiAnn');
+      if(kAll) kAll.textContent = all;
+      if(kEv) kEv.textContent = events;
+      if(kAn) kAn.textContent = ann;
+    }
+
+    tabs.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabs.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeFilter = btn.getAttribute('data-filter');
+        apply();
+      });
+    });
+
+    if(search){
+      search.addEventListener('input', (e) => {
+        q = (e.target.value || '').trim().toLowerCase();
+        apply();
+      });
+    }
+
+    // Initial load
+    // Ensure KPIs include everything first
+    items.forEach(el => el.classList.remove('d-none'));
+    apply();
+  })();
+</script>
 
 {% endblock %}
