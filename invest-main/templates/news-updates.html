@@ -34,15 +34,49 @@
             <h4 class="mb-0" style="color:#1e2d49;">Upcoming</h4>
           </div>
 
-          <div class="row g-3 align-items-start">
-            <div class="col-lg-7">
-              <div class="mb-3 p-3 rounded" style="background:#f8f9fa;">
-                <div class="d-flex justify-content-between flex-wrap">
-                  <strong>Next Meeting</strong>
-                  <span class="text-muted">March 10 • 10:00–12:00</span>
-                </div>
-                <div class="text-muted">Cote First Nation</div>
-              </div>
+          <div class="mb-3 p-4 rounded shadow-sm" style="background:#f8f9fa; border-left:4px solid #1e2d49;">
+  <div class="d-flex justify-content-between flex-wrap align-items-center mb-2">
+    <h5 class="mb-0" style="color:#1e2d49;">Next ESAP & CPDA Quarterly Session</h5>
+    <span class="badge bg-success">March 10 • 10:00–12:00</span>
+  </div>
+
+  <div class="text-muted mb-3">
+    Location: <strong>Cote First Nation</strong>
+  </div>
+
+  <p class="mb-3">
+    To register for the March 10th meeting at Cote First Nation, please use the link below or scan the QR code.
+  </p>
+
+  <div class="row align-items-center">
+    
+    <!-- RSVP Button -->
+    <div class="col-md-7 mb-3 mb-md-0">
+      <a href="https://forms.office.com/r/xHXBVihBJF"
+         target="_blank"
+         class="btn btn-primary btn-lg shadow-sm">
+        Register / RSVP Now
+      </a>
+      <div class="small text-muted mt-2">
+        Secure Microsoft Forms registration
+      </div>
+    </div>
+
+    <!-- QR Code -->
+    <div class="col-md-5 text-center">
+      <img 
+        src="{{ url_for('static', filename='assets/img/esap_cpda_march10_qr.jpg') }}" 
+        alt="QR Code for March 10 RSVP"
+        class="img-fluid rounded shadow-sm"
+        style="max-width:160px;"
+      />
+      <div class="small text-muted mt-2">
+        Scan to register
+      </div>
+    </div>
+
+  </div>
+</div>
 
               <div class="p-3 rounded" style="background:#f8f9fa;">
                 <div class="d-flex justify-content-between flex-wrap">
