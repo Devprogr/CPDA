@@ -5,7 +5,7 @@
   /* --- Modern look without changing global theme --- */
   .nu-hero {
     position: relative;
-    min-height: 58vh;
+    min-height: 80vh;
     background-image: url('{{ url_for("static", filename="assets/img/new_updates_hero_image.png") }}');
     background-size: cover;
     background-position: center;
@@ -19,13 +19,17 @@
     content:"";
     position:absolute;
     inset:0;
-    background: linear-gradient(120deg, rgba(10,22,44,.78), rgba(10,22,44,.35));
+    background: linear-gradient(
+    110deg,
+    rgba(10,22,44,.88) 0%,
+    rgba(10,22,44,.55) 55%,
+    rgba(10,22,44,.35) 100%,);
   }
 
   .nu-hero-inner{
     position:relative;
     z-index:2;
-    padding: 6rem 0 3.5rem;
+    padding: 7.5rem 0 4.5rem;
   }
 
   .nu-card{
@@ -100,10 +104,8 @@
   <div class="container nu-hero-inner">
     <div class="row justify-content-center">
       <div class="col-lg-9 text-center text-white">
-        <h1 class="mb-2" style="font-weight:900; letter-spacing:.5px;">News & Updates</h1>
-        <p class="mb-0" style="max-width: 70ch; margin: 0 auto; opacity:.95;">
-          Regional collaboration, upcoming events, and progress across the CPDA region.
-        </p>
+        <h1 class="mb-2" style="font-weight:900; letter-spacing:.4px; color:#ffffff; text-shadow: 0 8px 28px rgba(0,0,0,.45);"> News & Updates </h1>
+        <p class="mb-0" style="max-width: 72ch; margin: 0 auto; color: rgba(255,255,255,.92); text-shadow: 0 6px 22px rgba(0,0,0,.35);"> Regional collaboration, upcoming events, and progress across the CPDA region. </p>
       </div>
     </div>
   </div>
