@@ -5,134 +5,106 @@
   /* --- Modern look without changing global theme --- */
   .nu-hero {
     position: relative;
-    min-height: 60vh;
-    background-image: url('{{ url_for('static', filename='assets/img/news-updates.jpg') }}');
+    min-height: 58vh;
+    background-image: url('{{ url_for("static", filename="assets/img/new_updates_hero_image.png") }}');
     background-size: cover;
     background-position: center;
     border-bottom-left-radius: 24px;
     border-bottom-right-radius: 24px;
     overflow: hidden;
   }
+
+  /* darker overlay so text is readable on any image */
   .nu-hero::after{
     content:"";
-    position:absolute; inset:0;
+    position:absolute;
+    inset:0;
     background: linear-gradient(120deg, rgba(10,22,44,.78), rgba(10,22,44,.35));
   }
+
   .nu-hero-inner{
     position:relative;
     z-index:2;
-    padding: 5.5rem 0 3.5rem;
+    padding: 6rem 0 3.5rem;
   }
-  .nu-kpi{
-    background: rgba(255,255,255,.14);
-    border: 1px solid rgba(255,255,255,.22);
-    backdrop-filter: blur(6px);
-    border-radius: 18px;
-  }
-  .nu-kpi .num{ font-size: 1.35rem; font-weight: 800; }
+
   .nu-card{
     border: 0;
     border-radius: 18px;
     box-shadow: 0 10px 30px rgba(0,0,0,.06);
   }
+
   .nu-soft{
     background:#f7f9fc;
     border-radius: 18px;
   }
-  .nu-pill{
-    border-radius: 999px;
-    padding: .35rem .75rem;
-    font-weight: 600;
-    font-size: .85rem;
-  }
+
   .nu-sticky{
     position: sticky;
     top: 86px; /* adjust if your navbar is taller */
     z-index: 20;
   }
+
   .nu-tab{
     border-radius: 999px !important;
     font-weight: 700;
   }
+
   .nu-item{
     transition: transform .18s ease, box-shadow .18s ease;
   }
+
   .nu-item:hover{
     transform: translateY(-2px);
     box-shadow: 0 14px 34px rgba(0,0,0,.10);
   }
+
   .nu-date{
     font-size: .9rem;
     color:#6b7280;
     white-space: nowrap;
   }
+
   .nu-dot{
-    width:10px; height:10px; border-radius:50%;
+    width:10px;
+    height:10px;
+    border-radius:50%;
     background:#1e2d49;
     box-shadow: 0 0 0 6px rgba(30,45,73,.10);
     margin-top: 7px;
   }
+
   .nu-line{
     width:2px;
     background: rgba(30,45,73,.12);
     flex: 0 0 2px;
   }
+
   .nu-qr{
     max-width: 170px;
     border-radius: 14px;
     box-shadow: 0 10px 22px rgba(0,0,0,.10);
   }
+
   .nu-muted{ color:#6b7280; }
   .nu-badge-events{ background:#16a34a; }
   .nu-badge-announce{ background:#2563eb; }
   .nu-badge-progress{ background:#f59e0b; color:#111827; }
+
   .nu-fade-in{ animation: nuFade .35s ease; }
   @keyframes nuFade{ from{opacity:.2; transform:translateY(6px)} to{opacity:1; transform:translateY(0)} }
 </style>
 
-<!-- HERO -->
+<!-- HERO (clean: only title + description) -->
 <section class="nu-hero">
   <div class="container nu-hero-inner">
-    <div class="row align-items-end g-4">
-      <div class="col-lg-7 text-white">
-        <div class="d-inline-flex align-items-center gap-2 mb-2">
-          <span class="nu-pill" style="background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.25);">
-            CPDA Updates
-          </span>
-          <span class="nu-pill" style="background:rgba(22,163,74,.22); border:1px solid rgba(22,163,74,.35);">
-            New
-          </span>
-        </div>
-
+    <div class="row justify-content-center">
+      <div class="col-lg-9 text-center text-white">
         <h1 class="mb-2" style="font-weight:900; letter-spacing:.5px;">News & Updates</h1>
-        <p class="mb-0" style="max-width: 52ch; opacity:.95;">
-          Latest announcements, upcoming events, and progress across the region — in one place.
+        <p class="mb-0" style="max-width: 70ch; margin: 0 auto; opacity:.95;">
+          Regional collaboration, upcoming events, and progress across the CPDA region.
         </p>
       </div>
-
-      <div class="col-lg-5">
-        <div class="row g-3">
-          <div class="col-4">
-            <div class="nu-kpi text-white p-3 text-center">
-              <div class="num" id="kpiAll">—</div>
-              <div style="opacity:.9; font-size:.85rem;">Total</div>
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="nu-kpi text-white p-3 text-center">
-              <div class="num" id="kpiEvents">—</div>
-              <div style="opacity:.9; font-size:.85rem;">Events</div>
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="nu-kpi text-white p-3 text-center">
-              <div class="num" id="kpiAnn">—</div>
-              <div style="opacity:.9; font-size:.85rem;">Alerts</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
     </div>
   </div>
 </section>
@@ -161,13 +133,17 @@
   </div>
 
   <!-- FEATURED EVENT -->
-  <div class="nu-card p-4 mb-4 nu-item nu-fade-in" data-type="events" data-search="next esap cpda quarterly session march 10 cote first nation rsvp register">
+  <div class="nu-card p-4 mb-4 nu-item nu-fade-in"
+       data-type="events"
+       data-search="next esap cpda quarterly session march 10 cote first nation rsvp register">
     <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-2">
       <div class="d-flex align-items-center gap-2">
-        <span class="badge nu-badge-events nu-pill text-white">Featured Event</span>
+        <span class="badge nu-badge-events text-white" style="border-radius:999px; padding:.35rem .75rem; font-weight:700;">
+          Featured Event
+        </span>
         <span class="nu-date">March 10 • 10:00–12:00</span>
       </div>
-      <span class="nu-pill" style="background:#eef2ff; border:1px solid #e5e7eb;">Cote First Nation</span>
+      <span class="nu-date">Cote First Nation</span>
     </div>
 
     <div class="row g-4 align-items-center">
@@ -224,7 +200,9 @@
           <div class="w-100">
             <div class="d-flex justify-content-between flex-wrap gap-2">
               <div class="d-flex align-items-center gap-2">
-                <span class="badge nu-badge-events nu-pill text-white">Event</span>
+                <span class="badge nu-badge-events text-white" style="border-radius:999px; padding:.35rem .75rem; font-weight:700;">
+                  Event
+                </span>
                 <strong>Community Builders Workshop (Peter Kenyon)</strong>
               </div>
               <span class="nu-date">May 8 • 9:00am–4:00pm</span>
@@ -248,7 +226,9 @@
           <div class="w-100">
             <div class="d-flex justify-content-between flex-wrap gap-2">
               <div class="d-flex align-items-center gap-2">
-                <span class="badge nu-badge-announce nu-pill text-white">Announcement</span>
+                <span class="badge nu-badge-announce text-white" style="border-radius:999px; padding:.35rem .75rem; font-weight:700;">
+                  Announcement
+                </span>
                 <strong>Annual Membership Fees</strong>
               </div>
               <span class="nu-date">Now Due</span>
@@ -272,7 +252,9 @@
           <div class="w-100">
             <div class="d-flex justify-content-between flex-wrap gap-2">
               <div class="d-flex align-items-center gap-2">
-                <span class="badge nu-badge-progress nu-pill">Progress</span>
+                <span class="badge nu-badge-progress" style="border-radius:999px; padding:.35rem .75rem; font-weight:700;">
+                  Progress
+                </span>
                 <strong>Build Canada Homes Program (Regional Application)</strong>
               </div>
               <span class="nu-date">In Progress</span>
@@ -292,7 +274,9 @@
     <div class="col-lg-4">
 
       <!-- Poster -->
-      <div class="nu-card p-4 mb-4 nu-item nu-fade-in" data-type="events" data-search="workshop poster community builders melville peter kenyon view full size qr">
+      <div class="nu-card p-4 mb-4 nu-item nu-fade-in"
+           data-type="events"
+           data-search="workshop poster community builders melville peter kenyon view full size qr">
         <div class="d-flex justify-content-between align-items-center mb-2">
           <h5 class="mb-0" style="color:#1e2d49; font-weight:900;">Workshop Poster</h5>
           <a class="btn btn-sm btn-outline-dark"
@@ -327,7 +311,7 @@
             Email CPDA
           </a>
           <a class="btn btn-outline-dark" href="/contact">
-          Contact Page
+            Contact Page
           </a>
         </div>
 
@@ -400,20 +384,6 @@
         if(ok) shown++;
       });
       empty.classList.toggle('d-none', shown !== 0);
-      updateKPI();
-    }
-
-    function updateKPI(){
-      const all = Array.from(items).filter(el => !el.classList.contains('d-none')).length;
-      const events = Array.from(items).filter(el => !el.classList.contains('d-none') && el.getAttribute('data-type')==='events').length;
-      const ann = Array.from(items).filter(el => !el.classList.contains('d-none') && el.getAttribute('data-type')==='announcements').length;
-
-      const kAll = document.getElementById('kpiAll');
-      const kEv = document.getElementById('kpiEvents');
-      const kAn = document.getElementById('kpiAnn');
-      if(kAll) kAll.textContent = all;
-      if(kEv) kEv.textContent = events;
-      if(kAn) kAn.textContent = ann;
     }
 
     tabs.forEach(btn => {
@@ -433,7 +403,6 @@
     }
 
     // Initial load
-    // Ensure KPIs include everything first
     items.forEach(el => el.classList.remove('d-none'));
     apply();
   })();
