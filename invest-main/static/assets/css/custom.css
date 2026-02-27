@@ -147,6 +147,7 @@ footer {
    Navbar dropdown (CPDA)
    ========================= */
 
+/* Dropdown styling (works with Bootstrap show/hide) */
 .navbar .dropdown-menu {
   border: 1px solid rgba(30, 45, 73, 0.12);
   border-radius: 14px;
@@ -161,7 +162,13 @@ footer {
   transform: translateY(10px);
   visibility: hidden;
   transition: all 0.18s ease;
-  display: block;
+}
+
+/* When Bootstrap opens it */
+.navbar .dropdown-menu.show {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
 }
 
 .navbar .dropdown-menu.show {
@@ -188,4 +195,13 @@ footer {
   margin-left: 0.4rem;
   transform: translateY(1px);
   border-top-color: rgba(30, 45, 73, 0.7);
+}
+
+
+@media (min-width: 992px) {
+  .navbar .dropdown:hover > .dropdown-menu {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+  }
 }
