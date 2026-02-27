@@ -56,9 +56,10 @@ def get_involved():
 def news_updates():
     return render_template("news-updates.html")
 
+
 @app.route("/vision")
 def vision():
-    return render_template("vision.html")
+    return redirect("/about-us#vision", code=301)
 
 @app.route("/priorities")
 def priorities():
