@@ -302,14 +302,13 @@ def create_app():
                     "description": description,
                     "status": "pending",
                     "owner_email": owner_email,
-                    "owner_id": None,
                     "poster_path": None,
                     "poster_url": None
                 }).execute()
 
+                res = supabase.table("events").insert(payload).execute()
+                print("Supabase insert:", res)
                 print("Supabase insert response:", res)
-                print("Supabase data:", getattr(res, "data", None))
-                print("Supabase error:", getattr(res, "error", None))
 
                 # If supabase returned an error object (common), handle it:
                 if getattr(res, "error", None):
