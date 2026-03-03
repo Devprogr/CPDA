@@ -283,31 +283,31 @@ def create_app():
 
         if request.method == "POST":
             title = (request.form.get("title") or "").strip()
-            date = (request.form.get("date") or "").strip()
+            start_at = (request.form.get("start_at") or "").strip()
+            end_at = (request.form.get("end_at") or "").strip()
             location = (request.form.get("location") or "").strip()
             description = (request.form.get("description") or "").strip()
 
-            if not title or not date:
-                flash("Please fill at least Title and Date.", "danger")
+            if not title or not start_at:
+                flash("Please fill at least Title and Start date/time.", "danger")
                 return render_template("events/submit.html")
 
             try:
                 supabase.table("events").insert({
                     "title": title,
-                    "date": date,
+                    "start_at": start_at,
+                    "end_at": end_at if end_at else None,
                     "location": location,
                     "description": description,
                     "status": "pending",
                     "submitted_by": (session.get("member_user") or {}).get("email")
                 }).execute()
 
-                flash("Event submitted! Pending approval.", "success")
+                flash("✅ Event submitted successfully. The administrator will review and approve it within 2 business days.", "success")
                 return redirect(url_for("events"))
             except Exception as e:
                 print("Event insert error:", e)
                 flash("Could not submit event. Try again.", "danger")
-
-        return render_template("events/submit.html")
 
     # ---------------- ADMIN ----------------
 
