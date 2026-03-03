@@ -319,7 +319,9 @@ def create_app():
                 return redirect(url_for("events"))
             
             except Exception as e:
-                print("Event insert error:", repr(e))
+                import traceback
+                print("Event insert exception:", repr(e))
+                print(traceback.format_exc())
                 flash("Could not submit event. Try again.", "danger")
                 return render_template("events/submit.html")
         return render_template("events/submit.html")
