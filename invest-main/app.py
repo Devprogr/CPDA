@@ -271,10 +271,6 @@ def create_app():
 
     # ---------------- EVENTS ----------------
 
-    @app.route("/events")
-    def events():
-        return render_template("events/index.html")
-
     @app.route("/events/submit", methods=["GET", "POST"])
     def event_submit():
         if not _is_member_logged_in():
@@ -292,33 +288,39 @@ def create_app():
                 flash("Please fill at least Title and Start date/time.", "danger")
                 return render_template("events/submit.html")
 
-            try:
-                owner_email = (session.get("member_user") or {}).get("email")
+            # ✅ Bug #3 fix: normalize datetime-local format to include seconds
+            def normalize_dt(dt_str):
+                if dt_str and len(dt_str) == 16:  # "YYYY-MM-DDTHH:MM"
+                    return dt_str + ":00"
+                return dt_str or None
 
-                # ✅ Single, clean insert — no duplicate, no undefined variable
+            try:
+                member = session.get("member_user") or {}
+                owner_email = member.get("email")
+                owner_id = member.get("id")  # ✅ Bug #1 fix: pull user id from session
+
                 payload = {
-                    "title": title,
-                    "start_at": start_at,
-                    "end_at": end_at if end_at else None,
-                    "location": location,
-                    "description": description,
-                    "status": "pending",       # Stays pending until admin approves
+                    "owner_id": owner_id,           # ✅ Required NOT NULL foreign key
                     "owner_email": owner_email,
+                    "title": title,
+                    "start_at": normalize_dt(start_at),
+                    "end_at": normalize_dt(end_at),
+                    "location": location or None,
+                    "description": description or None,
+                    "status": "PENDING",            # ✅ Bug #2 fix: uppercase to match CHECK constraint
                     "poster_path": None,
-                    "poster_url": None
+                    "poster_url": None,
                 }
 
                 res = supabase.table("events").insert(payload).execute()
                 print("Supabase insert response:", res)
 
-                # ✅ Correct error check on the actual response
                 if getattr(res, "error", None):
                     flash(f"Submit failed: {res.error}", "danger")
                     return render_template("events/submit.html")
 
                 flash(
-                    "✅ Event submitted successfully. The administrator will review "
-                    "and approve it within 2 business days.",
+                    "✅ Event submitted! The administrator will review and approve it within 2 business days.",
                     "success"
                 )
                 return redirect(url_for("events"))
@@ -331,7 +333,6 @@ def create_app():
                 return render_template("events/submit.html")
 
         return render_template("events/submit.html")
-
     # ---------------- ADMIN ----------------
 
     @app.route("/admin/login", methods=["GET", "POST"])
