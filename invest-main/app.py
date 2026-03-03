@@ -297,41 +297,56 @@ def create_app():
             try:
                 member = session.get("member_user") or {}
                 owner_email = member.get("email")
-                owner_id = member.get("id")  # ✅ Bug #1 fix: pull user id from session
+                owner_id = member.get("id")
+
+                # Print everything before we even attempt the insert
+                print("=== DEBUG ===")
+                print("owner_id:", owner_id)
+                print("owner_email:", owner_email)
+                print("title:", title)
+                print("start_at:", start_at)
+                print("end_at:", end_at)
+
+                def normalize_dt(dt_str):
+                    if dt_str and len(dt_str) == 16:
+                        return dt_str + ":00"
+                    return dt_str or None
 
                 payload = {
-                    "owner_id": owner_id,           # ✅ Required NOT NULL foreign key
+                    "owner_id": owner_id,
                     "owner_email": owner_email,
                     "title": title,
                     "start_at": normalize_dt(start_at),
                     "end_at": normalize_dt(end_at),
                     "location": location or None,
                     "description": description or None,
-                    "status": "PENDING",            # ✅ Bug #2 fix: uppercase to match CHECK constraint
+                    "status": "PENDING",
                     "poster_path": None,
                     "poster_url": None,
                 }
 
+                print("payload:", payload)
+
                 res = supabase.table("events").insert(payload).execute()
-                print("Supabase insert response:", res)
+                
+                print("res type:", type(res))
+                print("res:", res)
+                print("res.data:", res.data)
+                # Check for error in both old and new supabase-py response formats
+                print("res.error (if any):", getattr(res, "error", "NO ERROR ATTR"))
 
-                if getattr(res, "error", None):
-                    flash(f"Submit failed: {res.error}", "danger")
-                    return render_template("events/submit.html")
-
-                flash(
-                    "✅ Event submitted! The administrator will review and approve it within 2 business days.",
-                    "success"
-                )
+                flash("✅ Event submitted successfully.", "success")
                 return redirect(url_for("events"))
 
             except Exception as e:
                 import traceback
-                print("Event insert exception:", repr(e))
-                print(traceback.format_exc())
-                flash("Could not submit event. Try again.", "danger")
+                tb = traceback.format_exc()
+                print("=== EXCEPTION ===")
+                print("Type:", type(e).__name__)
+                print("Message:", str(e))
+                print("Traceback:\n", tb)
+                flash(f"DEBUG ERROR: {type(e).__name__}: {str(e)}", "danger")
                 return render_template("events/submit.html")
-
         return render_template("events/submit.html")
     # ---------------- ADMIN ----------------
 
