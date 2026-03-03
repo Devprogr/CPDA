@@ -40,6 +40,11 @@ def create_app():
     admin_username = os.getenv("ADMIN_USERNAME", "admin")
     admin_password = os.getenv("ADMIN_PASSWORD", "change_me")
 
+    # ---------------- HELPERS ----------------
+
+    def _is_member_logged_in() -> bool:
+        return bool(session.get("member_access_token"))
+
     # ---------------- PUBLIC ROUTES ----------------
 
     @app.route("/")
@@ -168,9 +173,6 @@ def create_app():
     def membership():
         return redirect(url_for("auth_login"), code=302)
 
-    def _is_member_logged_in():
-        return bool(session.get("member_access_token"))
-
     @app.route("/auth/login", methods=["GET", "POST"])
     def auth_login():
         if request.method == "POST":
@@ -189,7 +191,7 @@ def create_app():
                 session["member_user"] = {"email": res.user.email, "id": res.user.id}
 
                 flash("Logged in successfully.", "success")
-                return redirect(url_for("member_dashboard"))
+                return redirect(url_for("event_submit"))
             except Exception as e:
                 print("Login error:", e)
                 flash("Login failed. Check your email/password.", "danger")
@@ -243,12 +245,21 @@ def create_app():
             session["member_user"] = {"email": res.user.email, "id": res.user.id}
 
             flash("Email verified. You are now logged in.", "success")
-            return redirect(url_for("member_dashboard"))
+            return redirect(url_for("event_submit"))
         except Exception as e:
             print("Callback error:", e)
             flash("Confirmation link expired or invalid.", "danger")
             return redirect(url_for("auth_login"))
 
+    @app.route("/auth/logout")
+    def auth_logout():
+        session.pop("member_access_token", None)
+        session.pop("member_refresh_token", None)
+        session.pop("member_user", None)
+        flash("Logged out.", "info")
+        return redirect(url_for("auth_login"))
+
+    # Optional dashboard (keep if you still want it)
     @app.route("/members/dashboard")
     def member_dashboard():
         if not _is_member_logged_in():
@@ -258,13 +269,45 @@ def create_app():
         user = session.get("member_user", {})
         return render_template("members/dashboard.html", user=user)
 
-    @app.route("/auth/logout")
-    def auth_logout():
-        session.pop("member_access_token", None)
-        session.pop("member_refresh_token", None)
-        session.pop("member_user", None)
-        flash("Logged out.", "info")
-        return redirect(url_for("auth_login"))
+    # ---------------- EVENTS ----------------
+
+    @app.route("/events")
+    def events():
+        return render_template("events/index.html")
+
+    @app.route("/events/submit", methods=["GET", "POST"])
+    def event_submit():
+        if not _is_member_logged_in():
+            flash("Please login to submit an event.", "warning")
+            return redirect(url_for("auth_login"))
+
+        if request.method == "POST":
+            title = (request.form.get("title") or "").strip()
+            date = (request.form.get("date") or "").strip()
+            location = (request.form.get("location") or "").strip()
+            description = (request.form.get("description") or "").strip()
+
+            if not title or not date:
+                flash("Please fill at least Title and Date.", "danger")
+                return render_template("events/submit.html")
+
+            try:
+                supabase.table("events").insert({
+                    "title": title,
+                    "date": date,
+                    "location": location,
+                    "description": description,
+                    "status": "pending",
+                    "submitted_by": (session.get("member_user") or {}).get("email")
+                }).execute()
+
+                flash("Event submitted! Pending approval.", "success")
+                return redirect(url_for("events"))
+            except Exception as e:
+                print("Event insert error:", e)
+                flash("Could not submit event. Try again.", "danger")
+
+        return render_template("events/submit.html")
 
     # ---------------- ADMIN ----------------
 
