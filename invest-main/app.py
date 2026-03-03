@@ -294,36 +294,42 @@ def create_app():
 
             try:
                 owner_email = (session.get("member_user") or {}).get("email")
-                res = supabase.table("events").insert({
+
+                # ✅ Single, clean insert — no duplicate, no undefined variable
+                payload = {
                     "title": title,
                     "start_at": start_at,
                     "end_at": end_at if end_at else None,
                     "location": location,
                     "description": description,
-                    "status": "pending",
+                    "status": "pending",       # Stays pending until admin approves
                     "owner_email": owner_email,
                     "poster_path": None,
                     "poster_url": None
-                }).execute()
+                }
 
                 res = supabase.table("events").insert(payload).execute()
-                print("Supabase insert:", res)
                 print("Supabase insert response:", res)
 
-                # If supabase returned an error object (common), handle it:
+                # ✅ Correct error check on the actual response
                 if getattr(res, "error", None):
                     flash(f"Submit failed: {res.error}", "danger")
                     return render_template("events/submit.html")
 
-                flash("✅ Event submitted successfully. The administrator will review and approve it within 2 business days.", "success")
+                flash(
+                    "✅ Event submitted successfully. The administrator will review "
+                    "and approve it within 2 business days.",
+                    "success"
+                )
                 return redirect(url_for("events"))
-            
+
             except Exception as e:
                 import traceback
                 print("Event insert exception:", repr(e))
                 print(traceback.format_exc())
                 flash("Could not submit event. Try again.", "danger")
                 return render_template("events/submit.html")
+
         return render_template("events/submit.html")
 
     # ---------------- ADMIN ----------------
