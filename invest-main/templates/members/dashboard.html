@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+  <h2 class="mb-3">Member Dashboard</h2>
+
+  {% if user and user.email %}
+    <p>Welcome, <strong>{{ user.email }}</strong></p>
+  {% else %}
+    <p>Welcome, Member</p>
+  {% endif %}
+
+  <hr class="my-4">
+
+  <p>This page is working.</p>
+</div>
+{% endblock %}
