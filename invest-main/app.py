@@ -8,7 +8,6 @@ import os
 from supabase import Client, create_client
 import httpx
 
-
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(
@@ -17,16 +16,29 @@ app = Flask(
     template_folder=os.path.join(BASE_DIR, "templates"),
     static_url_path="/static"
 )
-app.secret_key = 'cpda_secret_key'
 
-# Initialize Supabase client
+# Secret key: use env var in production (Vercel), fallback only for local
+app.secret_key = os.getenv("APP_SECRET_KEY", "dev_only_change_me")
+
+#Secure cookie settings (safe defaults for production)
+app.config.update(
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE="Lax",
+    SESSION_COOKIE_SECURE=True,   # Vercel is HTTPS
+)
+
+#  Initialize Supabase client (fail fast if missing env vars)
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_ANON_KEY = os.getenv("SUPABASE_ANON_KEY")
+
+if not SUPABASE_URL or not SUPABASE_ANON_KEY:
+    raise RuntimeError("Missing SUPABASE_URL or SUPABASE_ANON_KEY in environment variables.")
+
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_ANON_KEY)
 
-
-ADMIN_USERNAME = "admin"
-ADMIN_PASSWORD = "password123"    
+# Admin creds: NEVER hardcode
+ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "change_me")
 
 @app.route("/")
 def home():
@@ -175,4 +187,4 @@ def contact_messages():
 
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5000, debug=True)
+    app.run(debug=True)

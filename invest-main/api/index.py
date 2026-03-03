@@ -1,8 +1,12 @@
-from app import app  # app.py must expose: app = Flask(__name__)
+# api/index.py
+import sys
+import os
 
-from app import create_app
+# Make sure the project root is in Python path
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
 
-app = create_app()
+from app import app  # this imports your app.py "app = Flask(...)"
 
-if __name__ == "__main__":
-    app.run(debug=True)
+# Vercel needs a variable named "app"
