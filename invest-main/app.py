@@ -294,13 +294,13 @@ def create_app():
 
             try:
                 supabase.table("events").insert({
-                    "title": title,
-                    "start_at": start_at,
-                    "end_at": end_at if end_at else None,
-                    "location": location,
-                    "description": description,
-                    "status": "pending",
-                    "submitted_by": (session.get("member_user") or {}).get("email")
+                "title": title,
+                "start_at": start_at,
+                "end_at": end_at if end_at else None,
+                "location": location,
+                "description": description,
+                "status": "pending",
+                "submitted_by": (session.get("member_user") or {}).get("email")
                 }).execute()
 
                 flash("✅ Event submitted successfully. The administrator will review and approve it within 2 business days.", "success")
@@ -308,6 +308,8 @@ def create_app():
             except Exception as e:
                 print("Event insert error:", e)
                 flash("Could not submit event. Try again.", "danger")
+                return render_template("events/submit.html")
+        return render_template("events/submit.html")
 
     # ---------------- ADMIN ----------------
 
