@@ -19,20 +19,29 @@
   <link id="pagestyle1" href="{{ url_for('static', filename='assets/css/custom.css') }}" rel="stylesheet" />
 
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-  <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
 </head>
 
 <body class="index-page">
+
+  <!-- Navbar -->
   <div class="container-fluid position-sticky z-index-sticky top-0 top-full">
     <div class="row">
       <div class="col-12">
         <nav class="navbar navbar-expand-lg blur blur-rounded top-0 z-index-fixed shadow position-fixed my-3 py-2 start-0 end-0 mx-0 navbar-full">
           <div class="container px-0">
-            <a class="navbar-brand font-weight-bolder" href="./" rel="tooltip" title="Designed and Coded by Suncrest" data-placement="bottom" style="font-size: 2rem;">
+
+            <a class="navbar-brand font-weight-bolder"
+               href="{{ url_for('home') }}"
+               rel="tooltip"
+               title="Designed and Coded by Suncrest"
+               data-placement="bottom"
+               style="font-size: 2rem;">
               CPDA <span class="font-italic" style="font-size: 1rem;">Stronger Together</span>
             </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation" style="background-color: #f1f1f1; border-color: #000000;">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation"
+                    aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation"
+                    style="background-color: #f1f1f1; border-color: #000000;">
               <span class="navbar-toggler-icon mt-2">
                 <span class="navbar-toggler-bar bar1"></span>
                 <span class="navbar-toggler-bar bar2"></span>
@@ -44,14 +53,16 @@
               <ul class="navbar-nav ms-auto">
 
                 <li class="nav-item">
-                  <a class="nav-link ps-12 d-flex justify-content-between cursor-pointer align-items-center" href="./">
+                  <a class="nav-link ps-12 d-flex justify-content-between cursor-pointer align-items-center"
+                     href="{{ url_for('home') }}">
                     Home
                   </a>
                 </li>
 
+                <!-- About dropdown -->
                 <li class="nav-item dropdown">
                   <div class="d-flex align-items-center">
-                    <a class="nav-link ps-12" href="./about-us">About Us</a>
+                    <a class="nav-link ps-12" href="{{ url_for('aboutUs') }}">About Us</a>
 
                     <a class="nav-link dropdown-toggle p-0 ms-1"
                        href="#"
@@ -59,71 +70,79 @@
                        role="button"
                        data-bs-toggle="dropdown"
                        aria-expanded="false"
-                       aria-label="Open About Us menu">
-                    </a>
+                       aria-label="Open About Us menu"></a>
 
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="aboutDropdown">
-                      <li><a class="dropdown-item" href="./about-us">About CPDA</a></li>
-                      <li><a class="dropdown-item" href="./about-us#vision">Our Vision</a></li>
-                      <li><a class="dropdown-item" href="./about-us#why">Importance of CPDA</a></li>
-                      <li><a class="dropdown-item" href="./about-us#map">Community Map</a></li>
-                      <li><a class="dropdown-item" href="./about-us#communities">Communities</a></li>
+                      <li><a class="dropdown-item" href="{{ url_for('aboutUs') }}">About CPDA</a></li>
+                      <li><a class="dropdown-item" href="{{ url_for('aboutUs') }}#vision">Our Vision</a></li>
+                      <li><a class="dropdown-item" href="{{ url_for('aboutUs') }}#why">Importance of CPDA</a></li>
+                      <li><a class="dropdown-item" href="{{ url_for('aboutUs') }}#map">Community Map</a></li>
+                      <li><a class="dropdown-item" href="{{ url_for('aboutUs') }}#communities">Communities</a></li>
                     </ul>
                   </div>
                 </li>
 
                 <li class="nav-item">
-                  <a class="nav-link ps-12 d-flex justify-content-between cursor-pointer align-items-center" href="./region">
+                  <a class="nav-link ps-12 d-flex justify-content-between cursor-pointer align-items-center"
+                     href="{{ url_for('region') }}">
                     Statistics
                   </a>
                 </li>
 
                 <li class="nav-item">
-                  <a class="nav-link ps-12 d-flex justify-content-between cursor-pointer align-items-center" href="./priorities">
+                  <a class="nav-link ps-12 d-flex justify-content-between cursor-pointer align-items-center"
+                     href="{{ url_for('priorities') }}">
                     Priorities
                   </a>
                 </li>
 
                 <li class="nav-item">
-                  <a class="nav-link ps-12 d-flex justify-content-between cursor-pointer align-items-center" href="./get-involved">
+                  <a class="nav-link ps-12 d-flex justify-content-between cursor-pointer align-items-center"
+                     href="{{ url_for('get_involved') }}">
                     Get Involved
                   </a>
                 </li>
 
                 <li class="nav-item">
-                  <a class="nav-link ps-12 d-flex justify-content-between cursor-pointer align-items-center" href="./news-updates">
+                  <a class="nav-link ps-12 d-flex justify-content-between cursor-pointer align-items-center"
+                     href="{{ url_for('news_updates') }}">
                     News & Updates
                   </a>
                 </li>
 
-                <!-- ✅ NEW: Events (public calendar) -->
+                <!-- Events -->
                 <li class="nav-item">
-                  <a class="nav-link ps-12 d-flex justify-content-between cursor-pointer align-items-center" href="/events">
+                  <a class="nav-link ps-12 d-flex justify-content-between cursor-pointer align-items-center"
+                     href="/events">
                     Events
                   </a>
                 </li>
 
                 <li class="nav-item">
-                  <a class="nav-link ps-12 d-flex justify-content-between cursor-pointer align-items-center" href="./contact-us">
+                  <a class="nav-link ps-12 d-flex justify-content-between cursor-pointer align-items-center"
+                     href="{{ url_for('contact_us') }}">
                     Contact
                   </a>
                 </li>
 
-                <!-- ✅ NEW: Auth links (does not affect your existing pages) -->
-                {% if session.get('sb_access_token') %}
+                <!-- Member auth -->
+                {% if session.get('member_access_token') %}
                   <li class="nav-item">
-                    <a class="nav-link ps-12 d-flex justify-content-between cursor-pointer align-items-center" href="/events/submit">
-                      Submit Event
+                    <a class="nav-link ps-12 d-flex justify-content-between cursor-pointer align-items-center"
+                       href="{{ url_for('member_dashboard') }}">
+                      Dashboard
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link ps-12 d-flex justify-content-between cursor-pointer align-items-center" href="/auth/logout">
+                    <a class="nav-link ps-12 d-flex justify-content-between cursor-pointer align-items-center"
+                       href="{{ url_for('auth_logout') }}">
                       Logout
                     </a>
                   </li>
                 {% else %}
                   <li class="nav-item">
-                    <a class="nav-link ps-12 d-flex justify-content-between cursor-pointer align-items-center" href="/auth/login">
+                    <a class="nav-link ps-12 d-flex justify-content-between cursor-pointer align-items-center"
+                       href="{{ url_for('auth_login') }}">
                       Member Login
                     </a>
                   </li>
@@ -138,19 +157,18 @@
     </div>
   </div>
 
-  <!-- ✅ NEW: Flash messages (does not break any existing logic) -->
+  <!-- Flash messages / spacing for fixed navbar -->
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
       <div class="container" style="padding-top: 110px;">
         {% for category, message in messages %}
-          <div class="alert alert-{{ category }} alert-dismissible fade show shadow-sm" role="alert">
+          <div class="alert alert-{{ 'danger' if category=='danger' else category }} alert-dismissible fade show shadow-sm" role="alert">
             {{ message }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>
         {% endfor %}
       </div>
     {% else %}
-      <!-- keeps spacing consistent because navbar is fixed -->
       <div style="padding-top: 110px;"></div>
     {% endif %}
   {% endwith %}
@@ -167,16 +185,16 @@
           </div>
 
           {% set logos = [
-            {'img': 'assets/img/Logo1.png', 'url': './'},
-            {'img': 'assets/img/Logo2.png', 'url': './'},
-            {'img': 'assets/img/Logo3.png', 'url': './'},
-            {'img': 'assets/img/Logo4.png', 'url': './'}
+            {'img': 'assets/img/Logo1.png', 'url': url_for('home')},
+            {'img': 'assets/img/Logo2.png', 'url': url_for('home')},
+            {'img': 'assets/img/Logo3.png', 'url': url_for('home')},
+            {'img': 'assets/img/Logo4.png', 'url': url_for('home')}
           ] %}
 
           <div class="row g-2 mb-4 justify-content-center justify-content-lg-start">
             {% for logo in logos %}
               <div class="col-6 col-md-4 col-lg-2 text-center mb-2">
-                <a href="{{ logo.url }}" target="_blank">
+                <a href="{{ logo.url }}">
                   <img src="{{ url_for('static', filename=logo.img) }}" alt="Logo" class="img-fluid" style="max-height:40px;">
                 </a>
               </div>
@@ -188,21 +206,21 @@
           <div class="row justify-content-end">
 
             <div class="col-6 col-lg-3 text-end mb-2">
-              <a class="nav-link" href="./about-us">About Us</a>
-              <a class="nav-link" href="./region">Statistics</a>
-              <a class="nav-link" href="./about-us#vision">Our Vision</a>
+              <a class="nav-link" href="{{ url_for('aboutUs') }}">About Us</a>
+              <a class="nav-link" href="{{ url_for('region') }}">Statistics</a>
+              <a class="nav-link" href="{{ url_for('aboutUs') }}#vision">Our Vision</a>
             </div>
 
             <div class="col-6 col-lg-3 text-end mb-2">
-              <a class="nav-link" href="./priorities">Priorities</a>
-              <a class="nav-link" href="./get-involved">Get Involved</a>
-              <a class="nav-link" href="./news-updates">News & Updates</a>
+              <a class="nav-link" href="{{ url_for('priorities') }}">Priorities</a>
+              <a class="nav-link" href="{{ url_for('get_involved') }}">Get Involved</a>
+              <a class="nav-link" href="{{ url_for('news_updates') }}">News & Updates</a>
             </div>
 
             <div class="col-6 col-lg-3 text-end mb-2">
-              <a class="nav-link" href="./contact-us">Contact Us</a>
-              <a class="nav-link" href="./">Privacy</a>
-              <a class="nav-link" href="./">Accessibility</a>
+              <a class="nav-link" href="{{ url_for('contact_us') }}">Contact Us</a>
+              <a class="nav-link" href="{{ url_for('home') }}">Privacy</a>
+              <a class="nav-link" href="{{ url_for('home') }}">Accessibility</a>
             </div>
 
           </div>
@@ -215,7 +233,7 @@
           <div class="text-center">
             <p class="my-4 text-sm">
               All rights reserved. Copyright © <script>document.write(new Date().getFullYear())</script>
-              Soft UI Design System by <a href="" target="_blank" style="color: #ffd700;">Suncrest</a>.
+              Soft UI Design System by <span style="color: #ffd700;">Suncrest</span>.
             </p>
           </div>
         </div>
@@ -232,6 +250,7 @@
     document.querySelectorAll('.navbar .dropdown').forEach(function (dropdown) {
       const menu = dropdown.querySelector('.dropdown-menu');
       const toggle = dropdown.querySelector('.dropdown-toggle');
+      if (!menu || !toggle) return;
 
       dropdown.addEventListener('mouseenter', function () {
         if (window.innerWidth < 992) return;

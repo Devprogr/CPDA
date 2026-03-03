@@ -18,14 +18,14 @@ def create_app():
         static_url_path="/static"
     )
 
-    # Secret key
+    # Secret key (Vercel: set APP_SECRET_KEY in env vars)
     app.secret_key = os.getenv("APP_SECRET_KEY") or os.getenv("FLASK_SECRET_KEY") or "dev_only_change_me"
 
-    # Secure cookie settings
+    # Cookie security
     app.config.update(
         SESSION_COOKIE_HTTPONLY=True,
         SESSION_COOKIE_SAMESITE="Lax",
-        SESSION_COOKIE_SECURE=True,   # Vercel is HTTPS
+        SESSION_COOKIE_SECURE=True,  # HTTPS on Vercel
     )
 
     # Supabase
@@ -33,13 +33,14 @@ def create_app():
     supabase_anon_key = os.getenv("SUPABASE_ANON_KEY")
     if not supabase_url or not supabase_anon_key:
         raise RuntimeError("Missing SUPABASE_URL or SUPABASE_ANON_KEY in environment variables.")
+
     supabase: Client = create_client(supabase_url, supabase_anon_key)
 
-    # Admin creds
+    # Admin creds (set in Vercel env vars)
     admin_username = os.getenv("ADMIN_USERNAME", "admin")
     admin_password = os.getenv("ADMIN_PASSWORD", "change_me")
 
-    # ---------------- ROUTES ----------------
+    # ---------------- PUBLIC ROUTES ----------------
 
     @app.route("/")
     def home():
@@ -123,7 +124,7 @@ def create_app():
 
         income_labels = [
             "$200,000 and over", "$150,000 to 199,999", "$125,000 to 149,999", "$100,000 to 124,999",
-            "$90,000 to 99,999", "$80,000 to 89,999", "$70,000 to 79,999", "$60 to 69,999",
+            "$90,000 to 99,999", "$80,000 to 89,999", "$70,000 to 79,999", "$60,000 to 69,999",
             "$50,000 to 59,999", "$45,000 to 49,999", "$40,000 to 44,999", "$35,000 to 39,999",
             "$30,000 to 34,999", "$25,000 to 29,999", "$20,000 to 24,999", "$15,000 to 19,999",
             "$10,000 to 14,999", "$5,000 to 9,999", "Under $5,000"
@@ -155,7 +156,6 @@ def create_app():
 
                 flash("Your message has been sent successfully!", "success")
                 return redirect(url_for("contact_us"))
-
             except Exception as e:
                 print("Supabase Error:", e)
                 flash("Something went wrong. Please try again later.", "danger")
@@ -212,14 +212,42 @@ def create_app():
                 return render_template("auth/register.html")
 
             try:
-                supabase.auth.sign_up({"email": email, "password": password})
-                flash("Account created. Please login.", "success")
+                supabase.auth.sign_up({
+                    "email": email,
+                    "password": password,
+                    "options": {
+                        "email_redirect_to": url_for("auth_callback", _external=True)
+                    }
+                })
+
+                flash("Account created. Please check your email to confirm.", "success")
                 return redirect(url_for("auth_login"))
             except Exception as e:
                 print("Register error:", e)
                 flash("Registration failed. Try a different email.", "danger")
 
         return render_template("auth/register.html")
+
+    @app.route("/auth/callback")
+    def auth_callback():
+        code = request.args.get("code")
+        if not code:
+            flash("Invalid or expired confirmation link.", "danger")
+            return redirect(url_for("auth_login"))
+
+        try:
+            res = supabase.auth.exchange_code_for_session({"auth_code": code})
+
+            session["member_access_token"] = res.session.access_token
+            session["member_refresh_token"] = res.session.refresh_token
+            session["member_user"] = {"email": res.user.email, "id": res.user.id}
+
+            flash("Email verified. You are now logged in.", "success")
+            return redirect(url_for("member_dashboard"))
+        except Exception as e:
+            print("Callback error:", e)
+            flash("Confirmation link expired or invalid.", "danger")
+            return redirect(url_for("auth_login"))
 
     @app.route("/members/dashboard")
     def member_dashboard():
@@ -258,7 +286,7 @@ def create_app():
     @app.route("/admin/logout")
     def admin_logout():
         session.pop("admin_logged_in", None)
-        flash("Logged out", "info")
+        flash("Logged out.", "info")
         return redirect(url_for("admin_login"))
 
     @app.route("/admin/contact-messages")
@@ -281,7 +309,6 @@ def create_app():
 
 # Vercel entrypoint:
 app = create_app()
-
 
 if __name__ == "__main__":
     app.run(debug=True)
