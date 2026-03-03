@@ -298,14 +298,7 @@ def create_app():
                 member = session.get("member_user") or {}
                 owner_email = member.get("email")
                 owner_id = member.get("id")
-
-                # Print everything before we even attempt the insert
-                print("=== DEBUG ===")
-                print("owner_id:", owner_id)
-                print("owner_email:", owner_email)
-                print("title:", title)
-                print("start_at:", start_at)
-                print("end_at:", end_at)
+                access_token = session.get("member_access_token")
 
                 def normalize_dt(dt_str):
                     if dt_str and len(dt_str) == 16:
@@ -325,26 +318,22 @@ def create_app():
                     "poster_url": None,
                 }
 
-                print("payload:", payload)
+                # ✅ Use authenticated client with user's token
+                authed_client = create_client(
+                    os.getenv("SUPABASE_URL"),
+                    os.getenv("SUPABASE_ANON_KEY")
+                )
+                authed_client.postgrest.auth(access_token)
 
-                res = supabase.table("events").insert(payload).execute()
-                
-                print("res type:", type(res))
-                print("res:", res)
-                print("res.data:", res.data)
-                # Check for error in both old and new supabase-py response formats
-                print("res.error (if any):", getattr(res, "error", "NO ERROR ATTR"))
+                res = authed_client.table("events").insert(payload).execute()
 
-                flash("✅ Event submitted successfully.", "success")
-                return redirect(url_for("events"))
+                flash("✅ Event submitted! Admin will review within 2 business days.", "success")
+                return redirect(url_for("event_submit"))  # ✅ Fixed redirect too
 
             except Exception as e:
                 import traceback
-                tb = traceback.format_exc()
-                print("=== EXCEPTION ===")
-                print("Type:", type(e).__name__)
-                print("Message:", str(e))
-                print("Traceback:\n", tb)
+                print("Event insert exception:", repr(e))
+                print(traceback.format_exc())
                 flash(f"DEBUG ERROR: {type(e).__name__}: {str(e)}", "danger")
                 return render_template("events/submit.html")
         return render_template("events/submit.html")
