@@ -268,8 +268,25 @@ def create_app():
 
         user = session.get("member_user", {})
         return render_template("members/dashboard.html", user=user)
+    
+    #----------------- EVENTS ----------------
 
-    # ---------------- EVENTS ----------------
+    @app.route("/events")
+    def events():
+        try:
+            res = supabase.table("events")\
+                .select("*")\
+                .eq("status", "APPROVED")\
+                .order("start_at", desc=False)\
+                .execute()
+            events_list = res.data or []
+        except Exception as e:
+            print("Events fetch error:", e)
+            events_list = []
+
+        return render_template("events/index.html", events=events_list)
+
+    # ---------------- EVENT_submit----------
 
     @app.route("/events/submit", methods=["GET", "POST"])
     def event_submit():
