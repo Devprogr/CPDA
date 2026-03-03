@@ -2,7 +2,6 @@
 {% block content %}
 
 <style>
-  /* --- Modern look without changing global theme --- */
   .nu-hero {
     position: relative;
     min-height: 80vh;
@@ -13,99 +12,80 @@
     border-bottom-right-radius: 24px;
     overflow: hidden;
   }
-
-  /* darker overlay so text is readable on any image */
-  .nu-hero::after{
-    content:"";
-    position:absolute;
-    inset:0;
+  .nu-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
     background: linear-gradient(
-    110deg,
-    rgba(10,22,44,.88) 0%,
-    rgba(10,22,44,.55) 55%,
-    rgba(10,22,44,.35) 100%,);
+      110deg,
+      rgba(10,22,44,.88) 0%,
+      rgba(10,22,44,.55) 55%,
+      rgba(10,22,44,.35) 100%
+    );
   }
-
-  .nu-hero-inner{
-    position:relative;
-    z-index:2;
+  .nu-hero-inner {
+    position: relative;
+    z-index: 2;
     padding: 7.5rem 0 4.5rem;
   }
-
-  .nu-card{
+  .nu-card {
     border: 0;
     border-radius: 18px;
     box-shadow: 0 10px 30px rgba(0,0,0,.06);
+    background: #fff;
   }
+  .nu-soft { background: #f7f9fc; border-radius: 18px; }
+  .nu-sticky { position: sticky; top: 86px; z-index: 20; }
+  .nu-tab { border-radius: 999px !important; font-weight: 700; }
+  .nu-item { transition: transform .18s ease, box-shadow .18s ease; }
+  .nu-item:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(0,0,0,.10); }
+  .nu-date { font-size: .9rem; color: #6b7280; white-space: nowrap; }
+  .nu-dot { width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 0 6px rgba(30,45,73,.10); margin-top: 7px; }
+  .nu-line { width: 2px; background: rgba(30,45,73,.12); flex: 0 0 2px; }
+  .nu-qr { max-width: 170px; border-radius: 14px; box-shadow: 0 10px 22px rgba(0,0,0,.10); }
+  .nu-muted { color: #6b7280; }
+  .nu-badge-events    { background: #16a34a; }
+  .nu-badge-announce  { background: #2563eb; }
+  .nu-badge-progress  { background: #f59e0b; color: #111827; }
+  .nu-badge-community { background: #7c3aed; }
+  .nu-fade-in { animation: nuFade .35s ease; }
 
-  .nu-soft{
-    background:#f7f9fc;
-    border-radius: 18px;
-  }
-
-  .nu-sticky{
-    position: sticky;
-    top: 86px; /* adjust if your navbar is taller */
-    z-index: 20;
-  }
-
-  .nu-tab{
-    border-radius: 999px !important;
-    font-weight: 700;
-  }
-
-  .nu-item{
-    transition: transform .18s ease, box-shadow .18s ease;
-  }
-
-  .nu-item:hover{
-    transform: translateY(-2px);
-    box-shadow: 0 14px 34px rgba(0,0,0,.10);
-  }
-
-  .nu-date{
-    font-size: .9rem;
-    color:#6b7280;
-    white-space: nowrap;
-  }
-
-  .nu-dot{
-    width:10px;
-    height:10px;
-    border-radius:50%;
-    background:#1e2d49;
-    box-shadow: 0 0 0 6px rgba(30,45,73,.10);
-    margin-top: 7px;
-  }
-
-  .nu-line{
-    width:2px;
-    background: rgba(30,45,73,.12);
-    flex: 0 0 2px;
-  }
-
-  .nu-qr{
-    max-width: 170px;
+  /* Community submitted event card styling */
+  .nu-community-banner {
+    background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+    border-left: 4px solid #7c3aed;
     border-radius: 14px;
-    box-shadow: 0 10px 22px rgba(0,0,0,.10);
   }
 
-  .nu-muted{ color:#6b7280; }
-  .nu-badge-events{ background:#16a34a; }
-  .nu-badge-announce{ background:#2563eb; }
-  .nu-badge-progress{ background:#f59e0b; color:#111827; }
+  /* Section divider */
+  .nu-section-label {
+    font-size: .75rem;
+    font-weight: 800;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: #9ca3af;
+    padding: .25rem 0;
+    border-bottom: 2px solid #f3f4f6;
+    margin-bottom: 1.25rem;
+  }
 
-  .nu-fade-in{ animation: nuFade .35s ease; }
-  @keyframes nuFade{ from{opacity:.2; transform:translateY(6px)} to{opacity:1; transform:translateY(0)} }
+  @keyframes nuFade {
+    from { opacity: .2; transform: translateY(6px); }
+    to   { opacity: 1;  transform: translateY(0); }
+  }
 </style>
 
-<!-- HERO (clean: only title + description) -->
+<!-- HERO -->
 <section class="nu-hero">
   <div class="container nu-hero-inner">
     <div class="row justify-content-center">
       <div class="col-lg-9 text-center text-white">
-        <h1 class="mb-2" style="font-weight:900; letter-spacing:.4px; color:#ffffff; text-shadow: 0 8px 28px rgba(0,0,0,.45);"> News & Updates </h1>
-        <p class="mb-0" style="max-width: 72ch; margin: 0 auto; color: rgba(255,255,255,.92); text-shadow: 0 6px 22px rgba(0,0,0,.35);"> Regional collaboration, upcoming events, and progress across the CPDA region. </p>
+        <h1 class="mb-2" style="font-weight:900; letter-spacing:.4px; color:#ffffff; text-shadow: 0 8px 28px rgba(0,0,0,.45);">
+          News &amp; Updates
+        </h1>
+        <p class="mb-0" style="max-width:72ch; margin:0 auto; color:rgba(255,255,255,.92); text-shadow:0 6px 22px rgba(0,0,0,.35);">
+          Regional collaboration, upcoming events, and progress across the CPDA region.
+        </p>
       </div>
     </div>
   </div>
@@ -125,7 +105,6 @@
             <button class="btn btn-outline-dark nu-tab" data-filter="progress">Progress</button>
           </div>
         </div>
-
         <div class="col-lg-5">
           <input id="nuSearch" class="form-control" placeholder="Search updates (e.g., March 10, membership, housing)…" />
           <div class="small nu-muted mt-2">Tip: You can filter + search at the same time.</div>
@@ -134,7 +113,7 @@
     </div>
   </div>
 
-  <!-- FEATURED EVENT -->
+  <!-- FEATURED EVENT (hardcoded, pinned) -->
   <div class="nu-card p-4 mb-4 nu-item nu-fade-in"
        data-type="events"
        data-search="next esap cpda quarterly session march 10 cote first nation rsvp register">
@@ -147,32 +126,21 @@
       </div>
       <span class="nu-date">Cote First Nation</span>
     </div>
-
     <div class="row g-4 align-items-center">
       <div class="col-lg-8">
-        <h3 class="mb-2" style="color:#1e2d49; font-weight:900;">Next ESAP & CPDA Quarterly Session</h3>
-        <p class="nu-muted mb-3" style="max-width: 65ch;">
+        <h3 class="mb-2" style="color:#1e2d49; font-weight:900;">Next ESAP &amp; CPDA Quarterly Session</h3>
+        <p class="nu-muted mb-3" style="max-width:65ch;">
           To register for the March 10th meeting at Cote First Nation, please use the RSVP link below or scan the QR code.
         </p>
-
         <div class="d-flex flex-wrap gap-2">
-          <a class="btn btn-primary btn-lg" href="https://forms.office.com/r/xHXBVihBJF" target="_blank">
-            Register / RSVP
-          </a>
-          <button class="btn btn-outline-dark btn-lg" type="button" data-bs-toggle="modal" data-bs-target="#qrModal">
-            View QR Code
-          </button>
+          <a class="btn btn-primary btn-lg" href="https://forms.office.com/r/xHXBVihBJF" target="_blank">Register / RSVP</a>
+          <button class="btn btn-outline-dark btn-lg" type="button" data-bs-toggle="modal" data-bs-target="#qrModal">View QR Code</button>
         </div>
-
         <div class="small nu-muted mt-2">Secure Microsoft Forms registration.</div>
       </div>
-
       <div class="col-lg-4 text-center">
-        <img
-          src="{{ url_for('static', filename='assets/img/esap_cpda_march10_qr.jpg') }}"
-          alt="QR Code for March 10 RSVP"
-          class="img-fluid nu-qr"
-        />
+        <img src="{{ url_for('static', filename='assets/img/esap_cpda_march10_qr.jpg') }}"
+             alt="QR Code for March 10 RSVP" class="img-fluid nu-qr" />
         <div class="small nu-muted mt-2">Scan to register</div>
       </div>
     </div>
@@ -183,14 +151,64 @@
 
     <!-- LEFT: Timeline Feed -->
     <div class="col-lg-8">
-
       <div class="nu-card p-4 mb-4">
         <div class="d-flex align-items-center justify-content-between mb-3">
           <h4 class="mb-0" style="color:#1e2d49; font-weight:900;">Updates Feed</h4>
           <span class="nu-muted small">Newest items on top</span>
         </div>
 
-        <!-- Timeline item: Workshop -->
+        <!-- ======================================================
+             DYNAMIC: Community-submitted events from Supabase
+             Shown at TOP of feed, sorted by start_at ascending
+        ======================================================= -->
+        {% if events %}
+        <div class="nu-section-label">📅 Community Submitted Events</div>
+
+        {% for event in events %}
+        {% set search_text = (event.title ~ ' ' ~ (event.location or '') ~ ' ' ~ (event.description or '') ~ ' community submitted event') | lower %}
+        <div class="d-flex gap-3 mb-4 nu-item p-3 nu-community-banner nu-fade-in"
+             data-type="events"
+             data-search="{{ search_text }}">
+          <div class="d-flex flex-column align-items-center">
+            <div class="nu-dot" style="background:#7c3aed;"></div>
+            <div class="nu-line flex-grow-1 mt-2"></div>
+          </div>
+          <div class="w-100">
+            <div class="d-flex justify-content-between flex-wrap gap-2 mb-1">
+              <div class="d-flex align-items-center gap-2 flex-wrap">
+                <span class="badge nu-badge-community text-white" style="border-radius:999px; padding:.35rem .75rem; font-weight:700;">
+                  Event
+                </span>
+                <strong>{{ event.title }}</strong>
+              </div>
+              <span class="nu-date">
+                {{ event.start_at[:10] }}
+                {% if event.start_at[11:16] %} • {{ event.start_at[11:16] }}{% endif %}
+                {% if event.end_at %} – {{ event.end_at[11:16] }}{% endif %}
+              </span>
+            </div>
+            {% if event.location %}
+            <div class="nu-muted small">📍 {{ event.location }}</div>
+            {% endif %}
+            {% if event.description %}
+            <div class="small nu-muted mt-1">{{ event.description | truncate(160) }}</div>
+            {% endif %}
+            {% if event.poster_url %}
+            <div class="mt-2">
+              <a href="{{ event.poster_url }}" target="_blank" class="btn btn-sm btn-outline-secondary">
+                View Poster
+              </a>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+
+        <div class="nu-section-label mt-2">📌 CPDA Updates</div>
+        {% endif %}
+        <!-- END DYNAMIC EVENTS -->
+
+        <!-- HARDCODED: Workshop -->
         <div class="d-flex gap-3 mb-4 nu-item p-3 rounded nu-soft nu-fade-in"
              data-type="events"
              data-search="community builders workshop peter kenyon melville may 8 sponsored suncrest college city cic sask seda">
@@ -198,25 +216,20 @@
             <div class="nu-dot" style="background:#16a34a;"></div>
             <div class="nu-line flex-grow-1 mt-2"></div>
           </div>
-
           <div class="w-100">
             <div class="d-flex justify-content-between flex-wrap gap-2">
               <div class="d-flex align-items-center gap-2">
-                <span class="badge nu-badge-events text-white" style="border-radius:999px; padding:.35rem .75rem; font-weight:700;">
-                  Event
-                </span>
+                <span class="badge nu-badge-events text-white" style="border-radius:999px; padding:.35rem .75rem; font-weight:700;">Event</span>
                 <strong>Community Builders Workshop (Peter Kenyon)</strong>
               </div>
               <span class="nu-date">May 8 • 9:00am–4:00pm</span>
             </div>
             <div class="nu-muted">Melville</div>
-            <div class="small nu-muted mt-2">
-              Sponsored by Suncrest College, City of Melville, CIC Sask, SEDA
-            </div>
+            <div class="small nu-muted mt-2">Sponsored by Suncrest College, City of Melville, CIC Sask, SEDA</div>
           </div>
         </div>
 
-        <!-- Timeline item: Membership -->
+        <!-- HARDCODED: Membership -->
         <div class="d-flex gap-3 mb-4 nu-item p-3 rounded nu-soft nu-fade-in"
              data-type="announcements"
              data-search="annual membership fees invoice cpda info suncrestcollege">
@@ -224,53 +237,54 @@
             <div class="nu-dot" style="background:#2563eb;"></div>
             <div class="nu-line flex-grow-1 mt-2"></div>
           </div>
-
           <div class="w-100">
             <div class="d-flex justify-content-between flex-wrap gap-2">
               <div class="d-flex align-items-center gap-2">
-                <span class="badge nu-badge-announce text-white" style="border-radius:999px; padding:.35rem .75rem; font-weight:700;">
-                  Announcement
-                </span>
+                <span class="badge nu-badge-announce text-white" style="border-radius:999px; padding:.35rem .75rem; font-weight:700;">Announcement</span>
                 <strong>Annual Membership Fees</strong>
               </div>
               <span class="nu-date">Now Due</span>
             </div>
             <div class="nu-muted mt-1">
-              Please contact
-              <a href="mailto:cpda.info@suncrestcollege.ca">cpda.info@suncrestcollege.ca</a>
-              for your invoice.
+              Please contact <a href="mailto:cpda.info@suncrestcollege.ca">cpda.info@suncrestcollege.ca</a> for your invoice.
             </div>
           </div>
         </div>
 
-        <!-- Timeline item: Progress -->
+        <!-- HARDCODED: Progress -->
         <div class="d-flex gap-3 nu-item p-3 rounded nu-soft nu-fade-in"
              data-type="progress"
              data-search="build canada homes program regional application yorkton tribal council cpda info">
           <div class="d-flex flex-column align-items-center">
             <div class="nu-dot" style="background:#f59e0b;"></div>
           </div>
-
           <div class="w-100">
             <div class="d-flex justify-content-between flex-wrap gap-2">
               <div class="d-flex align-items-center gap-2">
-                <span class="badge nu-badge-progress" style="border-radius:999px; padding:.35rem .75rem; font-weight:700;">
-                  Progress
-                </span>
+                <span class="badge nu-badge-progress" style="border-radius:999px; padding:.35rem .75rem; font-weight:700;">Progress</span>
                 <strong>Build Canada Homes Program (Regional Application)</strong>
               </div>
               <span class="nu-date">In Progress</span>
             </div>
             <div class="nu-muted mt-1">
-              For information, contact
-              <a href="mailto:cpda.info@suncrestcollege.ca">cpda.info@suncrestcollege.ca</a>
+              For information, contact <a href="mailto:cpda.info@suncrestcollege.ca">cpda.info@suncrestcollege.ca</a>
               or the <strong>Yorkton Tribal Council</strong>.
             </div>
           </div>
         </div>
 
+      </div><!-- end nu-card -->
+
+      <!-- Submit CTA — visible to all, prompts login if needed -->
+      <div class="nu-card p-4 nu-fade-in d-flex align-items-center justify-content-between flex-wrap gap-3">
+        <div>
+          <h6 class="mb-1" style="color:#1e2d49; font-weight:900;">Have a community event to share?</h6>
+          <div class="small nu-muted">Members can submit events for admin approval.</div>
+        </div>
+        <a href="{{ url_for('event_submit') }}" class="btn btn-dark">Submit an Event →</a>
       </div>
-    </div>
+
+    </div><!-- end col-lg-8 -->
 
     <!-- RIGHT: Poster + Quick Links -->
     <div class="col-lg-4">
@@ -283,49 +297,32 @@
           <h5 class="mb-0" style="color:#1e2d49; font-weight:900;">Workshop Poster</h5>
           <a class="btn btn-sm btn-outline-dark"
              href="{{ url_for('static', filename='assets/img/community_workshop_melville.jpg') }}"
-             target="_blank">
-            View full size
-          </a>
+             target="_blank">View full size</a>
         </div>
-
         <a href="{{ url_for('static', filename='assets/img/community_workshop_melville.jpg') }}" target="_blank">
-          <img
-            src="{{ url_for('static', filename='assets/img/community_workshop_melville.jpg') }}"
-            alt="Community Builders Workshop poster - Peter Kenyon"
-            class="img-fluid rounded"
-            style="width:100%; max-height:320px; object-fit:cover; object-position:top;"
-          />
+          <img src="{{ url_for('static', filename='assets/img/community_workshop_melville.jpg') }}"
+               alt="Community Builders Workshop poster - Peter Kenyon"
+               class="img-fluid rounded"
+               style="width:100%; max-height:320px; object-fit:cover; object-position:top;" />
         </a>
-
-        <div class="small nu-muted mt-2">
-          Click “View full size” to read details and scan the poster QR code.
-        </div>
+        <div class="small nu-muted mt-2">Click "View full size" to read details and scan the poster QR code.</div>
       </div>
 
       <!-- Quick Actions -->
       <div class="nu-card p-4 nu-fade-in">
         <h5 class="mb-3" style="color:#1e2d49; font-weight:900;">Quick Actions</h5>
         <div class="d-grid gap-2">
-          <a class="btn btn-outline-dark" href="https://forms.office.com/r/xHXBVihBJF" target="_blank">
-            RSVP: March 10 Session
-          </a>
-          <a class="btn btn-outline-dark" href="mailto:cpda.info@suncrestcollege.ca">
-            Email CPDA
-          </a>
-          <a class="btn btn-outline-dark" href="/contact">
-            Contact Page
-          </a>
+          <a class="btn btn-outline-dark" href="https://forms.office.com/r/xHXBVihBJF" target="_blank">RSVP: March 10 Session</a>
+          <a class="btn btn-outline-dark" href="mailto:cpda.info@suncrestcollege.ca">Email CPDA</a>
+          <a class="btn btn-outline-dark" href="/contact-us">Contact Page</a>
+          <a class="btn btn-outline-dark" href="{{ url_for('event_submit') }}">Submit an Event</a>
         </div>
-
         <hr class="my-3"/>
-
-        <div class="small nu-muted">
-          Looking for something specific? Use the search bar above.
-        </div>
+        <div class="small nu-muted">Looking for something specific? Use the search bar above.</div>
       </div>
 
     </div>
-  </div>
+  </div><!-- end row -->
 
   <!-- Empty state -->
   <div id="nuEmpty" class="nu-card p-4 mt-4 text-center d-none">
@@ -344,12 +341,10 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body text-center">
-        <img
-          src="{{ url_for('static', filename='assets/img/esap_cpda_march10_qr.jpg') }}"
-          alt="QR Code for March 10 RSVP"
-          class="img-fluid rounded shadow-sm"
-          style="max-width:260px;"
-        />
+        <img src="{{ url_for('static', filename='assets/img/esap_cpda_march10_qr.jpg') }}"
+             alt="QR Code for March 10 RSVP"
+             class="img-fluid rounded shadow-sm"
+             style="max-width:260px;" />
         <div class="small nu-muted mt-2">Scan to register</div>
       </div>
       <div class="modal-footer">
@@ -362,17 +357,17 @@
 
 <script>
   (function(){
-    const tabs = document.querySelectorAll('[data-filter]');
-    const items = document.querySelectorAll('[data-type]');
+    const tabs   = document.querySelectorAll('[data-filter]');
+    const items  = document.querySelectorAll('[data-type]');
     const search = document.getElementById('nuSearch');
-    const empty = document.getElementById('nuEmpty');
+    const empty  = document.getElementById('nuEmpty');
 
     let activeFilter = 'all';
     let q = '';
 
     function matches(item){
-      const type = item.getAttribute('data-type');
-      const text = (item.getAttribute('data-search') || '').toLowerCase();
+      const type   = item.getAttribute('data-type');
+      const text   = (item.getAttribute('data-search') || '').toLowerCase();
       const filterOk = (activeFilter === 'all') || (type === activeFilter);
       const searchOk = !q || text.includes(q);
       return filterOk && searchOk;
@@ -398,14 +393,12 @@
     });
 
     if(search){
-      search.addEventListener('input', (e) => {
+      search.addEventListener('input', e => {
         q = (e.target.value || '').trim().toLowerCase();
         apply();
       });
     }
 
-    // Initial load
-    items.forEach(el => el.classList.remove('d-none'));
     apply();
   })();
 </script>

@@ -73,7 +73,18 @@ def create_app():
 
     @app.route("/news-updates")
     def news_updates():
-        return render_template("news-updates.html")
+        try:
+            res = supabase.table("events")\
+                .select("*")\
+                .eq("status", "APPROVED")\
+                .order("start_at", desc=False)\
+                .execute()
+            events = res.data or []
+        except Exception as e:
+            print("News updates events fetch error:", e)
+            events = []
+        return render_template("news-updates.html", events=events)
+
 
     @app.route("/vision")
     def vision():
@@ -273,18 +284,7 @@ def create_app():
 
     @app.route("/events")
     def events():
-        try:
-            res = supabase.table("events")\
-                .select("*")\
-                .eq("status", "APPROVED")\
-                .order("start_at", desc=False)\
-                .execute()
-            events_list = res.data or []
-        except Exception as e:
-            print("Events fetch error:", e)
-            events_list = []
-
-        return render_template("events/index.html", events=events_list)
+        return redirect(url_for("news_updates"), code=302)
 
     # ---------------- EVENT_submit----------
 
