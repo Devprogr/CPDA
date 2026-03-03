@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Submit Event{% endblock %}
+{% block content %}
+
+<header class="py-5 bg-light border-bottom">
+  <div class="container">
+    <h1 class="h3 mb-1">Submit an Event</h1>
+    <p class="text-muted mb-0">Events appear publicly only after admin approval.</p>
+  </div>
+</header>
+
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body p-4">
+          <form method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+              <label class="form-label">Title *</label>
+              <input name="title" class="form-control" required>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Start *</label>
+                <input name="start_at" type="datetime-local" class="form-control" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">End</label>
+                <input name="end_at" type="datetime-local" class="form-control">
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Location</label>
+              <input name="location" class="form-control">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Description</label>
+              <textarea name="description" rows="4" class="form-control"></textarea>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label">Poster (PNG/JPG/PDF, max 5MB)</label>
+              <input name="poster" type="file" class="form-control">
+            </div>
+
+            <button class="btn btn-dark">Submit for approval</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
