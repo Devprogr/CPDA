@@ -1,124 +1,789 @@
 {% extends "base.html" %}
 
 {% block content %}
-<!-- Navbar -->
 
-<!-- -------- START HEADER 8 w/ card over right bg image ------- -->
-<header>
-  <div class="page-header min-vh-85">
-    <div>
-      <img
-        class="position-absolute fixed-top ms-auto w-50 h-100 z-index-0 d-none d-sm-none d-md-block border-radius-section border-top-end-radius-0 border-top-start-radius-0 border-bottom-end-radius-0"
-        src="{{ url_for('static', filename='assets/img/curved-images/curved15.jpeg') }}" alt="image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
+<style>
+  :root {
+    --navy:   #1e2d49;
+    --navy2:  #162238;
+    --cream:  #f9f6f0;
+    --wheat:  #e8d5b0;
+    --amber:  #c8922a;
+    --muted:  #7a8599;
+    --white:  #ffffff;
+    --radius: 20px;
+    --shadow: 0 32px 80px rgba(30,45,73,.18);
+  }
+
+  /* ── PAGE SHELL ── */
+  .ct-page {
+    min-height: 100vh;
+    background: var(--cream);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Decorative wheat-field grain overlay */
+  .ct-page::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(ellipse 80% 60% at 70% 50%, rgba(200,146,42,.07) 0%, transparent 70%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='4' height='4' fill='%23f9f6f0'/%3E%3Ccircle cx='1' cy='1' r='.6' fill='rgba(30,45,73,.04)'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── LEFT PANEL ── */
+  .ct-left {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 5rem 4rem 5rem 6rem;
+  }
+
+  .ct-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: .6rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .75rem;
+    font-weight: 500;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 1.5rem;
+    animation: slideUp .6s ease both;
+  }
+
+  .ct-eyebrow::before {
+    content: "";
+    display: block;
+    width: 28px;
+    height: 2px;
+    background: var(--amber);
+    border-radius: 2px;
+  }
+
+  .ct-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 4vw, 4rem);
+    font-weight: 900;
+    color: var(--navy);
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    animation: slideUp .6s .1s ease both;
+  }
+
+  .ct-heading em {
+    font-style: italic;
+    color: var(--amber);
+  }
+
+  .ct-subtext {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    color: var(--muted);
+    line-height: 1.75;
+    max-width: 38ch;
+    margin-bottom: 3rem;
+    animation: slideUp .6s .2s ease both;
+  }
+
+  /* Contact info pills */
+  .ct-info-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: .9rem;
+    animation: slideUp .6s .3s ease both;
+  }
+
+  .ct-info-list li {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .ct-info-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: var(--navy);
+    color: var(--wheat);
+    display: grid;
+    place-items: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+    transition: background .2s, transform .2s;
+  }
+
+  .ct-info-list li:hover .ct-info-icon {
+    background: var(--amber);
+    transform: rotate(-6deg) scale(1.08);
+  }
+
+  .ct-info-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: .92rem;
+    color: var(--navy);
+  }
+
+  .ct-info-text span {
+    display: block;
+    font-size: .75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    margin-bottom: .1rem;
+  }
+
+  /* Social row */
+  .ct-social {
+    display: flex;
+    gap: .75rem;
+    animation: slideUp .6s .4s ease both;
+  }
+
+  .ct-social a {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1.5px solid rgba(30,45,73,.15);
+    display: grid;
+    place-items: center;
+    color: var(--navy);
+    font-size: .95rem;
+    transition: all .2s ease;
+    text-decoration: none;
+  }
+
+  .ct-social a:hover {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: var(--wheat);
+    transform: translateY(-3px);
+  }
+
+  /* Decorative vertical line */
+  .ct-divider {
+    position: absolute;
+    right: 0;
+    top: 10%;
+    height: 80%;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, rgba(30,45,73,.12) 30%, rgba(30,45,73,.12) 70%, transparent);
+  }
+
+  /* ── RIGHT PANEL ── */
+  .ct-right {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5rem 6rem 5rem 4rem;
+  }
+
+  .ct-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 3rem;
+    width: 100%;
+    max-width: 480px;
+    animation: cardReveal .7s .2s ease both;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Amber top accent bar */
+  .ct-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--amber), #e6b44a, var(--amber));
+    background-size: 200% 100%;
+    animation: shimmer 3s linear infinite;
+  }
+
+  @keyframes shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  .ct-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: .4rem;
+  }
+
+  .ct-card-sub {
+    font-family: 'DM Sans', sans-serif;
+    font-size: .88rem;
+    color: var(--muted);
+    margin-bottom: 2rem;
+  }
+
+  /* Flash messages */
+  .ct-flash {
+    margin-bottom: 1.5rem;
+  }
+
+  /* ── FLOATING LABEL INPUTS ── */
+  .ct-field {
+    position: relative;
+    margin-bottom: 1.6rem;
+  }
+
+  .ct-field label {
+    position: absolute;
+    top: 50%;
+    left: 1rem;
+    transform: translateY(-50%);
+    font-family: 'DM Sans', sans-serif;
+    font-size: .9rem;
+    color: var(--muted);
+    pointer-events: none;
+    transition: all .22s ease;
+    background: transparent;
+    padding: 0 .2rem;
+    z-index: 1;
+  }
+
+  .ct-field.ct-textarea label {
+    top: 1.1rem;
+    transform: none;
+  }
+
+  .ct-field input,
+  .ct-field textarea {
+    width: 100%;
+    padding: 1.1rem 1rem .5rem;
+    border: 1.5px solid rgba(30,45,73,.15);
+    border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .95rem;
+    color: var(--navy);
+    background: #fafafa;
+    outline: none;
+    transition: border-color .22s, box-shadow .22s, background .22s;
+    resize: none;
+  }
+
+  .ct-field textarea {
+    padding-top: 1.6rem;
+    min-height: 130px;
+  }
+
+  /* Floated state */
+  .ct-field input:focus,
+  .ct-field input:not(:placeholder-shown),
+  .ct-field textarea:focus,
+  .ct-field textarea:not(:placeholder-shown) {
+    border-color: var(--amber);
+    background: var(--white);
+    box-shadow: 0 0 0 4px rgba(200,146,42,.10);
+  }
+
+  .ct-field input:focus ~ label,
+  .ct-field input:not(:placeholder-shown) ~ label,
+  .ct-field textarea:focus ~ label,
+  .ct-field textarea:not(:placeholder-shown) ~ label {
+    top: .45rem;
+    font-size: .72rem;
+    color: var(--amber);
+    font-weight: 500;
+    letter-spacing: .04em;
+    transform: none;
+  }
+
+  /* Error state */
+  .ct-field.has-error input,
+  .ct-field.has-error textarea {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 4px rgba(239,68,68,.08);
+  }
+
+  .ct-error-msg {
+    font-family: 'DM Sans', sans-serif;
+    font-size: .76rem;
+    color: #ef4444;
+    margin-top: .35rem;
+    padding-left: .2rem;
+    display: flex;
+    align-items: center;
+    gap: .3rem;
+  }
+
+  /* Row for name + email */
+  .ct-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  /* ── SUBMIT BUTTON ── */
+  .ct-btn {
+    width: 100%;
+    padding: .95rem 1.5rem;
+    background: var(--navy);
+    color: var(--white);
+    border: none;
+    border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .95rem;
+    font-weight: 500;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform .18s ease, box-shadow .18s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .6rem;
+    letter-spacing: .02em;
+  }
+
+  .ct-btn::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .ct-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(30,45,73,.28);
+    background: var(--navy2);
+  }
+
+  .ct-btn:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  .ct-btn:disabled {
+    opacity: .7;
+    cursor: not-allowed;
+  }
+
+  /* Spinner */
+  .ct-spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255,255,255,.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+    display: none;
+  }
+
+  .ct-btn.loading .ct-spinner { display: block; }
+  .ct-btn.loading .ct-btn-text { opacity: .7; }
+
+  /* ── SUCCESS STATE ── */
+  .ct-success {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1.5rem 0 .5rem;
+    animation: nuFade .4s ease both;
+  }
+
+  .ct-success-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+    display: grid;
+    place-items: center;
+    margin-bottom: 1.25rem;
+    box-shadow: 0 8px 24px rgba(22,163,74,.25);
+    animation: popIn .5s .1s ease both;
+  }
+
+  .ct-success-icon svg {
+    width: 28px;
+    height: 28px;
+    stroke: white;
+    stroke-width: 2.5;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Animated checkmark */
+  .ct-check-path {
+    stroke-dasharray: 40;
+    stroke-dashoffset: 40;
+    animation: drawCheck .5s .4s ease forwards;
+  }
+
+  @keyframes drawCheck {
+    to { stroke-dashoffset: 0; }
+  }
+
+  .ct-success h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: .5rem;
+  }
+
+  .ct-success p {
+    font-family: 'DM Sans', sans-serif;
+    font-size: .9rem;
+    color: var(--muted);
+    max-width: 30ch;
+    line-height: 1.6;
+  }
+
+  .ct-reset-btn {
+    margin-top: 1.5rem;
+    background: none;
+    border: 1.5px solid rgba(30,45,73,.2);
+    border-radius: 999px;
+    padding: .5rem 1.5rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .85rem;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all .2s;
+  }
+
+  .ct-reset-btn:hover {
+    border-color: var(--navy);
+    color: var(--navy);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .ct-page {
+      grid-template-columns: 1fr;
+    }
+    .ct-left {
+      padding: 4rem 2rem 2rem;
+      text-align: center;
+      align-items: center;
+    }
+    .ct-subtext { max-width: 100%; }
+    .ct-divider { display: none; }
+    .ct-right {
+      padding: 2rem 1.5rem 4rem;
+    }
+    .ct-card { padding: 2rem 1.5rem; }
+    .ct-social { justify-content: center; }
+  }
+
+  @media (max-width: 480px) {
+    .ct-row { grid-template-columns: 1fr; }
+    .ct-heading { font-size: 2.4rem; }
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes cardReveal {
+    from { opacity: 0; transform: translateY(30px) scale(.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(.5); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes nuFade {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+</style>
+
+<main class="ct-page" aria-label="Contact Us">
+
+  <!-- ── LEFT: Info Panel ── -->
+  <div class="ct-left">
+    <p class="ct-eyebrow">Get in touch</p>
+    <h1 class="ct-heading">Let's start a<br><em>conversation.</em></h1>
+    <p class="ct-subtext">
+      For partnership opportunities or general inquiries about the CPDA region,
+      reach out via the form or contact us directly.
+    </p>
+
+    <ul class="ct-info-list" aria-label="Contact information">
+      <li>
+        <div class="ct-info-icon" aria-hidden="true">
+          <i class="fas fa-phone-alt"></i>
+        </div>
+        <div class="ct-info-text">
+          <span>Phone</span>
+          639 562 9550
+        </div>
+      </li>
+      <li>
+        <div class="ct-info-icon" aria-hidden="true">
+          <i class="fas fa-envelope"></i>
+        </div>
+        <div class="ct-info-text">
+          <span>Email</span>
+          <a href="mailto:cpda.info@suncrestcollege.ca"
+             style="color:var(--navy); text-decoration:none;">
+            cpda.info@suncrestcollege.ca
+          </a>
+        </div>
+      </li>
+    </ul>
+
+    <div class="ct-social" aria-label="Social media links">
+      <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+      <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <i class="fab fa-linkedin-in"></i>
+      </a>
+      <a href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter / X">
+        <i class="fab fa-twitter"></i>
+      </a>
     </div>
-    <div class="container">
 
-      <div class="row">
-        <div class="col-lg-7 d-flex justify-content-center flex-column">
-          <div class="card d-flex blur justify-content-center p-4 shadow-lg my-sm-0 my-sm-6 mt-8 mb-5">
-            <div class="text-center">
-              {% with messages = get_flashed_messages(with_categories=true) %}
-              {% if messages %}
-              <div class="mb-3">
-                {% for category, message in messages %}
-                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                  {{ message }}
-                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                {% endfor %}
-              </div>
-              {% endif %}
-              {% endwith %}
-              <h3 class="text-gradient text-primary">Contact us</h3>
-              <p class="mb-0">
-                For further questions, including partnership opportunities, please email cpda.info@suncrestcollege.ca or contact using our contact form.
-              </p>
-            </div>
-            <form id="contact-form" method="POST" autocomplete="off">
-              {{ form.hidden_tag() }}
-              <div class="card-body pb-2">
-                <div class="row">
-                  <div class="col-md-6">
-                    <label for="{{ form.name.id }}">Full Name</label>
-                    <div class="input-group mb-4">
-                      {{ form.name(class="form-control", placeholder="Full Name") }}
-                      {% if form.name.errors %}
-                      <div class="text-danger small">
-                        {{ form.name.errors[0] }}
-                      </div>
-                      {% endif %}
-                    </div>
-                  </div>
-                  <div class="col-md-6 ps-md-2">
-                    <label for="{{ form.email.id }}">Email</label>
-                    <div class="input-group">
-                      {{ form.email(class="form-control", placeholder="david1@gmail.com") }}
-                      {% if form.email.errors %}
-                      <div class="text-danger small">
-                        {{ form.email.errors[0] }}
-                      </div>
-                      {% endif %}
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group mb-0 mt-md-0 mt-4">
-                  <label for="{{ form.message.id }}">How can we help you?</label>
-                  {{ form.message(class="form-control", rows=6, placeholder="Describe your problem in at least 10 characters") }}
-                  {% if form.message.errors %}
-                  <div class="text-danger small">
-                    {{ form.message.errors[0] }}
-                  </div>
-                  {% endif %}
-                </div>
-                <div class="row">
-                  <div class="col-md-12 text-center">
-                    {{ form.submit(class="btn btn-primary mt-3 mb-0") }}
-                  </div>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
+    <div class="ct-divider" aria-hidden="true"></div>
+  </div>
 
-        <div class="col-lg-5">
-          <div class="card p-4 shadow-lg my-sm-0 my-sm-6 mt-8 mb-5">
-            <h4>Need Help?</h4>
-            <ul>
-              <li>Phone number: 639 562 9550</li>
-              <li>Inquiries: cpda.info@suncrestcollege.ca </li>
-            </ul>
-            <div class="mt-4">
-              <h5>Follow us</h5>
-              <a href="https://facebook.com" target="_blank" class="me-1 text-info">
-                <i class="fab fa-facebook fa-2x"></i>
-              </a>
-              <a href="https://instagram.com" target="_blank" class="me-2 text-info">
-                <i class="fab fa-instagram fa-2x"></i>
-              </a>
-              <a href="https://linkedin.com" target="_blank" class="me-3 text-info">
-                <i class="fab fa-linkedin fa-2x"></i>
-              </a>
-              <a href="https://twitter.com" target="_blank" class="me-4 text-info">
-                <i class="fab fa-twitter fa-2x"></i>
-              </a>
-            </div>
-          </div>
+  <!-- ── RIGHT: Form Panel ── -->
+  <div class="ct-right">
+    <div class="ct-card" role="region" aria-label="Contact form">
+
+      <!-- Flash messages from Flask -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+      <div class="ct-flash">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert"
+             style="border-radius:12px; font-family:'DM Sans',sans-serif; font-size:.88rem;">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
+        {% endfor %}
       </div>
+      {% endif %}
+      {% endwith %}
+
+      <!-- Form wrapper (hidden on success) -->
+      <div id="ct-form-wrap">
+        <p class="ct-card-title">Send a message</p>
+        <p class="ct-card-sub">We'll get back to you within 1–2 business days.</p>
+
+        <form id="contact-form" method="POST" autocomplete="off" novalidate>
+          {{ form.hidden_tag() }}
+
+          <div class="ct-row">
+            <!-- Full Name -->
+            <div class="ct-field {% if form.name.errors %}has-error{% endif %}" id="field-name">
+              {{ form.name(class="form-control", placeholder=" ", id="ct-name",
+                           aria_describedby="name-error", aria_required="true") }}
+              <label for="ct-name">Full Name *</label>
+              {% if form.name.errors %}
+              <p class="ct-error-msg" id="name-error" role="alert">
+                <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+                {{ form.name.errors[0] }}
+              </p>
+              {% endif %}
+            </div>
+
+            <!-- Email -->
+            <div class="ct-field {% if form.email.errors %}has-error{% endif %}" id="field-email">
+              {{ form.email(class="form-control", placeholder=" ", id="ct-email",
+                            type="email", aria_describedby="email-error", aria_required="true") }}
+              <label for="ct-email">Email Address *</label>
+              {% if form.email.errors %}
+              <p class="ct-error-msg" id="email-error" role="alert">
+                <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+                {{ form.email.errors[0] }}
+              </p>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Message -->
+          <div class="ct-field ct-textarea {% if form.message.errors %}has-error{% endif %}" id="field-message">
+            {{ form.message(class="form-control", placeholder=" ", id="ct-message", rows=5,
+                            aria_describedby="message-error", aria_required="true") }}
+            <label for="ct-message">How can we help you? *</label>
+            {% if form.message.errors %}
+            <p class="ct-error-msg" id="message-error" role="alert">
+              <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+              {{ form.message.errors[0] }}
+            </p>
+            {% endif %}
+          </div>
+
+          <!-- Submit -->
+          <button type="submit" class="ct-btn" id="ct-submit" aria-live="polite">
+            <span class="ct-spinner" aria-hidden="true"></span>
+            <span class="ct-btn-text">Send Message</span>
+            <i class="fas fa-arrow-right ct-btn-arrow" aria-hidden="true"
+               style="margin-left:.3rem; transition:transform .2s;"></i>
+          </button>
+        </form>
+      </div>
+
+      <!-- Success State (shown after JS submit OR Flask success flash) -->
+      <div class="ct-success" id="ct-success" aria-live="polite" aria-atomic="true">
+        <div class="ct-success-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <polyline class="ct-check-path" points="4 12 9 17 20 6"/>
+          </svg>
+        </div>
+        <h4>Message Sent!</h4>
+        <p>Thank you for reaching out. We'll be in touch within 1–2 business days.</p>
+        <button class="ct-reset-btn" id="ct-reset" aria-label="Send another message">
+          Send another message
+        </button>
+      </div>
+
     </div>
   </div>
-</header>
+</main>
 
-<!--   Core JS Files   -->
+<script>
+(function () {
+  const form    = document.getElementById('contact-form');
+  const btn     = document.getElementById('ct-submit');
+  const wrap    = document.getElementById('ct-form-wrap');
+  const success = document.getElementById('ct-success');
+  const resetBtn= document.getElementById('ct-reset');
+  const arrow   = btn ? btn.querySelector('.ct-btn-arrow') : null;
 
-<script src="../assets/js/core/popper.min.js" type="text/javascript"></script>
-<script src="../assets/js/core/bootstrap.min.js" type="text/javascript"></script>
-<script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
-<!--  Plugin for Parallax, full documentation here: https://github.com/wagerfield/parallax  -->
-<script src="../assets/js/plugins/parallax.min.js"></script>
-<!-- Control Center for Soft UI Kit: parallax effects, scripts for the example pages etc -->
-<!--  Google Maps Plugin    -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTTfWur0PDbZWPr7Pmq8K3jiDp0_xUziI"></script>
-<script src="../assets/js/soft-design-system.min.js?v=1.1.0" type="text/javascript"></script>
+  // ── If Flask already flashed a success message, show success state ──
+  const flashAlerts = document.querySelectorAll('.alert-success');
+  if (flashAlerts.length > 0) {
+    showSuccess();
+  }
+
+  // ── Button arrow hover ──
+  if (btn && arrow) {
+    btn.addEventListener('mouseenter', () => arrow.style.transform = 'translateX(4px)');
+    btn.addEventListener('mouseleave', () => arrow.style.transform = 'translateX(0)');
+  }
+
+  // ── Client-side validation ──
+  function validateField(input) {
+    const wrapper = input.closest('.ct-field');
+    if (!wrapper) return true;
+
+    const val = input.value.trim();
+    let error = '';
+
+    if (input.id === 'ct-name' && val.length < 2) {
+      error = 'Please enter your full name.';
+    } else if (input.id === 'ct-email') {
+      const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRe.test(val)) error = 'Please enter a valid email address.';
+    } else if (input.id === 'ct-message' && val.length < 10) {
+      error = 'Message must be at least 10 characters.';
+    }
+
+    // Clear existing client error
+    const existingErr = wrapper.querySelector('.ct-client-error');
+    if (existingErr) existingErr.remove();
+
+    if (error) {
+      wrapper.classList.add('has-error');
+      const p = document.createElement('p');
+      p.className = 'ct-error-msg ct-client-error';
+      p.setAttribute('role', 'alert');
+      p.innerHTML = `<i class="fas fa-exclamation-circle" aria-hidden="true"></i> ${error}`;
+      wrapper.appendChild(p);
+      return false;
+    } else {
+      wrapper.classList.remove('has-error');
+      return true;
+    }
+  }
+
+  // Validate on blur
+  ['ct-name', 'ct-email', 'ct-message'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('blur', () => validateField(el));
+      el.addEventListener('input', () => {
+        if (el.closest('.ct-field').classList.contains('has-error')) validateField(el);
+      });
+    }
+  });
+
+  // ── Submit handler: show loading state ──
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      const name    = document.getElementById('ct-name');
+      const email   = document.getElementById('ct-email');
+      const message = document.getElementById('ct-message');
+
+      const valid = [name, email, message]
+        .map(validateField)
+        .every(Boolean);
+
+      if (!valid) {
+        e.preventDefault();
+        // Focus first error
+        const firstErr = form.querySelector('.has-error input, .has-error textarea');
+        if (firstErr) firstErr.focus();
+        return;
+      }
+
+      // Show loading
+      btn.classList.add('loading');
+      btn.disabled = true;
+      btn.querySelector('.ct-btn-text').textContent = 'Sending…';
+      if (arrow) arrow.style.display = 'none';
+    });
+  }
+
+  // ── Reset ──
+  if (resetBtn) {
+    resetBtn.addEventListener('click', function () {
+      success.style.display = 'none';
+      wrap.style.display    = 'block';
+      if (form) form.reset();
+      // Remove any has-error states
+      document.querySelectorAll('.ct-field').forEach(f => f.classList.remove('has-error'));
+      document.querySelectorAll('.ct-client-error').forEach(e => e.remove());
+    });
+  }
+
+  function showSuccess() {
+    if (!wrap || !success) return;
+    wrap.style.display    = 'none';
+    success.style.display = 'flex';
+  }
+})();
+</script>
+
 {% endblock %}
