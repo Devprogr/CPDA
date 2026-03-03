@@ -308,11 +308,19 @@ def create_app():
                 }).execute()
 
                 print("Supabase insert response:", res)
-                
+                print("Supabase data:", getattr(res, "data", None))
+                print("Supabase error:", getattr(res, "error", None))
+
+                # If supabase returned an error object (common), handle it:
+                if getattr(res, "error", None):
+                    flash(f"Submit failed: {res.error}", "danger")
+                    return render_template("events/submit.html")
+
                 flash("✅ Event submitted successfully. The administrator will review and approve it within 2 business days.", "success")
                 return redirect(url_for("events"))
+            
             except Exception as e:
-                print("Event insert error:", e)
+                print("Event insert error:", repr(e))
                 flash("Could not submit event. Try again.", "danger")
                 return render_template("events/submit.html")
         return render_template("events/submit.html")
