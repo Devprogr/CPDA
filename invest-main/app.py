@@ -293,16 +293,22 @@ def create_app():
                 return render_template("events/submit.html")
 
             try:
-                supabase.table("events").insert({
-                "title": title,
-                "start_at": start_at,
-                "end_at": end_at if end_at else None,
-                "location": location,
-                "description": description,
-                "status": "pending",
-                "submitted_by": (session.get("member_user") or {}).get("email")
+                owner_email = (session.get("member_user") or {}).get("email")
+                res = supabase.table("events").insert({
+                    "title": title,
+                    "start_at": start_at,
+                    "end_at": end_at if end_at else None,
+                    "location": location,
+                    "description": description,
+                    "status": "pending",
+                    "owner_email": owner_email,
+                    "owner_id": None,
+                    "poster_path": None,
+                    "poster_url": None
                 }).execute()
 
+                print("Supabase insert response:", res)
+                
                 flash("✅ Event submitted successfully. The administrator will review and approve it within 2 business days.", "success")
                 return redirect(url_for("events"))
             except Exception as e:
