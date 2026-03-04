@@ -1,104 +1,594 @@
 {% extends "base.html" %}
 {% block content %}
 
-<header class="header-2">
-  <div class="page-header min-vh-100 relative"
-       style="background-image: url('{{ url_for('static', filename='assets/img/health-education.jpg') }}'); background-size: cover; background-position: center;">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-8 mx-auto text-center">
-          <div style="background: rgba(20,20,30,0.70); border-radius: 1rem; display:inline-block; padding: 2rem 2.5rem;">
-            <h1 class="text-white mb-2" style="text-shadow: 3px 3px 12px rgba(0,0,0,0.7);">Healthcare &amp; Education</h1>
-            <p class="lead text-white mb-0" style="text-shadow: 3px 3px 12px rgba(0,0,0,0.7);">
-              Regional services that support families, workforce attraction, and long-term community growth.
-            </p>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --navy:    #0f1724;
+  --navy2:   #182034;
+  --teal:    #0d7a6b;
+  --teal2:   #15a98f;
+  --teal-bg: rgba(13,122,107,.07);
+  --cream:   #f5f2ec;
+  --slate:   #475569;
+  --fog:     #8896a8;
+  --font-d:  'Cormorant Garamond', Georgia, serif;
+  --font-b:  'Figtree', system-ui, sans-serif;
+  --ease:    cubic-bezier(.22,1,.36,1);
+}
+*, *::before, *::after { box-sizing: border-box; }
+body { background: var(--cream); font-family: var(--font-b); color: var(--navy); margin: 0; }
+
+/* HERO */
+.he-hero {
+  background: var(--navy); position: relative; overflow: hidden;
+  padding: 8rem 0 5.5rem; min-height: 90vh; display: flex; align-items: center;
+}
+/* Hexagonal cell pattern — nods to biology/education */
+.he-hero::before {
+  content: ""; position: absolute; inset: 0; z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100'%3E%3Cpath d='M28 0 L56 14 L56 42 L28 56 L0 42 L0 14 Z' fill='none' stroke='rgba(255,255,255,0.028)' stroke-width='1'/%3E%3Cpath d='M28 56 L56 70 L56 98 L28 112 L0 98 L0 70 Z' fill='none' stroke='rgba(255,255,255,0.028)' stroke-width='1'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.he-hero::after {
+  content: ""; position: absolute; inset: 0; z-index: 1;
+  background: radial-gradient(ellipse 55% 45% at 15% 40%, rgba(13,122,107,.28), transparent),
+              radial-gradient(ellipse 40% 60% at 90% 70%, rgba(13,122,107,.12), transparent);
+  pointer-events: none;
+}
+.he-grain {
+  position: absolute; inset: 0; z-index: 2;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: .5; pointer-events: none;
+}
+.he-hero-inner { position: relative; z-index: 3; }
+
+.he-eyebrow {
+  display: inline-flex; align-items: center; gap: .65rem;
+  font-family: var(--font-b); font-size: .7rem; font-weight: 700;
+  letter-spacing: .22em; text-transform: uppercase;
+  color: var(--teal2); margin-bottom: 1.5rem;
+  animation: fadeUp .7s .05s var(--ease) both;
+}
+.he-eyebrow-bar { width: 28px; height: 2px; background: var(--teal2); border-radius: 2px; }
+.he-title {
+  font-family: var(--font-d); font-size: clamp(3rem, 6vw, 5.5rem);
+  font-weight: 700; line-height: 1.03; letter-spacing: -.02em;
+  color: #fff; margin-bottom: 1.5rem;
+  animation: fadeUp .7s .13s var(--ease) both;
+}
+.he-title em { display: block; font-style: italic; font-weight: 400; color: var(--teal2); }
+.he-subtitle {
+  font-size: 1.05rem; font-weight: 300; line-height: 1.8;
+  color: rgba(255,255,255,.72); max-width: 52ch;
+  margin-bottom: 2.5rem; animation: fadeUp .7s .2s var(--ease) both;
+}
+.he-hero-btns { display: flex; flex-wrap: wrap; gap: 1rem; animation: fadeUp .7s .27s var(--ease) both; }
+
+/* Hero dual stats */
+.he-stat-card {
+  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.09);
+  border-radius: 18px; padding: 1.75rem;
+  animation: fadeUp .7s .32s var(--ease) both;
+}
+.he-stat-item { padding: .85rem 0; }
+.he-stat-item + .he-stat-item { border-top: 1px solid rgba(255,255,255,.07); }
+.he-stat-num {
+  font-family: var(--font-d); font-size: 2.6rem; font-weight: 700;
+  line-height: 1; color: #fff;
+}
+.he-stat-num em { font-style: normal; font-size: 1.2rem; color: var(--teal2); }
+.he-stat-lbl { font-size: .72rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.42); margin-top: .3rem; }
+
+/* SECTIONS */
+.he-section { padding: 5.5rem 0; }
+.he-section-white { background: #fff; }
+.he-section-dark { background: var(--navy); position: relative; overflow: hidden; }
+.he-section-dark::before {
+  content: ""; position: absolute; inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,.03) 1px, transparent 1px);
+  background-size: 26px 26px; pointer-events: none;
+}
+
+.he-kicker {
+  font-size: .68rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--teal); display: flex; align-items: center; gap: .55rem; margin-bottom: .8rem;
+}
+.he-kicker::before { content: ""; width: 20px; height: 2px; background: currentColor; border-radius: 2px; }
+.he-kicker-light { color: var(--teal2); }
+
+.he-heading {
+  font-family: var(--font-d); font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 700; line-height: 1.15; letter-spacing: -.01em;
+  color: var(--navy); margin-bottom: 1rem;
+}
+.he-heading em { font-style: italic; font-weight: 400; color: var(--teal); }
+.he-heading-light { color: #fff; }
+.he-heading-light em { color: var(--teal2); }
+
+.he-body { font-size: .95rem; font-weight: 300; line-height: 1.8; color: var(--slate); max-width: 60ch; }
+.he-body-light { color: rgba(255,255,255,.62); }
+
+/* SUNCREST FEATURE CARD */
+.he-suncrest {
+  background: linear-gradient(135deg, #0a1f18, #0d2e22);
+  border: 1px solid rgba(21,169,143,.2);
+  border-radius: 24px; padding: 3rem 2.5rem;
+  position: relative; overflow: hidden;
+}
+.he-suncrest::before {
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--teal), var(--teal2));
+}
+.he-suncrest::after {
+  content: "";
+  position: absolute; top: -4rem; right: -3rem;
+  width: 280px; height: 280px;
+  background: radial-gradient(circle, rgba(21,169,143,.12), transparent 70%);
+  pointer-events: none;
+}
+.he-suncrest-badge {
+  display: inline-flex; align-items: center; gap: .5rem;
+  background: rgba(21,169,143,.15); border: 1px solid rgba(21,169,143,.25);
+  border-radius: 999px; padding: .35rem .9rem;
+  font-size: .68rem; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--teal2); margin-bottom: 1.25rem;
+}
+.he-suncrest-title {
+  font-family: var(--font-d); font-size: 2.2rem; font-weight: 700;
+  color: #fff; line-height: 1.1; margin-bottom: .75rem;
+}
+.he-suncrest-sub {
+  font-size: .9rem; font-weight: 300; color: rgba(255,255,255,.6);
+  line-height: 1.7; margin-bottom: 2rem; max-width: 55ch;
+}
+.he-suncrest-pills { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 2rem; }
+.he-suncrest-pill {
+  padding: .35rem .9rem; border-radius: 999px;
+  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+  font-size: .78rem; font-weight: 500; color: rgba(255,255,255,.75);
+}
+.he-suncrest-links { display: flex; flex-wrap: wrap; gap: .75rem; }
+
+/* PROGRAM CARDS */
+.he-prog-card {
+  background: #fff; border-radius: 16px; padding: 1.75rem 1.5rem; height: 100%;
+  border: 1px solid rgba(15,23,36,.08);
+  border-top: 3px solid var(--teal);
+  box-shadow: 0 2px 14px rgba(15,23,36,.05);
+  transition: transform .22s var(--ease), box-shadow .22s var(--ease);
+}
+.he-prog-card:hover { transform: translateY(-4px); box-shadow: 0 14px 36px rgba(15,23,36,.1); }
+.he-prog-icon { font-size: 1.6rem; margin-bottom: .9rem; }
+.he-prog-title { font-family: var(--font-d); font-size: 1.2rem; font-weight: 700; color: var(--navy); margin-bottom: .5rem; }
+.he-prog-body { font-size: .85rem; font-weight: 300; color: var(--slate); line-height: 1.7; margin-bottom: 1.1rem; }
+.he-prog-link {
+  display: inline-flex; align-items: center; gap: .4rem;
+  font-size: .82rem; font-weight: 600; color: var(--teal);
+  text-decoration: none; transition: gap .2s, color .2s;
+}
+.he-prog-link:hover { gap: .7rem; color: var(--navy); }
+
+/* YORKTON HEALTH CENTRE FEATURE */
+.he-hospital-card {
+  background: var(--navy2); border-radius: 20px;
+  border: 1px solid rgba(255,255,255,.07);
+  padding: 2.5rem 2rem; height: 100%;
+  position: relative; overflow: hidden;
+}
+.he-hospital-card::before {
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--teal), var(--teal2));
+}
+.he-hospital-stat { margin-bottom: 1.25rem; }
+.he-hospital-num {
+  font-family: var(--font-d); font-size: 3rem; font-weight: 700;
+  color: #fff; line-height: 1;
+}
+.he-hospital-num em { font-style: normal; font-size: 1.3rem; color: var(--teal2); }
+.he-hospital-lbl { font-size: .72rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.4); margin-top: .2rem; }
+
+/* SERVICES LIST */
+.he-service-list { list-style: none; padding: 0; margin: 0; }
+.he-service-list li {
+  display: flex; align-items: center; gap: .65rem;
+  padding: .6rem 0; font-size: .88rem; color: rgba(255,255,255,.65);
+  border-bottom: 1px solid rgba(255,255,255,.05);
+}
+.he-service-list li:last-child { border-bottom: none; }
+.he-service-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal2); flex-shrink: 0; }
+
+/* OPPORTUNITY ITEMS */
+.he-opp-item {
+  display: flex; align-items: flex-start; gap: 1rem;
+  padding: 1.25rem; border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.06);
+  background: rgba(255,255,255,.03);
+  transition: background .2s, border-color .2s;
+}
+.he-opp-item:hover { background: rgba(255,255,255,.06); border-color: rgba(21,169,143,.25); }
+.he-opp-num { font-family: var(--font-d); font-size: 2rem; font-weight: 700; color: rgba(21,169,143,.3); line-height: 1; flex-shrink: 0; width: 2.2rem; }
+.he-opp-title { font-size: .9rem; font-weight: 600; color: #fff; margin-bottom: .3rem; }
+.he-opp-desc { font-size: .82rem; font-weight: 300; color: rgba(255,255,255,.48); line-height: 1.6; }
+
+/* CTA */
+.he-cta { background: var(--teal); padding: 4.5rem 0; position: relative; overflow: hidden; }
+.he-cta::before {
+  content: ""; position: absolute; inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,.06) 1px, transparent 1px);
+  background-size: 22px 22px; pointer-events: none;
+}
+.he-cta-title { font-family: var(--font-d); font-size: clamp(1.6rem,3vw,2.4rem); font-weight: 700; color: #fff; margin-bottom: .6rem; }
+.he-cta-body { font-size: .95rem; font-weight: 300; color: rgba(255,255,255,.78); line-height: 1.7; margin: 0; max-width: 55ch; }
+
+/* BUTTONS */
+.btn-prim { display: inline-flex; align-items: center; gap: .5rem; padding: .85rem 1.75rem; border-radius: 999px; background: var(--teal); color: #fff; font-weight: 600; font-size: .9rem; text-decoration: none; font-family: var(--font-b); transition: all .2s var(--ease); }
+.btn-prim:hover { background: var(--teal2); color: #fff; transform: translateY(-2px); box-shadow: 0 10px 28px rgba(13,122,107,.4); }
+.btn-ghost { display: inline-flex; align-items: center; gap: .5rem; padding: .85rem 1.75rem; border-radius: 999px; background: rgba(255,255,255,.08); color: rgba(255,255,255,.8); border: 1.5px solid rgba(255,255,255,.2); font-weight: 600; font-size: .9rem; text-decoration: none; font-family: var(--font-b); transition: all .2s var(--ease); }
+.btn-ghost:hover { background: rgba(255,255,255,.16); color: #fff; transform: translateY(-2px); }
+.btn-teal-sm { display: inline-flex; align-items: center; gap: .45rem; padding: .65rem 1.4rem; border-radius: 999px; background: var(--teal); color: #fff; font-weight: 600; font-size: .85rem; text-decoration: none; font-family: var(--font-b); transition: all .2s var(--ease); }
+.btn-teal-sm:hover { background: var(--teal2); color: #fff; transform: translateY(-1px); }
+.btn-outline-sm { display: inline-flex; align-items: center; gap: .45rem; padding: .65rem 1.4rem; border-radius: 999px; background: transparent; color: rgba(255,255,255,.75); border: 1.5px solid rgba(255,255,255,.25); font-weight: 500; font-size: .85rem; text-decoration: none; font-family: var(--font-b); transition: all .2s var(--ease); }
+.btn-outline-sm:hover { background: rgba(255,255,255,.08); color: #fff; }
+.btn-white { display: inline-flex; align-items: center; gap: .5rem; padding: .85rem 1.75rem; border-radius: 999px; background: #fff; color: var(--teal); font-weight: 700; font-size: .9rem; text-decoration: none; font-family: var(--font-b); transition: all .2s var(--ease); }
+.btn-white:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0,0,0,.2); color: var(--navy); }
+.btn-outline { display: inline-flex; align-items: center; gap: .5rem; padding: .85rem 1.75rem; border-radius: 999px; background: transparent; color: rgba(255,255,255,.75); border: 1.5px solid rgba(255,255,255,.3); font-weight: 500; font-size: .85rem; text-decoration: none; font-family: var(--font-b); transition: all .2s var(--ease); }
+.btn-outline:hover { background: rgba(255,255,255,.08); color: #fff; }
+
+/* QUICK LINKS */
+.he-ql { padding: 2.5rem 0; background: var(--cream); }
+.he-ql-label { font-size: .68rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--fog); margin-bottom: .85rem; }
+.he-ql-row { display: flex; flex-wrap: wrap; gap: .6rem; }
+.he-ql-pill { padding: .5rem 1.15rem; border-radius: 999px; background: #fff; border: 1.5px solid rgba(15,23,36,.1); font-size: .82rem; font-weight: 500; color: var(--navy); text-decoration: none; transition: all .18s var(--ease); }
+.he-ql-pill:hover { background: var(--navy); color: #fff; border-color: var(--navy); transform: translateY(-1px); }
+.he-ql-dark { background: var(--navy); color: #fff; border-color: var(--navy); }
+.he-ql-dark:hover { background: #0a0f1a; }
+
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity .55s var(--ease), transform .55s var(--ease); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+@keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+@media (max-width: 600px) { .he-title { font-size: 2.8rem; } .he-suncrest { padding: 2rem 1.5rem; } }
+</style>
+
+<!-- HERO -->
+<section class="he-hero">
+  <div class="he-grain"></div>
+  <div class="container he-hero-inner">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-7">
+        <div class="he-eyebrow">
+          <span class="he-eyebrow-bar"></span>
+          East-Central Saskatchewan · Healthcare & Education
+        </div>
+        <h1 class="he-title">
+          World-Class Care.<br>
+          <em>Education That Stays.</em>
+        </h1>
+        <p class="he-subtitle">
+          The CPDA region is home to a regional acute care hospital, Canada's only provincial firefighter training institute, and a college offering degrees in nursing, trades, and technology — all within one community. For families and professionals relocating from out of province, the infrastructure is already here.
+        </p>
+        <div class="he-hero-btns">
+          <a href="{{ url_for('contact_us') }}" class="btn-prim">Connect With Our Team <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg></a>
+          <a href="{{ url_for('industries') }}" class="btn-ghost">← All Industries</a>
+        </div>
+      </div>
+      <div class="col-lg-4 offset-lg-1 d-none d-lg-block">
+        <div class="he-stat-card">
+          <div class="he-stat-item">
+            <div class="he-stat-num">86 <em>beds</em></div>
+            <div class="he-stat-lbl">Yorkton Regional Health Centre — acute care</div>
+          </div>
+          <div class="he-stat-item">
+            <div class="he-stat-num">4 <em>OR suites</em></div>
+            <div class="he-stat-lbl">Full surgical, OB/GYN & emergency services</div>
+          </div>
+          <div class="he-stat-item">
+            <div class="he-stat-num">74 <em>projects</em></div>
+            <div class="he-stat-lbl">Active Suncrest College applied research projects</div>
+          </div>
+          <div class="he-stat-item">
+            <div class="he-stat-num">40K<em>+</em></div>
+            <div class="he-stat-lbl">Saskatchewan Health Authority employees province-wide</div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</header>
+</section>
 
-<div class="container my-5">
-  <div class="row justify-content-center">
-    <div class="col-lg-9">
-
-      <div class="card shadow-sm mb-4">
-        <div class="card-body">
-          <h4 class="mb-2" style="color:#23254a; font-weight:700;">Healthcare</h4>
-          <p class="mb-0">
-            Yorkton is served by regional healthcare facilities, including the Yorkton Regional Health Centre,
-            supported by the Saskatchewan Health Authority.
-          </p>
-        </div>
+<!-- SUNCREST COLLEGE — FEATURED SECTION -->
+<section class="he-section" style="background:#f0f7f5;">
+  <div class="container">
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="he-kicker reveal">Featured Institution</div>
+        <h2 class="he-heading reveal">Suncrest College —<br><em>Yorkton's Post-Secondary Hub</em></h2>
+        <p class="he-body reveal">Founded in 2023 through the merger of Cumberland College and Parkland College, Suncrest College is now one of Saskatchewan's most innovative regional post-secondary institutions — and it calls Yorkton home.</p>
       </div>
+    </div>
 
-      <div class="card shadow-sm mb-4">
-        <div class="card-body">
-          <h4 class="mb-2" style="color:#23254a; font-weight:700;">Education & training</h4>
-          <p class="mb-0">
-            Education and workforce development support business growth through training, trades, and career pathways.
+    <!-- Main Suncrest card -->
+    <div class="he-suncrest reveal mb-4">
+      <div class="he-suncrest-badge">★ Yorkton Campus Highlight</div>
+      <div class="row g-4 align-items-start">
+        <div class="col-lg-7">
+          <h3 class="he-suncrest-title">Skills. Research. Community.</h3>
+          <p class="he-suncrest-sub">
+            Suncrest College delivers university degrees in partnership with the University of Saskatchewan and University of Regina, alongside trades training, health sciences, and one-of-a-kind programs you can't find anywhere else in the province. With 74 active applied research projects and international partnerships spanning Jamaica, Kenya, Tanzania, Belize, and South Africa — this is not a small regional college. It's a genuine institution.
           </p>
+          <div class="he-suncrest-pills">
+            <span class="he-suncrest-pill">BSc Nursing (U of S)</span>
+            <span class="he-suncrest-pill">Diagnostic Medical Sonography</span>
+            <span class="he-suncrest-pill">Power Engineering</span>
+            <span class="he-suncrest-pill">Welding & Trades</span>
+            <span class="he-suncrest-pill">Primary Care Paramedic</span>
+            <span class="he-suncrest-pill">Digital & Computer Science</span>
+            <span class="he-suncrest-pill">Agricultural Equipment Tech</span>
+            <span class="he-suncrest-pill">First Year University</span>
+          </div>
+          <div class="he-suncrest-links">
+            <a href="https://suncrestcollege.ca" target="_blank" rel="noopener" class="btn-teal-sm">Visit Suncrest College →</a>
+            <a href="https://suncrestcollege.ca/programs/search" target="_blank" rel="noopener" class="btn-outline-sm">Browse All Programs</a>
+            <a href="https://suncrestcollege.ca/future-students/domestic-students/" target="_blank" rel="noopener" class="btn-outline-sm">How to Apply</a>
+          </div>
         </div>
-      </div>
-
-      <div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
-        <div class="col">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="mb-2" style="color:#23254a; font-weight:700;">What’s strong here</h5>
-              <ul class="mb-0">
-                <li>Regional healthcare access for residents and workers</li>
-                <li>Training pathways that support trades and industry</li>
-                <li>Room for partnerships (employers + training + recruitment)</li>
-              </ul>
+        <div class="col-lg-5">
+          <!-- 3 mini-highlight cards -->
+          <div class="d-flex flex-column gap-3">
+            <div style="background:rgba(255,255,255,.06);border:1px solid rgba(21,169,143,.15);border-radius:14px;padding:1.25rem 1.5rem;">
+              <div style="font-family:var(--font-d);font-size:1.5rem;font-weight:700;color:#fff;margin-bottom:.25rem;">Saskatchewan's Only 🔥</div>
+              <div style="font-size:.85rem;font-weight:500;color:rgba(255,255,255,.75);margin-bottom:.3rem;">Provincial Firefighter Training Program</div>
+              <div style="font-size:.78rem;font-weight:300;color:rgba(255,255,255,.45);line-height:1.55;">The Saskatchewan Emergency Response Institute (SERI) in Melville — professional & industrial firefighter training found nowhere else in the province.</div>
+              <a href="https://suncrestcollege.ca" target="_blank" rel="noopener" style="font-size:.78rem;color:var(--teal2);text-decoration:none;font-weight:600;margin-top:.6rem;display:inline-block;">Learn about SERI →</a>
+            </div>
+            <div style="background:rgba(255,255,255,.06);border:1px solid rgba(21,169,143,.15);border-radius:14px;padding:1.25rem 1.5rem;">
+              <div style="font-family:var(--font-d);font-size:1.5rem;font-weight:700;color:#fff;margin-bottom:.25rem;">New in 2024 🩺</div>
+              <div style="font-size:.85rem;font-weight:500;color:rgba(255,255,255,.75);margin-bottom:.3rem;">Diagnostic Medical Sonography Diploma</div>
+              <div style="font-size:.78rem;font-weight:300;color:rgba(255,255,255,.45);line-height:1.55;">Previously, Saskatchewan students had to leave the province to train as sonographers. Suncrest now offers this 28-month advanced diploma in Yorkton.</div>
+              <a href="https://www.saskatchewan.ca/government/news-and-media/2024/february/20/new-saskatchewan-sonography-training-program-coming-to-suncrest-college" target="_blank" rel="noopener" style="font-size:.78rem;color:var(--teal2);text-decoration:none;font-weight:600;margin-top:.6rem;display:inline-block;">Read the Announcement →</a>
+            </div>
+            <div style="background:rgba(255,255,255,.06);border:1px solid rgba(21,169,143,.15);border-radius:14px;padding:1.25rem 1.5rem;">
+              <div style="font-family:var(--font-d);font-size:1.5rem;font-weight:700;color:#fff;margin-bottom:.25rem;">Degree at Home 🎓</div>
+              <div style="font-size:.85rem;font-weight:500;color:rgba(255,255,255,.75);margin-bottom:.3rem;">Full BSc in Nursing — right in Yorkton</div>
+              <div style="font-size:.78rem;font-weight:300;color:rgba(255,255,255,.45);line-height:1.55;">Complete all four years of a University of Saskatchewan Bachelor of Science in Nursing without leaving the region. Smaller classes, personal support, community roots.</div>
+              <a href="https://suncrestcollege.ca/programs/search" target="_blank" rel="noopener" style="font-size:.78rem;color:var(--teal2);text-decoration:none;font-weight:600;margin-top:.6rem;display:inline-block;">View Nursing Programs →</a>
             </div>
           </div>
         </div>
-        <div class="col">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="mb-2" style="color:#23254a; font-weight:700;">Opportunities</h5>
-              <ul class="mb-0">
-                <li>Workforce attraction and retention initiatives</li>
-                <li>Industry-aligned training programs</li>
-                <li>Community wellness and support services</li>
-              </ul>
+      </div>
+    </div>
+
+    <!-- International students note -->
+    <div class="reveal" style="background:#fff;border-radius:14px;border:1px solid rgba(15,23,36,.08);padding:1.5rem 2rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;">
+      <div style="font-size:2rem;">🌍</div>
+      <div style="flex:1;">
+        <div style="font-family:var(--font-b);font-size:.85rem;font-weight:600;color:var(--navy);margin-bottom:.2rem;">International Students Welcome</div>
+        <div style="font-size:.82rem;font-weight:300;color:var(--slate);line-height:1.6;">Suncrest College has active international development partnerships and accepts applications from students worldwide. With approximately 300 international students enrolled, the Yorkton campus is a genuinely global learning community. Application fee: CAD $140.</div>
+      </div>
+      <a href="https://suncrestcollege.ca/future-students/international-students/" target="_blank" rel="noopener" class="btn-teal-sm">International Admissions →</a>
+    </div>
+  </div>
+</section>
+
+<!-- SUNCREST PROGRAMS GRID -->
+<section class="he-section he-section-white">
+  <div class="container">
+    <div class="row mb-4">
+      <div class="col-lg-7">
+        <div class="he-kicker reveal">Suncrest College Programs</div>
+        <h2 class="he-heading reveal">Train Here.<br><em>Work Here. Stay Here.</em></h2>
+        <p class="he-body reveal">Programs at Suncrest are designed around real regional workforce needs. Every graduate enters a market that is actively recruiting — businesses in the area provide practicum placements and hire Suncrest graduates directly.</p>
+      </div>
+    </div>
+    <div class="row g-4">
+
+      <div class="col-md-6 col-lg-4 reveal">
+        <div class="he-prog-card">
+          <div class="he-prog-icon">🏥</div>
+          <h4 class="he-prog-title">Health Sciences & Nursing</h4>
+          <p class="he-prog-body">BSc Nursing (4-year, U of S), Primary Care Paramedic, Diagnostic Medical Sonography, Medical Laboratory Assistant, and first-year pathways to medicine and pharmacy — all offered in Yorkton.</p>
+          <a href="https://suncrestcollege.ca/programs/search?category=health" target="_blank" rel="noopener" class="he-prog-link">View Health Programs →</a>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4 reveal">
+        <div class="he-prog-card">
+          <div class="he-prog-icon">🔧</div>
+          <h4 class="he-prog-title">Skilled Trades & Technology</h4>
+          <p class="he-prog-body">Power Engineering, Welding, Agricultural Equipment Technician, and Carpentry — taught at the Trades & Technology Centre (TTC) with real industry equipment and hands-on projects including student-built tiny homes.</p>
+          <a href="https://suncrestcollege.ca/programs/search?category=trades" target="_blank" rel="noopener" class="he-prog-link">View Trades Programs →</a>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4 reveal">
+        <div class="he-prog-card">
+          <div class="he-prog-icon">🔥</div>
+          <h4 class="he-prog-title">Emergency Services & Safety</h4>
+          <p class="he-prog-body">Saskatchewan's only provincial firefighter training program, offered through the Saskatchewan Emergency Response Institute (SERI). Also includes industrial safety and first responder certifications.</p>
+          <a href="https://suncrestcollege.ca" target="_blank" rel="noopener" class="he-prog-link">Learn About SERI →</a>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4 reveal">
+        <div class="he-prog-card">
+          <div class="he-prog-icon">💻</div>
+          <h4 class="he-prog-title">Digital & Computer Science</h4>
+          <p class="he-prog-body">A new Digital Careers program (in partnership with Southeast College and Yorkton Tribal Council), funded by a $404K Future Skills Centre grant, trains Indigenous peoples, newcomers, women, and youth in computer science and workplace readiness.</p>
+          <a href="https://suncrestcollege.ca/programs/digital_careers" target="_blank" rel="noopener" class="he-prog-link">Digital Careers Program →</a>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4 reveal">
+        <div class="he-prog-card">
+          <div class="he-prog-icon">🎓</div>
+          <h4 class="he-prog-title">University Transfer & Upgrading</h4>
+          <p class="he-prog-body">Complete first-year university credits at Suncrest before transferring to U of S or U of R. Also offers high school upgrading, English Language Training, and adult education pathways.</p>
+          <a href="https://suncrestcollege.ca/programs/search?category=university" target="_blank" rel="noopener" class="he-prog-link">University @ Suncrest →</a>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4 reveal">
+        <div class="he-prog-card">
+          <div class="he-prog-icon">🌾</div>
+          <h4 class="he-prog-title">Agriculture & Applied Research</h4>
+          <p class="he-prog-body">With over 10 years of applied research experience, 74 active research projects, and 20+ business partnerships, Suncrest conducts real industry research in agriculture and Indigenous social innovation.</p>
+          <a href="https://suncrestcollege.ca" target="_blank" rel="noopener" class="he-prog-link">Research at Suncrest →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- HEALTHCARE — YORKTON REGIONAL HEALTH CENTRE -->
+<section class="he-section he-section-dark">
+  <div class="container position-relative">
+    <div class="row mb-5">
+      <div class="col-lg-7">
+        <div class="he-kicker he-kicker-light reveal">Healthcare</div>
+        <h2 class="he-heading he-heading-light reveal">Regional Hospital.<br><em>Full-Service Care.</em></h2>
+        <p class="he-body he-body-light reveal">The Yorkton Regional Health Centre is an 86-bed acute care referral centre serving the city and surrounding communities — equipped to handle complex medical needs without the commute to a major centre.</p>
+      </div>
+    </div>
+    <div class="row g-4">
+
+      <!-- Hospital card -->
+      <div class="col-lg-5 reveal">
+        <div class="he-hospital-card">
+          <div class="row g-3 mb-3">
+            <div class="col-6">
+              <div class="he-hospital-stat">
+                <div class="he-hospital-num">86 <em>beds</em></div>
+                <div class="he-hospital-lbl">Acute care capacity</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="he-hospital-stat">
+                <div class="he-hospital-num">4 <em>OR</em></div>
+                <div class="he-hospital-lbl">Operating suites</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="he-hospital-stat">
+                <div class="he-hospital-num">24/7</div>
+                <div class="he-hospital-lbl">Emergency department</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="he-hospital-stat">
+                <div class="he-hospital-num">3</div>
+                <div class="he-hospital-lbl">Birthing rooms</div>
+              </div>
             </div>
           </div>
+          <p style="font-size:.8rem;font-weight:300;color:rgba(255,255,255,.45);line-height:1.6;margin-bottom:1.25rem;">270 Bradbrooke Drive, Yorkton · 306-782-2401</p>
+          <a href="https://www.saskhealthauthority.ca/facilities-locations/yorkton-regional-health-centre" target="_blank" rel="noopener" class="btn-teal-sm">Saskatchewan Health Authority →</a>
         </div>
       </div>
 
-      <div class="card shadow-sm mb-4">
-        <div class="card-body">
-          <h4 class="mb-3" style="color:#23254a; font-weight:700;">Major organizations to highlight</h4>
-          <div class="d-flex flex-wrap gap-2">
-            <a class="btn btn-outline-primary" href="https://www.yorkton.ca/en/your-city/healthcare-and-wellness.aspx" target="_blank" rel="noopener">Yorkton Healthcare Info</a>
-            <a class="btn btn-outline-primary" href="https://siit.ca/" target="_blank" rel="noopener">SIIT</a>
-            <a class="btn btn-outline-primary" href="http://www.parklandcollege.sk.ca" target="_blank" rel="noopener">Parkland College</a>
+      <!-- Services list -->
+      <div class="col-lg-7 reveal">
+        <h4 style="font-family:var(--font-d);font-size:1.4rem;font-weight:700;color:#fff;margin-bottom:1.25rem;">Services Available in Yorkton</h4>
+        <ul class="he-service-list">
+          <li><span class="he-service-dot"></span>24-Hour Emergency Department with full triage</li>
+          <li><span class="he-service-dot"></span>General Surgery, Obstetrics & Gynecology (4 OR suites)</li>
+          <li><span class="he-service-dot"></span>Maternity care — low to moderate risk pregnancies, C-sections, epidurals</li>
+          <li><span class="he-service-dot"></span>Pediatric inpatient unit (children 18 and under)</li>
+          <li><span class="he-service-dot"></span>Diagnostic Imaging — including new Sonography training program</li>
+          <li><span class="he-service-dot"></span>Stroke Rehabilitation (Jowsey House inpatient program)</li>
+          <li><span class="he-service-dot"></span>Physical Therapy, Occupational Therapy & Speech Language Pathology</li>
+          <li><span class="he-service-dot"></span>Mental Health & Addictions inpatient services</li>
+          <li><span class="he-service-dot"></span>Palliative & supportive care — cancer, cardiovascular, neurological</li>
+        </ul>
+        <div class="mt-3 d-flex flex-wrap gap-2">
+          <a href="https://www.yorkton.ca/living-in-yorkton/healthcare-and-wellness/" target="_blank" rel="noopener" class="btn-outline-sm">City of Yorkton Health Resources</a>
+          <a href="https://www.saskhealthauthority.ca" target="_blank" rel="noopener" class="btn-outline-sm">Saskatchewan Health Authority</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- INVESTMENT OPPORTUNITIES -->
+<section class="he-section" style="background:#0a1218;">
+  <div class="container position-relative">
+    <div class="row mb-5">
+      <div class="col-lg-7">
+        <div class="he-kicker he-kicker-light reveal">Career Opportunities</div>
+        <h2 class="he-heading he-heading-light reveal">Why Healthcare & Education<br><em>Make Sense Here</em></h2>
+        <p class="he-body he-body-light reveal">Saskatchewan faces a well-documented shortage of healthcare workers and skilled tradespeople. This creates genuine, immediate opportunity for professionals, investors, and organizations ready to grow in the region.</p>
+      </div>
+    </div>
+    <div class="row g-3">
+      {% for num, title, desc in [
+        ('01', 'Healthcare Workforce Recruitment', 'The Saskatchewan Health Authority is one of the largest employers in the province. The Yorkton region actively recruits physicians, nurses, sonographers, paramedics, and allied health professionals.'),
+        ('02', 'Training & Education Investment', 'Suncrest College actively seeks industry partnerships for applied research, practicum placements, and corporate/professional development programming.'),
+        ('03', 'Medical Supply & Equipment', 'The Health Foundation of East Central Saskatchewan raises capital for equipment — creating ongoing procurement opportunities for medical supply and technology businesses.'),
+        ('04', 'Digital Health & Innovation', 'Saskatchewan's provincial health system is investing in technology modernization — from electronic records to diagnostic imaging expansion — opening opportunities for health tech firms.'),
+        ('05', 'Senior Care & Long-Term Care', 'Provincial budget commitments include long-term care development across Saskatchewan. The Yorkton region's growing and aging population drives sustained demand.'),
+        ('06', 'Trades & Apprenticeship Programs', 'The Suncrest Trades & Technology Centre actively partners with employers for apprenticeship and workforce development — connect your business to the next generation of skilled workers.')
+      ] %}
+      <div class="col-md-6 reveal">
+        <div class="he-opp-item">
+          <div class="he-opp-num">{{ num }}</div>
+          <div>
+            <div class="he-opp-title">{{ title }}</div>
+            <div class="he-opp-desc">{{ desc }}</div>
           </div>
         </div>
       </div>
+      {% endfor %}
+    </div>
+    <div class="mt-5 d-flex flex-wrap gap-3 reveal">
+      <a href="{{ url_for('contact_us') }}" class="btn-white">Talk to the CPDA Team</a>
+      <a href="https://suncrestcollege.ca" target="_blank" rel="noopener" class="btn-outline">Visit Suncrest College</a>
+      <a href="https://www.saskhealthauthority.ca/work-with-us" target="_blank" rel="noopener" class="btn-outline">SHA Careers</a>
+    </div>
+  </div>
+</section>
 
-      <div class="d-flex justify-content-between mt-4">
-        <a href="{{ url_for('industries') }}" class="btn btn-outline-primary">&larr; Back to Industry Page</a>
-        <a href="https://www.yorkton.ca/en/build-invest-and-grow/start-a-business.aspx" target="_blank" rel="noopener"
-           class="btn btn-primary" style="background-color:#ed4c1c; border-color:#ed4c1c;">
-          View Business Opportunities
-        </a>
+<!-- CTA BAND -->
+<section class="he-cta">
+  <div class="container">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-8 reveal">
+        <h2 class="he-cta-title">Looking to Build a Career — or a Business — in Healthcare or Education?</h2>
+        <p class="he-cta-body">The CPDA region offers exceptional quality of life, a full range of healthcare services, and post-secondary education right in the community. Whether you're a professional, student, or investor — let's connect.</p>
       </div>
-
-      <div class="card mt-5 shadow-sm">
-        <div class="card-body text-center">
-          <a href="{{ url_for('contact_us') }}" class="btn" style="font-size:15px;">CONTACT US</a>
-          <p class="mb-0 text-muted" style="font-size:14px;">
-            Want to feature specific programs, clinics, or community services? Send your list and I’ll format it cleanly.
-          </p>
-        </div>
+      <div class="col-lg-4 text-lg-end reveal">
+        <a href="{{ url_for('contact_us') }}" class="btn-white d-inline-block mb-2">Get in Touch →</a><br>
+        <a href="{{ url_for('region') }}" style="font-size:.82rem;color:rgba(255,255,255,.6);text-decoration:none;">View Regional Statistics</a>
       </div>
+    </div>
+  </div>
+</section>
 
+<!-- QUICK LINKS -->
+<div class="he-ql">
+  <div class="container">
+    <div class="he-ql-label reveal">Explore More</div>
+    <div class="he-ql-row reveal">
+      <a href="{{ url_for('industries') }}" class="he-ql-pill">← All Industries</a>
+      <a href="/agriculture" class="he-ql-pill">Agriculture</a>
+      <a href="/agri-process" class="he-ql-pill">Agrifood Processing</a>
+      <a href="/mining" class="he-ql-pill">Mining</a>
+      <a href="/tourism" class="he-ql-pill">Tourism</a>
+      <a href="/transportation" class="he-ql-pill">Transportation</a>
+      <a href="https://suncrestcollege.ca" target="_blank" rel="noopener" class="he-ql-pill">Suncrest College ↗</a>
+      <a href="{{ url_for('contact_us') }}" class="he-ql-pill he-ql-dark">Contact CPDA</a>
     </div>
   </div>
 </div>
 
+<script>
+const io = new IntersectionObserver(entries => {
+  entries.forEach((e,i) => { if(e.isIntersecting){ setTimeout(()=>e.target.classList.add('visible'), i*65); io.unobserve(e.target); } });
+}, {threshold:0.07});
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
 {% endblock %}
