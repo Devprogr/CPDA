@@ -1,412 +1,287 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" itemscope itemtype="http://schema.org/WebPage">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CPDA Footer – Preview</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <title>Central Prairie Development Alliance</title>
+
+  <link rel="apple-touch-icon" sizes="76x76" href="{{ url_for('static', filename='assets/img/apple-icon.png') }}">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/favicon.png') }}">
+
+  <link href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,800" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <style>
-    /* ─── Reset for preview ─────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'DM Sans', sans-serif; background: #0d1b2a; }
+  <link href="{{ url_for('static', filename='assets/css/nucleo-icons.css') }}" rel="stylesheet" />
+  <link href="{{ url_for('static', filename='assets/css/nucleo-svg.css') }}" rel="stylesheet" />
 
-    /* ═══════════════════════════════════════════════════════
-       CPDA FOOTER
-    ═══════════════════════════════════════════════════════ */
-
-    /* ── CSS Variables ── */
-    .cpda-footer {
-      --gold:        #c89b3c;
-      --gold-light:  #e0b85a;
-      --gold-dim:    rgba(200, 155, 60, 0.18);
-      --navy:        #0d1b2a;
-      --navy-mid:    #112236;
-      --navy-light:  #1a3350;
-      --white:       #ffffff;
-      --muted:       rgba(255, 255, 255, 0.45);
-      --border:      rgba(200, 155, 60, 0.15);
-      --radius:      6px;
-      --transition:  0.25s ease;
-    }
-
-    .cpda-footer {
-      background: var(--navy);
-      color: var(--white);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.9rem;
-      line-height: 1.6;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* ── Subtle background texture ── */
-    .cpda-footer::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 60% 50% at 10% 110%, rgba(200,155,60,0.07) 0%, transparent 70%),
-        radial-gradient(ellipse 50% 40% at 90% -10%,  rgba(200,155,60,0.05) 0%, transparent 60%);
-      pointer-events: none;
-    }
-
-    /* ── Gold top border ── */
-    .cpda-footer__topbar {
-      height: 3px;
-      background: linear-gradient(90deg, transparent 0%, var(--gold) 30%, var(--gold-light) 55%, var(--gold) 75%, transparent 100%);
-    }
-
-    .cpda-footer__inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 1.5rem;
-      position: relative;
-    }
-
-    /* ═══════════════
-       MAIN BODY
-    ═══════════════ */
-    .cpda-footer__body {
-      display: grid;
-      grid-template-columns: 1.6fr 1fr 1fr 1fr;
-      gap: 3rem;
-      padding: 4rem 0 3.5rem;
-    }
-
-    /* ── Brand column ── */
-    .cpda-footer__brand-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 2rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      color: var(--white);
-    }
-
-    .cpda-footer__brand-tagline {
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-size: 0.85rem;
-      font-weight: 400;
-      color: var(--gold);
-      margin-left: 0.4rem;
-      letter-spacing: 0.06em;
-    }
-
-    .cpda-footer__brand-accent {
-      display: block;
-      width: 38px;
-      height: 2px;
-      background: var(--gold);
-      margin: 1rem 0;
-      border-radius: 2px;
-    }
-
-    .cpda-footer__blurb {
-      color: var(--muted);
-      font-size: 0.875rem;
-      line-height: 1.75;
-      max-width: 280px;
-      margin-bottom: 1.75rem;
-    }
-
-    /* ── Partner logos ── */
-    .cpda-footer__logos {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .cpda-footer__logos img {
-      height: 36px;
-      width: auto;
-      object-fit: contain;
-      filter: brightness(0) invert(1) opacity(0.55);
-      transition: filter var(--transition), transform var(--transition);
-    }
-
-    .cpda-footer__logos img:hover {
-      filter: brightness(0) invert(1) opacity(0.9);
-      transform: translateY(-2px);
-    }
-
-    /* ── Nav columns ── */
-    .cpda-footer__col-heading {
-      font-family: 'Playfair Display', serif;
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 1.25rem;
-      position: relative;
-      padding-bottom: 0.75rem;
-    }
-
-    .cpda-footer__col-heading::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0;
-      width: 24px; height: 1px;
-      background: var(--gold);
-      opacity: 0.5;
-    }
-
-    .cpda-footer__list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.55rem;
-    }
-
-    .cpda-footer__link {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.875rem;
-      font-weight: 400;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      transition: color var(--transition), gap var(--transition);
-    }
-
-    .cpda-footer__link::before {
-      content: '';
-      display: block;
-      width: 0;
-      height: 1px;
-      background: var(--gold);
-      transition: width var(--transition);
-      flex-shrink: 0;
-    }
-
-    .cpda-footer__link:hover {
-      color: var(--white);
-      gap: 0.7rem;
-    }
-
-    .cpda-footer__link:hover::before {
-      width: 12px;
-    }
-
-    /* ═══════════════
-       DIVIDER
-    ═══════════════ */
-    .cpda-footer__divider {
-      height: 1px;
-      background: var(--border);
-      margin: 0;
-    }
-
-    /* ═══════════════
-       BOTTOM BAR
-    ═══════════════ */
-    .cpda-footer__bottom {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1.5rem;
-      padding: 1.5rem 0;
-      flex-wrap: wrap;
-    }
-
-    .cpda-footer__copyright {
-      color: var(--muted);
-      font-size: 0.8rem;
-      display: flex;
-      gap: 0.4rem;
-      flex-wrap: wrap;
-    }
-
-    .cpda-footer__bottom-actions {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-    }
-
-    .cpda-footer__backtotop {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.78rem;
-      letter-spacing: 0.05em;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      transition: color var(--transition), transform var(--transition);
-    }
-
-    .cpda-footer__backtotop:hover {
-      color: var(--gold);
-      transform: translateY(-2px);
-    }
-
-    /* ── Admin link — intentionally subtle ── */
-    .cpda-footer__admin {
-      color: rgba(255, 255, 255, 0.12);
-      font-size: 0.65rem;
-      letter-spacing: 0.12em;
-      text-decoration: none;
-      text-transform: uppercase;
-      transition: color 0.4s ease;
-      user-select: none;
-    }
-
-    .cpda-footer__admin:hover {
-      color: rgba(255, 255, 255, 0.35);
-    }
-
-    /* ═══════════════
-       RESPONSIVE
-    ═══════════════ */
-    @media (max-width: 1024px) {
-      .cpda-footer__body {
-        grid-template-columns: 1.4fr 1fr 1fr 1fr;
-        gap: 2rem;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .cpda-footer__body {
-        grid-template-columns: 1fr 1fr;
-        gap: 2.5rem;
-        padding: 3rem 0 2.5rem;
-      }
-
-      .cpda-footer__brand-col {
-        grid-column: 1 / -1;
-      }
-
-      .cpda-footer__blurb {
-        max-width: 100%;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .cpda-footer__body {
-        grid-template-columns: 1fr;
-        padding: 2.5rem 0 2rem;
-      }
-
-      .cpda-footer__bottom {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.75rem;
-        padding: 1.25rem 0;
-      }
-    }
-  </style>
+  <link id="pagestyle" href="{{ url_for('static', filename='assets/css/soft-design-system.css') }}" rel="stylesheet" />
+  <link href="{{ url_for('static', filename='assets/css/custom.css') }}" rel="stylesheet" />
 </head>
 
-<body>
+<body class="index-page" id="top">
 
-<!-- ═══════════════════════════════════════════════════
-     CPDA FOOTER — Drop-in replacement
-     Replace everything from <footer ...> to </footer>
-     in your base.html with the block below.
-═══════════════════════════════════════════════════ -->
+  <!-- Navbar -->
+  <div class="container-fluid position-sticky z-index-sticky top-0 top-full">
+    <div class="row">
+      <div class="col-12">
+        <nav class="navbar navbar-expand-lg blur blur-rounded top-0 z-index-fixed shadow position-fixed my-3 py-2 start-0 end-0 mx-0 navbar-full">
+          <div class="container px-0">
 
-<footer class="cpda-footer" role="contentinfo">
+            <a class="navbar-brand font-weight-bolder"
+               href="{{ url_for('home') }}"
+               rel="tooltip"
+               title="Designed and Coded by Suncrest"
+               data-placement="bottom"
+               style="font-size: 2rem;">
+              CPDA <span class="font-italic" style="font-size: 1rem;">Stronger Together</span>
+            </a>
 
-  <!-- Gold accent bar -->
-  <div class="cpda-footer__topbar" aria-hidden="true"></div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation"
+                    aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation"
+                    style="background-color: #f1f1f1; border-color: #000000;">
+              <span class="navbar-toggler-icon mt-2">
+                <span class="navbar-toggler-bar bar1"></span>
+                <span class="navbar-toggler-bar bar2"></span>
+                <span class="navbar-toggler-bar bar3"></span>
+              </span>
+            </button>
 
-  <div class="cpda-footer__inner">
+            <div class="collapse navbar-collapse pt-3 pb-2 py-lg-0 w-100" id="navigation">
+              <ul class="navbar-nav ms-auto">
 
-    <!-- ── Main grid ── -->
-    <div class="cpda-footer__body">
+                <li class="nav-item">
+                  <a class="nav-link ps-12 d-flex justify-content-between cursor-pointer align-items-center"
+                     href="{{ url_for('home') }}">
+                    Home
+                  </a>
+                </li>
 
-      <!-- Brand / About -->
-      <div class="cpda-footer__brand-col">
-        <div>
-          <span class="cpda-footer__brand-name">CPDA</span>
-          <span class="cpda-footer__brand-tagline">Stronger Together</span>
-        </div>
+                <!-- About dropdown -->
+                <li class="nav-item dropdown">
+                  <div class="d-flex align-items-center">
+                    <a class="nav-link ps-12" href="{{ url_for('aboutUs') }}">About Us</a>
 
-        <span class="cpda-footer__brand-accent" aria-hidden="true"></span>
+                    <a class="nav-link dropdown-toggle p-0 ms-1"
+                       href="#"
+                       id="aboutDropdown"
+                       role="button"
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false"
+                       aria-label="Open About Us menu"></a>
 
-        <p class="cpda-footer__blurb">
-          Working together to build a stronger, more connected future for communities across East-Central Saskatchewan.
-        </p>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="aboutDropdown">
+                      <li><a class="dropdown-item" href="{{ url_for('aboutUs') }}">About CPDA</a></li>
+                      <li><a class="dropdown-item" href="{{ url_for('aboutUs') }}#vision">Our Vision</a></li>
+                      <li><a class="dropdown-item" href="{{ url_for('aboutUs') }}#why">Importance of CPDA</a></li>
+                      <li><a class="dropdown-item" href="{{ url_for('aboutUs') }}#map">Community Map</a></li>
+                      <li><a class="dropdown-item" href="{{ url_for('aboutUs') }}#communities">Communities</a></li>
+                    </ul>
+                  </div>
+                </li>
 
-        <!-- Partner logos — swap src paths for real images in your project -->
-        <div class="cpda-footer__logos" aria-label="Partner logos">
-          <img src="{{ url_for('static', filename='assets/img/footer/logo1.png') }}" alt="Partner 1" loading="lazy">
-          <img src="{{ url_for('static', filename='assets/img/footer/logo2.png') }}" alt="Partner 2" loading="lazy">
-          <img src="{{ url_for('static', filename='assets/img/footer/logo3.png') }}" alt="Partner 3" loading="lazy">
-          <img src="{{ url_for('static', filename='assets/img/footer/logo4.png') }}" alt="Partner 4" loading="lazy">
-        </div>
-      </div>
+                <li class="nav-item">
+                  <a class="nav-link ps-12 d-flex justify-content-between cursor-pointer align-items-center"
+                     href="{{ url_for('region') }}">
+                    Statistics
+                  </a>
+                </li>
 
-      <!-- Quick Links -->
-      <nav aria-label="Footer – Quick links">
-        <h2 class="cpda-footer__col-heading">Quick Links</h2>
-        <ul class="cpda-footer__list">
-          <li><a class="cpda-footer__link" href="{{ url_for('home') }}">Home</a></li>
-          <li><a class="cpda-footer__link" href="{{ url_for('aboutUs') }}">About Us</a></li>
-          <li><a class="cpda-footer__link" href="{{ url_for('region') }}">Statistics</a></li>
-          <li><a class="cpda-footer__link" href="{{ url_for('priorities') }}">Priorities</a></li>
-        </ul>
-      </nav>
+                <li class="nav-item">
+                  <a class="nav-link ps-12 d-flex justify-content-between cursor-pointer align-items-center"
+                     href="{{ url_for('priorities') }}">
+                    Priorities
+                  </a>
+                </li>
 
-      <!-- Explore -->
-      <nav aria-label="Footer – Explore">
-        <h2 class="cpda-footer__col-heading">Explore</h2>
-        <ul class="cpda-footer__list">
-          <li><a class="cpda-footer__link" href="{{ url_for('get_involved') }}">Get Involved</a></li>
-          <li><a class="cpda-footer__link" href="{{ url_for('news_updates') }}">News &amp; Updates</a></li>
-          <li><a class="cpda-footer__link" href="{{ url_for('contact_us') }}">Contact</a></li>
-        </ul>
-      </nav>
+                <li class="nav-item">
+                  <a class="nav-link ps-12 d-flex justify-content-between cursor-pointer align-items-center"
+                     href="{{ url_for('get_involved') }}">
+                    Get Involved
+                  </a>
+                </li>
 
-      <!-- Legal -->
-      <nav aria-label="Footer – Legal">
-        <h2 class="cpda-footer__col-heading">Legal</h2>
-        <ul class="cpda-footer__list">
-          <li><a class="cpda-footer__link" href="#">Privacy Policy</a></li>
-          <li><a class="cpda-footer__link" href="#">Accessibility</a></li>
-        </ul>
-      </nav>
+                <li class="nav-item">
+                  <a class="nav-link ps-12 d-flex justify-content-between cursor-pointer align-items-center"
+                     href="{{ url_for('news_updates') }}">
+                    News & Updates
+                  </a>
+                </li>
 
-    </div><!-- /.cpda-footer__body -->
+                <li class="nav-item">
+                  <a class="nav-link ps-12 d-flex justify-content-between cursor-pointer align-items-center"
+                     href="{{ url_for('contact_us') }}">
+                    Contact
+                  </a>
+                </li>
 
-    <div class="cpda-footer__divider" aria-hidden="true"></div>
+                <!-- Member auth -->
+                {% if session.get('member_access_token') %}
+                  <li class="nav-item">
+                    <a class="nav-link ps-12 d-flex justify-content-between cursor-pointer align-items-center"
+                       href="{{ url_for('member_dashboard') }}">
+                      Dashboard
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link ps-12 d-flex justify-content-between cursor-pointer align-items-center"
+                       href="{{ url_for('auth_logout') }}">
+                      Logout
+                    </a>
+                  </li>
+                {% else %}
+                  <li class="nav-item">
+                    <a class="nav-link ps-12 d-flex justify-content-between cursor-pointer align-items-center"
+                       href="{{ url_for('auth_login') }}">
+                      Member Login
+                    </a>
+                  </li>
+                {% endif %}
 
-    <!-- ── Bottom bar ── -->
-    <div class="cpda-footer__bottom">
-      <p class="cpda-footer__copyright">
-        <span>© <span id="cpda-year">2026</span> Central Prairie Development Alliance.</span>
-        <span>All rights reserved.</span>
-      </p>
+              </ul>
+            </div>
 
-      <div class="cpda-footer__bottom-actions">
-        <a class="cpda-footer__backtotop" href="#top" aria-label="Back to top">
-          <i class="fa-solid fa-arrow-up" style="font-size:0.65rem;"></i> Back to top
-        </a>
-
-        <!-- Admin — subtle, low-contrast, not prominent -->
-        <a
-          class="cpda-footer__admin"
-          href="https://cpda-git-main-dev-joshis-projects-ebc4dc68.vercel.app/admin/login"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Admin login"
-          tabindex="-1"
-        >&#9679;</a>
+          </div>
+        </nav>
       </div>
     </div>
+  </div>
 
-  </div><!-- /.cpda-footer__inner -->
+  <!-- Flash messages / spacing for fixed navbar -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="container" style="padding-top: 110px;">
+        {% for category, message in messages %}
+          <div class="alert alert-{{ 'danger' if category=='danger' else category }} alert-dismissible fade show shadow-sm" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div style="padding-top: 110px;"></div>
+    {% endif %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+
+  <!-- Footer -->
+  <footer class="cpda-footer" role="contentinfo">
+    <div class="cpda-footer__inner">
+
+      <div class="cpda-footer__top">
+        <div class="cpda-footer__brand">
+          <div class="cpda-footer__brand-title">
+            <span class="cpda-footer__brand-name">CPDA</span>
+            <span class="cpda-footer__brand-tagline">Stronger Together</span>
+          </div>
+
+          <p class="cpda-footer__blurb">
+            Working together to build a stronger, more connected future for communities across East-Central Saskatchewan.
+          </p>
+
+          <div class="cpda-footer__logos" aria-label="Partner logos">
+            <!-- NOTE: filenames are case-sensitive on Vercel (Linux) -->
+            <img src="{{ url_for('static', filename='assets/img/footer/logo1.png') }}" alt="Partner logo 1" loading="lazy">
+            <img src="{{ url_for('static', filename='assets/img/footer/logo2.png') }}" alt="Partner logo 2" loading="lazy">
+            <img src="{{ url_for('static', filename='assets/img/footer/logo3.png') }}" alt="Partner logo 3" loading="lazy">
+            <img src="{{ url_for('static', filename='assets/img/footer/logo4.png') }}" alt="Partner logo 4" loading="lazy">
+          </div>
+        </div>
+
+        <nav class="cpda-footer__nav" aria-label="Footer">
+          <div class="cpda-footer__col">
+            <h2 class="cpda-footer__heading">Quick links</h2>
+            <ul class="cpda-footer__list">
+              <li><a class="cpda-footer__link" href="{{ url_for('home') }}">Home</a></li>
+              <li><a class="cpda-footer__link" href="{{ url_for('aboutUs') }}">About Us</a></li>
+              <li><a class="cpda-footer__link" href="{{ url_for('region') }}">Statistics</a></li>
+              <li><a class="cpda-footer__link" href="{{ url_for('priorities') }}">Priorities</a></li>
+            </ul>
+          </div>
+
+          <div class="cpda-footer__col">
+            <h2 class="cpda-footer__heading">Explore</h2>
+            <ul class="cpda-footer__list">
+              <li><a class="cpda-footer__link" href="{{ url_for('get_involved') }}">Get Involved</a></li>
+              <li><a class="cpda-footer__link" href="{{ url_for('news_updates') }}">News &amp; Updates</a></li>
+              <li><a class="cpda-footer__link" href="{{ url_for('contact_us') }}">Contact</a></li>
+            </ul>
+          </div>
+
+          <div class="cpda-footer__col">
+            <h2 class="cpda-footer__heading">Legal</h2>
+            <ul class="cpda-footer__list">
+              <!-- If you don’t have these pages yet, create routes OR replace with "#". -->
+              <li><a class="cpda-footer__link" href="#">Privacy</a></li>
+              <li><a class="cpda-footer__link" href="#">Accessibility</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+
+      <div class="cpda-footer__divider" aria-hidden="true"></div>
+
+      <div class="cpda-footer__bottom">
+        <p class="cpda-footer__copyright">
+          <span>© <span id="cpda-year">2026</span> Central Prairie Development Alliance.</span>
+          <span class="cpda-footer__muted">All rights reserved.</span>
+        </p>
+
+        <div class="cpda-footer__bottom-right">
+          <a class="cpda-footer__backtotop" href="#top" aria-label="Back to top">
+            Back to top ↑
+          </a>
+
+          <a
+            class="cpda-footer__admin"
+            href="https://cpda-git-main-dev-joshis-projects-ebc4dc68.vercel.app/admin/login"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Admin login"
+            title="Admin login"
+          >
+            Admin
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <script>
+      (function () {
+        var el = document.getElementById("cpda-year");
+        if (el) el.textContent = new Date().getFullYear();
+      })();
+    </script>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    (function () {
-      var el = document.getElementById('cpda-year');
-      if (el) el.textContent = new Date().getFullYear();
-    })();
-  </script>
+    // Hover dropdown on desktop
+    document.querySelectorAll('.navbar .dropdown').forEach(function (dropdown) {
+      const menu = dropdown.querySelector('.dropdown-menu');
+      const toggle = dropdown.querySelector('.dropdown-toggle');
+      if (!menu || !toggle) return;
 
-</footer>
+      dropdown.addEventListener('mouseenter', function () {
+        if (window.innerWidth < 992) return;
+        menu.classList.add('show');
+        toggle.classList.add('show');
+        toggle.setAttribute('aria-expanded', 'true');
+      });
+
+      dropdown.addEventListener('mouseleave', function () {
+        if (window.innerWidth < 992) return;
+        menu.classList.remove('show');
+        toggle.classList.remove('show');
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  </script>
 
 </body>
 </html>
