@@ -55,27 +55,21 @@ button, .btn-primary {
   box-shadow: 0 4px 20px rgba(0,0,0,0.05);
 }
 
-footer {
-  background-color: var(--color-primary);
-  color: #fff;
-  font-family: var(--font-body);
-}
-
 .custom-navbar-container {
-  max-width: 100vw; /* or any value you want */
+  max-width: 100vw;
   width: 100%;
 }
 
 .top-full {
   width: 100vw;
-  min-height: 0px; /* Adjust as needed */
+  min-height: 0px;
   padding: 0;
   margin: 0;
 }
 
 .navbar-full {
   width: 100vw;
-  min-height: 50px; /* Adjust as needed */
+  min-height: 50px;
   left: 0;
   right: 0;
   top: 0;
@@ -118,7 +112,7 @@ footer {
   .carousel-control-prev {
     left: 8px;
   }
-  
+
   .carousel-control-next {
     right: 8px;
   }
@@ -147,7 +141,6 @@ footer {
    Navbar dropdown (CPDA)
    ========================= */
 
-/* Dropdown styling (works with Bootstrap show/hide) */
 .navbar .dropdown-menu {
   border: 1px solid rgba(30, 45, 73, 0.12);
   border-radius: 14px;
@@ -162,13 +155,6 @@ footer {
   transform: translateY(10px);
   visibility: hidden;
   transition: all 0.18s ease;
-}
-
-/* When Bootstrap opens it */
-.navbar .dropdown-menu.show {
-  opacity: 1;
-  transform: translateY(0);
-  visibility: visible;
 }
 
 .navbar .dropdown-menu.show {
@@ -197,11 +183,223 @@ footer {
   border-top-color: rgba(30, 45, 73, 0.7);
 }
 
-
 @media (min-width: 992px) {
   .navbar .dropdown:hover > .dropdown-menu {
     opacity: 1;
     transform: translateY(0);
     visibility: visible;
   }
+}
+
+
+/* =========================
+   Footer (CPDA)
+   ========================= */
+
+.cpda-footer {
+  background: #111827;
+  color: #e5e7eb;
+  font-family: var(--font-body);
+  padding: 3rem 0 0;
+}
+
+.cpda-footer__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Top row */
+.cpda-footer__top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3rem;
+  padding-bottom: 2.5rem;
+}
+
+/* Brand column */
+.cpda-footer__brand {
+  flex: 1 1 260px;
+  max-width: 320px;
+}
+
+.cpda-footer__brand-title {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.cpda-footer__brand-name {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+}
+
+.cpda-footer__brand-tagline {
+  font-size: 0.8rem;
+  font-style: italic;
+  color: #9ca3af;
+  letter-spacing: 0.03em;
+}
+
+.cpda-footer__blurb {
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: #9ca3af;
+  margin-bottom: 1.75rem;
+}
+
+/* FIX 1 — Uniform logos
+   Each logo sits in a fixed 80×48 px container.
+   object-fit: contain scales every image down to fit
+   without cropping, so all four look the same size. */
+.cpda-footer__logos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+
+.cpda-footer__logo-wrap {
+  width: 80px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 8px;
+  padding: 6px;
+  transition: background 0.2s;
+}
+
+.cpda-footer__logo-wrap:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.cpda-footer__logo-wrap img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  /* Converts dark-on-transparent logos to a soft white silhouette.
+     Remove this line if your logos are already light-coloured. */
+  filter: brightness(0) invert(1) opacity(0.75);
+}
+
+/* FIX 2 — Visible nav links
+   Explicitly light colour so links never blend into the dark background. */
+.cpda-footer__nav {
+  flex: 1 1 400px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.cpda-footer__col {
+  min-width: 120px;
+}
+
+.cpda-footer__heading {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #6b7280;
+  margin: 0 0 0.85rem;
+}
+
+.cpda-footer__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cpda-footer__link {
+  font-size: 0.9rem;
+  color: #d1d5db !important;   /* light grey — clearly visible on dark bg */
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.cpda-footer__link:hover,
+.cpda-footer__link:focus {
+  color: #ffffff !important;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Divider */
+.cpda-footer__divider {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin: 0;
+}
+
+/* Bottom row */
+.cpda-footer__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1.25rem 0 1.5rem;
+}
+
+.cpda-footer__copyright {
+  font-size: 0.8rem;
+  color: #6b7280;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+}
+
+.cpda-footer__muted {
+  color: #4b5563;
+}
+
+.cpda-footer__bottom-right {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.cpda-footer__backtotop {
+  font-size: 0.8rem;
+  color: #6b7280;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.cpda-footer__backtotop:hover {
+  color: #d1d5db;
+}
+
+.cpda-footer__admin {
+  font-size: 0.75rem;
+  color: #4b5563;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 4px;
+  padding: 2px 8px;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.cpda-footer__admin:hover {
+  color: #9ca3af;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .cpda-footer__top    { flex-direction: column; gap: 2rem; }
+  .cpda-footer__brand  { max-width: 100%; }
+  .cpda-footer__nav    { gap: 1.5rem; }
+  .cpda-footer__bottom { flex-direction: column; align-items: flex-start; }
 }
