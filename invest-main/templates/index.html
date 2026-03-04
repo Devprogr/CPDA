@@ -1,7 +1,5 @@
 {% extends "base.html" %}
-  
 {% block content %}
-
 
 {% set hero_images = [
   'assets/img/saskpic-1.jpg',
@@ -11,322 +9,751 @@
   'assets/img/homepic5.jpg'
 ] %}
 
-<header class="header-2 position-relative" style="height:100vh; width:100vw;">
-  <div id="heroCarousel" class="carousel slide min-vh-100" data-bs-ride="carousel" data-bs-interval="4000" style="height:100vh; width:100vw;">
-    <div class="carousel-indicators mb-4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ─────────────────────────────────────────
+   TOKENS
+───────────────────────────────────────── */
+:root {
+  --navy:    #1a2540;
+  --navy2:   #111826;
+  --gold:    #b8893a;
+  --gold2:   #d4a85a;
+  --cream:   #f8f4ed;
+  --cream2:  #ede8df;
+  --slate:   #4a5568;
+  --fog:     #8896a8;
+  --white:   #ffffff;
+  --border:  rgba(26,37,64,.10);
+  --font-d:  'Cormorant Garamond', Georgia, serif;
+  --font-b:  'Figtree', system-ui, sans-serif;
+  --ease:    cubic-bezier(.22,1,.36,1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+body { background: var(--cream); font-family: var(--font-b); color: var(--navy); margin: 0; }
+
+/* ─────────────────────────────────────────
+   HERO
+───────────────────────────────────────── */
+.hp-hero {
+  position: relative;
+  height: 100vh; min-height: 600px;
+  overflow: hidden;
+}
+
+/* Carousel */
+.hp-carousel, .hp-carousel .carousel-inner,
+.hp-carousel .carousel-item,
+.hp-carousel .carousel-item > div {
+  height: 100vh; width: 100%;
+}
+
+.hp-carousel .carousel-item > div {
+  background-size: cover;
+  background-position: center;
+  transition: opacity .8s ease;
+}
+
+/* Layered dark overlay */
+.hp-hero-overlay {
+  position: absolute; inset: 0; z-index: 2;
+  background:
+    linear-gradient(100deg,
+      rgba(17,24,38,.94) 0%,
+      rgba(17,24,38,.75) 45%,
+      rgba(17,24,38,.30) 75%,
+      rgba(17,24,38,.10) 100%),
+    linear-gradient(to top,
+      rgba(17,24,38,.85) 0%,
+      transparent 45%);
+}
+
+/* Grain */
+.hp-hero-overlay::after {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: .55; pointer-events: none;
+}
+
+/* Gold accent rule */
+.hp-hero-accent {
+  position: absolute; left: 0; top: 0;
+  width: 4px; height: 100%;
+  background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+  z-index: 3; opacity: .7;
+}
+
+/* Hero text */
+.hp-hero-content {
+  position: absolute; inset: 0; z-index: 4;
+  display: flex; align-items: center;
+  padding-top: 80px;
+}
+
+.hp-hero-inner { max-width: 680px; }
+
+.hp-hero-eyebrow {
+  display: inline-flex; align-items: center; gap: .6rem;
+  font-family: var(--font-b); font-size: .7rem; font-weight: 700;
+  letter-spacing: .22em; text-transform: uppercase;
+  color: var(--gold2); margin-bottom: 1.5rem;
+  animation: fadeUp .8s .1s var(--ease) both;
+}
+.hp-hero-eyebrow::before {
+  content: ""; width: 28px; height: 2px;
+  background: var(--gold2); border-radius: 2px;
+}
+
+.hp-hero-title {
+  font-family: var(--font-d);
+  font-size: clamp(3rem, 5.5vw, 5rem);
+  font-weight: 700; line-height: 1.05; letter-spacing: -.01em;
+  color: #fff; margin-bottom: 1.5rem;
+  text-shadow: 0 2px 24px rgba(0,0,0,.4);
+  animation: fadeUp .8s .18s var(--ease) both;
+}
+.hp-hero-title em {
+  font-style: italic; font-weight: 400; color: var(--gold2);
+}
+
+.hp-hero-sub {
+  font-family: var(--font-b); font-size: 1.05rem; font-weight: 300;
+  color: rgba(255,255,255,.82); line-height: 1.75; max-width: 48ch;
+  margin-bottom: 2.5rem;
+  text-shadow: 0 1px 12px rgba(0,0,0,.5);
+  animation: fadeUp .8s .26s var(--ease) both;
+}
+
+.hp-hero-ctas {
+  display: flex; gap: 1rem; flex-wrap: wrap;
+  animation: fadeUp .8s .34s var(--ease) both;
+}
+
+/* Carousel indicators */
+.hp-carousel .carousel-indicators {
+  bottom: 2rem; z-index: 5; justify-content: flex-start;
+  padding-left: calc(var(--bs-gutter-x, 1.5rem) + max(0px, (100% - 1140px)/2));
+}
+.hp-carousel .carousel-indicators button {
+  width: 28px; height: 3px; border-radius: 2px;
+  background: rgba(255,255,255,.35); border: none;
+  transition: all .3s;
+}
+.hp-carousel .carousel-indicators button.active {
+  background: var(--gold2); width: 44px;
+}
+
+/* Carousel arrows */
+.hp-carousel .carousel-control-prev,
+.hp-carousel .carousel-control-next {
+  width: 48px; height: 48px; opacity: 1;
+  top: 50%; transform: translateY(-50%);
+  background: rgba(255,255,255,.1);
+  backdrop-filter: blur(8px);
+  border: 1.5px solid rgba(255,255,255,.18);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .2s;
+}
+.hp-carousel .carousel-control-prev { left: 1.5rem; }
+.hp-carousel .carousel-control-next { right: 1.5rem; }
+.hp-carousel .carousel-control-prev:hover,
+.hp-carousel .carousel-control-next:hover { background: rgba(255,255,255,.2); }
+.hp-carousel .carousel-control-prev-icon,
+.hp-carousel .carousel-control-next-icon { width: 16px; height: 16px; }
+
+/* ─────────────────────────────────────────
+   BUTTONS
+───────────────────────────────────────── */
+.btn-gold {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .8rem 1.75rem;
+  background: var(--gold); color: #fff; border: none;
+  border-radius: 999px;
+  font-family: var(--font-b); font-size: .9rem; font-weight: 600;
+  text-decoration: none; cursor: pointer;
+  transition: all .22s var(--ease);
+}
+.btn-gold:hover {
+  background: var(--gold2); color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(184,137,58,.4);
+}
+
+.btn-ghost-light {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .8rem 1.75rem;
+  background: rgba(255,255,255,.1); color: #fff;
+  border: 1.5px solid rgba(255,255,255,.25);
+  border-radius: 999px;
+  font-family: var(--font-b); font-size: .9rem; font-weight: 600;
+  text-decoration: none; cursor: pointer;
+  transition: all .22s var(--ease);
+}
+.btn-ghost-light:hover {
+  background: rgba(255,255,255,.2); color: #fff;
+  border-color: rgba(255,255,255,.4);
+  transform: translateY(-2px);
+}
+
+/* ─────────────────────────────────────────
+   STATS BAND
+───────────────────────────────────────── */
+.hp-stats {
+  background: var(--navy2);
+  position: relative; z-index: 10;
+}
+
+.hp-stats-inner {
+  max-width: 900px; margin: 0 auto;
+  padding: 3.5rem 2rem;
+  display: grid; grid-template-columns: 1fr 1px 1fr;
+  gap: 0; align-items: center;
+}
+
+.hp-stat-divider {
+  width: 1px; height: 80px;
+  background: rgba(255,255,255,.1);
+  justify-self: center;
+}
+
+.hp-stat {
+  text-align: center; padding: 1rem 2rem;
+}
+
+.hp-stat-num {
+  font-family: var(--font-d);
+  font-size: 4rem; font-weight: 700; line-height: 1;
+  color: #fff;
+  display: flex; align-items: baseline; justify-content: center; gap: .1rem;
+}
+.hp-stat-num sup {
+  font-size: 1.6rem; color: var(--gold2); margin-top: .4rem;
+}
+
+.hp-stat-label {
+  font-family: var(--font-b); font-size: .82rem; font-weight: 600;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: rgba(255,255,255,.5); margin-top: .5rem;
+}
+
+.hp-stat-desc {
+  font-family: var(--font-b); font-size: .82rem; font-weight: 300;
+  color: rgba(255,255,255,.45); line-height: 1.55;
+  max-width: 28ch; margin: .5rem auto 0;
+}
+
+/* ─────────────────────────────────────────
+   INITIATIVE SECTION
+───────────────────────────────────────── */
+.hp-initiative {
+  padding: 6rem 0;
+  background: var(--cream);
+  position: relative; overflow: hidden;
+}
+
+/* Large decorative letter */
+.hp-initiative::before {
+  content: "C";
+  position: absolute;
+  top: -2rem; right: -1rem;
+  font-family: var(--font-d);
+  font-size: 28rem; font-weight: 700;
+  color: rgba(26,37,64,.04);
+  line-height: 1; pointer-events: none;
+  user-select: none;
+}
+
+.hp-initiative-label {
+  font-family: var(--font-b); font-size: .7rem; font-weight: 700;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 1rem;
+  display: flex; align-items: center; gap: .6rem;
+}
+.hp-initiative-label::before {
+  content: ""; width: 24px; height: 2px;
+  background: var(--gold); border-radius: 2px;
+}
+
+.hp-initiative-title {
+  font-family: var(--font-d);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 700; line-height: 1.15; letter-spacing: -.01em;
+  color: var(--navy); margin-bottom: 1.5rem;
+}
+.hp-initiative-title em { font-style: italic; font-weight: 400; color: var(--gold); }
+
+.hp-initiative-body {
+  font-family: var(--font-b); font-size: 1rem; font-weight: 300;
+  color: var(--slate); line-height: 1.8; max-width: 52ch;
+  margin-bottom: 2rem;
+}
+
+/* Action links row */
+.hp-links {
+  display: flex; gap: 2rem; flex-wrap: wrap; align-items: center;
+}
+
+.hp-link {
+  display: inline-flex; align-items: center; gap: .5rem;
+  font-family: var(--font-b); font-size: .9rem; font-weight: 600;
+  color: var(--navy); text-decoration: none;
+  border-bottom: 2px solid var(--gold);
+  padding-bottom: 2px;
+  transition: all .2s var(--ease);
+}
+.hp-link svg { transition: transform .2s var(--ease); }
+.hp-link:hover { color: var(--gold); }
+.hp-link:hover svg { transform: translateX(4px); }
+
+/* ─────────────────────────────────────────
+   BUSINESS INSIGHTS
+───────────────────────────────────────── */
+.hp-insights {
+  background: var(--navy);
+  padding: 6rem 0;
+  position: relative; overflow: hidden;
+}
+
+/* Subtle dot grid */
+.hp-insights::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+}
+
+.hp-insights-header {
+  margin-bottom: 3.5rem;
+}
+
+.hp-insights-kicker {
+  font-family: var(--font-b); font-size: .7rem; font-weight: 700;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--gold2); margin-bottom: .75rem;
+  display: flex; align-items: center; gap: .6rem;
+}
+.hp-insights-kicker::before {
+  content: ""; width: 24px; height: 2px;
+  background: var(--gold2); border-radius: 2px;
+}
+
+.hp-insights-title {
+  font-family: var(--font-d);
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 700; color: #fff; line-height: 1.15;
+  letter-spacing: -.01em;
+}
+
+/* ── Insight cards ── */
+.hp-insight-card {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  height: 100%;
+  position: relative; overflow: hidden;
+  transition: background .25s var(--ease), border-color .25s var(--ease), transform .25s var(--ease);
+}
+
+.hp-insight-card:hover {
+  background: rgba(255,255,255,.07);
+  border-color: rgba(184,137,58,.3);
+  transform: translateY(-4px);
+}
+
+/* Gold top border on hover */
+.hp-insight-card::before {
+  content: "";
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--gold), var(--gold2));
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .35s var(--ease);
+}
+.hp-insight-card:hover::before { transform: scaleX(1); }
+
+/* Large number */
+.hp-insight-num {
+  font-family: var(--font-d);
+  font-size: 5rem; font-weight: 700; line-height: 1;
+  color: rgba(255,255,255,.06);
+  position: absolute; top: 1rem; right: 1.25rem;
+  pointer-events: none; user-select: none;
+  transition: color .25s;
+}
+.hp-insight-card:hover .hp-insight-num { color: rgba(184,137,58,.12); }
+
+/* FEATURED: Industry Diversity card — larger and highlighted */
+.hp-insight-card.featured {
+  background: rgba(184,137,58,.08);
+  border-color: rgba(184,137,58,.25);
+  grid-column: 1 / -1;
+  display: grid; grid-template-columns: 1fr auto;
+  gap: 2rem; align-items: center;
+  padding: 3rem 2.5rem;
+}
+.hp-insight-card.featured::before { transform: scaleX(1); }
+.hp-insight-card.featured .hp-insight-num {
+  font-size: 8rem; color: rgba(184,137,58,.09);
+  position: static; line-height: 1;
+  flex-shrink: 0; order: 2;
+  align-self: center;
+}
+
+.hp-insight-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  background: rgba(184,137,58,.15); border: 1px solid rgba(184,137,58,.25);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 1.25rem;
+  transition: background .2s;
+}
+.hp-insight-card:hover .hp-insight-icon { background: rgba(184,137,58,.22); }
+.hp-insight-card.featured .hp-insight-icon {
+  background: rgba(184,137,58,.18);
+  width: 52px; height: 52px; border-radius: 14px;
+}
+
+.hp-insight-label {
+  font-family: var(--font-b); font-size: .68rem; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--gold2); margin-bottom: .6rem;
+}
+
+.hp-insight-title {
+  font-family: var(--font-d);
+  font-size: 1.4rem; font-weight: 700; color: #fff;
+  line-height: 1.2; margin-bottom: .75rem;
+}
+.hp-insight-card.featured .hp-insight-title { font-size: 1.8rem; }
+
+.hp-insight-body {
+  font-family: var(--font-b); font-size: .88rem; font-weight: 300;
+  color: rgba(255,255,255,.6); line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+.hp-insight-card.featured .hp-insight-body { font-size: .95rem; max-width: 55ch; }
+
+.hp-insight-link {
+  display: inline-flex; align-items: center; gap: .5rem;
+  font-family: var(--font-b); font-size: .85rem; font-weight: 600;
+  color: var(--gold2); text-decoration: none;
+  transition: gap .2s var(--ease), color .2s;
+}
+.hp-insight-link:hover { gap: .8rem; color: #fff; }
+.hp-insight-link svg { flex-shrink: 0; }
+
+/* Featured "Learn More" button — bigger and prominent */
+.hp-insight-card.featured .hp-insight-link {
+  font-size: .95rem;
+  padding: .7rem 1.6rem;
+  background: var(--gold);
+  color: #fff; border-radius: 999px;
+  transition: all .22s var(--ease);
+}
+.hp-insight-card.featured .hp-insight-link:hover {
+  background: var(--gold2); gap: .8rem;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(184,137,58,.35);
+}
+
+/* ─────────────────────────────────────────
+   ANIMATIONS
+───────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  opacity: 0; transform: translateY(22px);
+  transition: opacity .6s var(--ease), transform .6s var(--ease);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ─────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────── */
+@media (max-width: 768px) {
+  .hp-stats-inner { grid-template-columns: 1fr; gap: 2rem; }
+  .hp-stat-divider { display: none; }
+  .hp-insight-card.featured { grid-template-columns: 1fr; }
+  .hp-insight-card.featured .hp-insight-num { display: none; }
+  .hp-hero-title { font-size: 2.8rem; }
+  .hp-initiative::before { font-size: 14rem; }
+}
+</style>
+
+<!-- ══════════════════════════════════════
+     HERO — Full-height carousel
+══════════════════════════════════════ -->
+<div class="hp-hero">
+
+  <!-- Carousel -->
+  <div id="heroCarousel" class="carousel slide hp-carousel" data-bs-ride="carousel" data-bs-interval="5000">
+    <div class="carousel-indicators">
       {% for img in hero_images %}
-        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="{{ loop.index0 }}" {% if loop.first %}class="active"{% endif %} aria-label="Slide {{ loop.index }}"></button>
+      <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="{{ loop.index0 }}"
+              {% if loop.first %}class="active" aria-current="true"{% endif %}
+              aria-label="Slide {{ loop.index }}"></button>
       {% endfor %}
     </div>
-    <div class="carousel-inner" style="height:100vh; width:100vw;">
+    <div class="carousel-inner">
       {% for img in hero_images %}
-      <div class="carousel-item {% if loop.first %}active{% endif %}" style="height:100vh; width:100vw;">
-        <div style="
-          background-image: url('{{ url_for('static', filename=img) }}');
-          background-size: cover;
-          background-position: center;
-          width:100vw; height:100vh; min-height:400px;">
-        </div>
+      <div class="carousel-item {% if loop.first %}active{% endif %}">
+        <div style="background-image:url('{{ url_for('static', filename=img) }}');background-size:cover;background-position:center;height:100vh;width:100%;"></div>
       </div>
       {% endfor %}
     </div>
-  <!-- Carousel arrow controls -->
-    <button class="carousel-control-prev custom-arrow" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-      <span aria-hidden="true">
-        <i class="fas fa-chevron-left fa-2x"></i>
-      </span>
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
       <span class="visually-hidden">Previous</span>
     </button>
-    <button class="carousel-control-next custom-arrow" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-      <span aria-hidden="true">
-      <i class="fas fa-chevron-right fa-2x"></i>
-      </span>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
       <span class="visually-hidden">Next</span>
     </button>
   </div>
-  <!-- Fixed text container overlay -->
-  <div class="container position-absolute top-50 end-0 translate-middle-y" style="right:0; z-index:10; pointer-events: none;">
-    <div class="row w-100">
-      <div class="col-lg-7 text-end mx-auto">
-        <h1 class="text-white pt-3 mt-n5 text-dark" style="text-shadow: 2px 2px 6px rgba(0,0,0,0.8);">Welcome to <br> the Central Prairie Development Alliance</h1>
-        <p class="lead text-white mt-3" style="text-shadow:2px 2px 6px rgba(0,0,0,0.8);">Working Together to Build a Stronger Future for Our Region</p>
-      </div>
-    </div>
-  </div>
-</header>
 
-<section class="pt-3 pb-4" id="count-stats">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-9 z-index-2 border-radius-xl mx-auto py-3 blur shadow-blur">
-        <div class="row">
-          <div class="col-md-6 position-relative">
-            <div class="p-3 text-center">
-              <h1 class="text-gradient text-dark"><span id="state1" countTo="1344">0</span>+</h1>
-              <h5 class="mt-3">Businesses</h5>
-              <p class="text-sm">With industry-leaders in Agriculture, Agri-Food Processing, Mining, Tourism, Healthcare, and Education, our region is a perfect place to expand your business.</p>
-            </div>
-            <hr class="vertical dark">
-          </div>
-          <div class="col-md-6">
-            <div class="p-3 text-center">
-              <h1 class="text-gradient text-dark" id="state3" countTo="16">0</h1>
-              <h5 class="mt-3">Communities</h5>
-              <p class="text-sm">Explore our 16 member communities — ideal for living, working, and investing in the heart of Saskatchewan.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+  <!-- Overlay -->
+  <div class="hp-hero-overlay"></div>
+  <div class="hp-hero-accent"></div>
 
-<section class="py-5">
-  <div class="container">
-    <div class="row">
-      <div class="col-12">
-        <div class="d-flex justify-content-center align-items-center">
-          <a href="/about-us" class="text-primary font-weight-bold icon-move-right fs-4" style="text-shadow: 1px 1px 4px rgba(106, 71, 10, 0.3);">
-            Learn More
-            <i class="fas fa-arrow-right text-sm ms-1"></i>
+  <!-- Text content -->
+  <div class="hp-hero-content">
+    <div class="container">
+      <div class="hp-hero-inner">
+        <p class="hp-hero-eyebrow">Saskatchewan &amp; Manitoba</p>
+        <h1 class="hp-hero-title">
+          Central Prairie<br>
+          <em>Development Alliance</em>
+        </h1>
+        <p class="hp-hero-sub">
+          Working together to build a stronger, more connected future for our communities across East-Central Saskatchewan and West-Central Manitoba.
+        </p>
+        <div class="hp-hero-ctas">
+          <a href="/about-us" class="btn-gold">
+            Learn About Us
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
           </a>
-          <a href="/get-involved" class="text-primary font-weight-bold icon-move-right fs-4 ms-10 text-end-md-right" style="text-shadow: 1px 1px 4px rgba(106, 71, 10, 0.3);">
+          <a href="/get-involved" class="btn-ghost-light">
             Get Involved
-            <i class="fas fa-arrow-right text-sm ms-1"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="py-3">
-  <div class="container">
-    <div class="row">
-      <div class="col-12">
-        <h2 class="text-gradient text-primary mb-0 mt-2">Our Initiative</h2>
-        <div class="mb-5"></div>
-        <p class="lead mb-0">The CPDA is a regional initiative bringing together communities across East-Central Saskatchewan and West-Central Manitoba. Together, we're creating a future where growth is sustainable and communities thrive.</p>
-        <div class="mb-6"></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- -------- START Content Presentation Docs ------- -->
-
-<div class="container">
-  <h2 class="business-title mb-4">Business Insights</h2>
-  <div class="row">
-    <div class="col-lg-4">
-      <div class="info-horizontal bg-gray-100 border-radius-xl p-4 h-100">
-        <!-- <div class="icon">
-          <svg class="text-primary" width="25px" height="25px" viewBox="0 0 46 43" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-            <title>delivery-fast</title>
-            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-              <g transform="translate(-2320.000000, -741.000000)" fill="#FFFFFF" fill-rule="nonzero">
-                <g transform="translate(1716.000000, 291.000000)">
-                  <g id="delivery-fast" transform="translate(604.000000, 450.000000)">
-                    <rect class="color-background" opacity="0.601143973" x="0" y="0" width="17.25" height="3.83333333"></rect>
-                    <rect class="color-background" opacity="0.601143973" x="3.83333333" y="7.66666667" width="13.4166667" height="3.83333333"></rect>
-                    <rect class="color-background" opacity="0.601143973" x="7.66666667" y="15.3333333" width="9.58333333" height="3.83333333"></rect>
-                    <rect class="color-background" opacity="0.601888021" x="11.5" y="23" width="5.75" height="3.83333333"></rect>
-                    <path class="color-foreground" d="M44.9400833,19.3679167 L38.0611667,15.9294167 L36.3591667,9.1195 C36.1464167,8.26466667 35.37975,7.66666667 34.5,7.66666667 L31.3854167,7.66666667 L21.0833333,7.66666667 C21.0833333,7.66666667 21.0833333,31.5310833 21.0833333,32.5833333 C21.0833333,33.6355833 21.1810833,34.5 21.1810833,34.5 C21.6640833,38.801 25.2808333,42.1666667 29.7083333,42.1666667 C34.1358333,42.1666667 37.7525833,38.801 38.2355833,34.5 L44.0833333,34.5 C45.1413333,34.5 46,33.6413333 46,32.5833333 L46,21.0833333 C46,20.3569167 45.5898333,19.69375 44.9400833,19.3679167 Z M29.7083333,38.3333333 C27.0671667,38.3333333 24.9166667,36.18475 24.9166667,33.5416667 C24.9166667,30.8985833 27.0671667,28.75 29.7083333,28.75 C32.3495,28.75 34.5,30.8985833 34.5,33.5416667 C34.5,36.18475 32.3495,38.3333333 29.7083333,38.3333333 Z M24.9166667,17.25 L24.9166667,11.5 L33.2426667,11.5 L34.5,17.25 L24.9166667,17.25 Z"></path>
-                  </g>
-                </g>
-              </g>
-            </g>
-          </svg>
-        </div> -->
-        
-
-
-        <div class="description ps-4">
-          <h5>Industry Diversity</h5>
-          <p>CPDA’s 1,344 businesses thrive in agriculture (8.1%), manufacturing (6.8%), and sales. Local shops and workshops leverage these strengths for growth.</p>
-          <a href="./industries" class="text-primary icon-move-right">
-            Learn More
-            <i class="fas fa-arrow-right text-sm ms-1"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-4 px-lg-1 mt-lg-0 mt-4">
-      <div class="info-horizontal bg-gray-100 border-radius-xl p-4 h-100">
-        <!-- <div class="icon">
-          <svg class="text-primary" width="25px" height="25px" viewBox="0 0 40 44" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-            <title>document</title>
-            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-              <g transform="translate(-1870.000000, -591.000000)" fill="#FFFFFF" fill-rule="nonzero">
-                <g transform="translate(1716.000000, 291.000000)">
-                  <g transform="translate(154.000000, 300.000000)">
-                    <path class="color-foreground" d="M40,40 L36.3636364,40 L36.3636364,3.63636364 L5.45454545,3.63636364 L5.45454545,0 L38.1818182,0 C39.1854545,0 40,0.814545455 40,1.81818182 L40,40 Z" opacity="0.603585379"></path>
-                    <path class="color-background" d="M30.9090909,7.27272727 L1.81818182,7.27272727 C0.814545455,7.27272727 0,8.08727273 0,9.09090909 L0,41.8181818 C0,42.8218182 0.814545455,43.6363636 1.81818182,43.6363636 L30.9090909,43.6363636 C31.9127273,43.6363636 32.7272727,42.8218182 32.7272727,41.8181818 L32.7272727,9.09090909 C32.7272727,8.08727273 31.9127273,7.27272727 30.9090909,7.27272727 Z M18.1818182,34.5454545 L7.27272727,34.5454545 L7.27272727,30.9090909 L18.1818182,30.9090909 L18.1818182,34.5454545 Z M25.4545455,27.2727273 L7.27272727,27.2727273 L7.27272727,23.6363636 L25.4545455,23.6363636 L25.4545455,27.2727273 Z M25.4545455,20 L7.27272727,20 L7.27272727,16.3636364 L25.4545455,16.3636364 L25.4545455,20 Z"></path>
-                  </g>
-                </g>
-              </g>
-            </g>
-          </svg>
-        </div> -->
-        <div class="description ps-4">
-          <h5>Support for Entrepreneurs</h5>
-          <p>The CPDA helps connect businesses and communities in our region with the tools, resources, and education to help them thrive.</p>
-          <a href="https://www.yorkton.ca/en/build-invest-and-grow/start-a-business.aspx" class="text-primary icon-move-right">
-            Learn More
-            <i class="fas fa-arrow-right text-sm ms-1"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-4 mt-lg-0 mt-4">
-      <div class="info-horizontal bg-gray-100 border-radius-xl p-4 h-100">
-        <!-- <div class="icon">
-          <svg class="text-primary" width="25px" height="25px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-            <title>ungroup</title>
-            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-              <g transform="translate(-2170.000000, -442.000000)" fill="#FFFFFF" fill-rule="nonzero">
-                <g transform="translate(1716.000000, 291.000000)">
-                  <g id="ungroup" transform="translate(454.000000, 151.000000)">
-                    <path class="color-background" d="M38.1818182,10.9090909 L32.7272727,10.9090909 L32.7272727,30.9090909 C32.7272727,31.9127273 31.9127273,32.7272727 30.9090909,32.7272727 L10.9090909,32.7272727 L10.9090909,38.1818182 C10.9090909,39.1854545 11.7236364,40 12.7272727,40 L38.1818182,40 C39.1854545,40 40,39.1854545 40,38.1818182 L40,12.7272727 C40,11.7236364 39.1854545,10.9090909 38.1818182,10.9090909 Z"></path>
-                    <path class="color-foreground" d="M27.2727273,29.0909091 L1.81818182,29.0909091 C0.812727273,29.0909091 0,28.2781818 0,27.2727273 L0,1.81818182 C0,0.814545455 0.812727273,0 1.81818182,0 L27.2727273,0 C28.2781818,0 29.0909091,0.814545455 29.0909091,1.81818182 L29.0909091,27.2727273 C29.0909091,28.2781818 28.2781818,29.0909091 27.2727273,29.0909091 Z"></path>
-                  </g>
-                </g>
-              </g>
-            </g>
-          </svg>
-        </div> -->
-        <div class="description ps-4">
-          <h5>Growing with the Region</h5>
-          <p>A projected population rise of 4.9%, to 36,020, by 2034, and 28,300 workers enable businesses to tap into expanding opportunities.</p>
-          <a href="./region" class="text-primary icon-move-right">
-            Learn More
-            <i class="fas fa-arrow-right text-sm ms-1"></i>
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
           </a>
         </div>
       </div>
     </div>
   </div>
 </div>
- 
 
-<!-- -------- END Content Presentation Docs ------- -->
+<!-- ══════════════════════════════════════
+     STATS BAND
+══════════════════════════════════════ -->
+<div class="hp-stats">
+  <div class="hp-stats-inner">
 
+    <div class="hp-stat reveal">
+      <div class="hp-stat-num">
+        <span id="state1" countTo="1344">0</span>
+        <sup>+</sup>
+      </div>
+      <div class="hp-stat-label">Businesses</div>
+      <p class="hp-stat-desc">Agriculture, manufacturing, retail and more across the region.</p>
+    </div>
 
+    <div class="hp-stat-divider reveal"></div>
 
+    <div class="hp-stat reveal">
+      <div class="hp-stat-num">
+        <span id="state3" countTo="16">0</span>
+      </div>
+      <div class="hp-stat-label">Member Communities</div>
+      <p class="hp-stat-desc">Ideal communities for living, working, and investing.</p>
+    </div>
 
+  </div>
+</div>
 
+<!-- ══════════════════════════════════════
+     INITIATIVE
+══════════════════════════════════════ -->
+<section class="hp-initiative">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6">
+        <p class="hp-initiative-label reveal">Our Initiative</p>
+        <h2 class="hp-initiative-title reveal">
+          Building a Region<br>
+          <em>Stronger Together</em>
+        </h2>
+        <p class="hp-initiative-body reveal">
+          The CPDA is a regional initiative bringing together communities across East-Central Saskatchewan and West-Central Manitoba. Together, we're creating a future where growth is sustainable and communities thrive.
+        </p>
+        <div class="hp-links reveal">
+          <a href="/about-us" class="hp-link">
+            Our Story
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+          </a>
+          <a href="/get-involved" class="hp-link">
+            Get Involved
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+          </a>
+          <a href="/priorities" class="hp-link">
+            Our Priorities
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+          </a>
+        </div>
+      </div>
 
+      <!-- Right: decorative stat highlight -->
+      <div class="col-lg-5 offset-lg-1">
+        <div class="reveal" style="
+          background: var(--navy);
+          border-radius: 24px;
+          padding: 3rem 2.5rem;
+          position: relative; overflow: hidden;
+          box-shadow: 0 24px 60px rgba(26,37,64,.18);
+        ">
+          <!-- Gold corner accent -->
+          <div style="
+            position: absolute; top: 0; left: 0;
+            width: 80px; height: 80px;
+            background: linear-gradient(135deg, rgba(184,137,58,.3), transparent);
+            border-radius: 24px 0 80px 0;
+          "></div>
+          <p style="font-family:var(--font-b);font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold2);margin-bottom:1rem;">Regional Outlook</p>
+          <p style="font-family:var(--font-d);font-size:3rem;font-weight:700;color:#fff;line-height:1;margin-bottom:.5rem;">4.9%</p>
+          <p style="font-family:var(--font-b);font-size:.85rem;color:rgba(255,255,255,.55);line-height:1.6;margin-bottom:1.75rem;">Projected population growth by 2034, with 28,300+ workers enabling expanding opportunity.</p>
+          <div style="border-top:1px solid rgba(255,255,255,.08);padding-top:1.5rem;">
+            <p style="font-family:var(--font-d);font-size:2.4rem;font-weight:700;color:#fff;line-height:1;margin-bottom:.4rem;">16</p>
+            <p style="font-family:var(--font-b);font-size:.82rem;color:rgba(255,255,255,.5);">Member communities across two provinces.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
+<!-- ══════════════════════════════════════
+     BUSINESS INSIGHTS
+══════════════════════════════════════ -->
+<section class="hp-insights">
+  <div class="container position-relative">
 
-<!--   Core JS Files   -->
+    <div class="hp-insights-header">
+      <p class="hp-insights-kicker reveal">Business Insights</p>
+      <h2 class="hp-insights-title reveal">Why Invest in the<br><span style="font-style:italic;font-weight:400;color:var(--gold2);">Central Prairie Region</span></h2>
+    </div>
+
+    <div class="row g-4">
+
+      <!-- ★ FEATURED: Industry Diversity — full width, prominent -->
+      <div class="col-12 reveal">
+        <div class="hp-insight-card featured">
+          <div>
+            <div class="hp-insight-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--gold2);">
+                <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+                <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+              </svg>
+            </div>
+            <p class="hp-insight-label">Priority Insight</p>
+            <h3 class="hp-insight-title">Industry Diversity</h3>
+            <p class="hp-insight-body">
+              CPDA's 1,344 businesses thrive across agriculture (8.1%), manufacturing (6.8%), and retail trade. This diverse industrial base creates resilience and cross-sector opportunity — making our region a powerful platform for growth.
+            </p>
+            <a href="/industries" class="hp-insight-link">
+              Explore Industry Data
+              <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+            </a>
+          </div>
+          <div class="hp-insight-num">01</div>
+        </div>
+      </div>
+
+      <!-- Support for Entrepreneurs -->
+      <div class="col-md-6 reveal">
+        <div class="hp-insight-card">
+          <div class="hp-insight-num">02</div>
+          <div class="hp-insight-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--gold2);">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+            </svg>
+          </div>
+          <p class="hp-insight-label">Entrepreneurs</p>
+          <h3 class="hp-insight-title">Support for Business Owners</h3>
+          <p class="hp-insight-body">
+            The CPDA helps connect businesses and communities with tools, resources, and education to help them thrive in our growing regional economy.
+          </p>
+          <a href="https://www.yorkton.ca/en/build-invest-and-grow/start-a-business.aspx"
+             class="hp-insight-link" target="_blank">
+            Learn More
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Growing with the Region -->
+      <div class="col-md-6 reveal">
+        <div class="hp-insight-card">
+          <div class="hp-insight-num">03</div>
+          <div class="hp-insight-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--gold2);">
+              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+              <polyline points="17 6 23 6 23 12"/>
+            </svg>
+          </div>
+          <p class="hp-insight-label">Growth</p>
+          <h3 class="hp-insight-title">Growing with the Region</h3>
+          <p class="hp-insight-body">
+            A projected population rise of 4.9% to 36,020 by 2034, and 28,300 workers enables businesses to tap into expanding opportunities across the prairie.
+          </p>
+          <a href="/region" class="hp-insight-link">
+            View Regional Statistics
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     SCRIPTS (keep existing ones)
+══════════════════════════════════════ -->
 <script src="{{ url_for('static', filename='assets/js/core/popper.min.js') }}" type="text/javascript"></script>
 <script src="{{ url_for('static', filename='assets/js/core/bootstrap.min.js') }}" type="text/javascript"></script>
-<script src="{{ url_for('static', filename='assets/js/plugins/perfect-scrollbar.min.js') }}"></script>
-
-
-
-
-<!--  Plugin for TypedJS, full documentation here: https://github.com/inorganik/CountUp.js -->
 <script src="{{ url_for('static', filename='assets/js/plugins/countup.min.js') }}"></script>
-
-
-
-
-
-<script src="{{ url_for('static', filename='assets/js/plugins/choices.min.js') }}"></script>
-
-
-
-
-
-<script src="{{ url_for('static', filename='assets/js/plugins/prism.min.js') }}"></script>
-<script src="{{ url_for('static', filename='assets/js/plugins/highlight.min.js') }}"></script>
-
-
-
-
-
-<!--  Plugin for Parallax, full documentation here: https://github.com/dixonandmoe/rellax -->
-<script src="{{ url_for('static', filename='assets/js/plugins/rellax.min.js') }}"></script>
-<!--  Plugin for TiltJS, full documentation here: https://gijsroge.github.io/tilt.js/ -->
-<script src="{{ url_for('static', filename='assets/js/plugins/tilt.min.js') }}"></script>
-<!--  Plugin for Selectpicker - ChoicesJS, full documentation here: https://github.com/jshjohnson/Choices -->
-<script src="{{ url_for('static', filename='assets/js/plugins/choices.min.js') }}"></script>
-
-
-<!--  Plugin for Parallax, full documentation here: https://github.com/wagerfield/parallax  -->
-<script src="{{ url_for('static', filename='assets/js/plugins/parallax.min.js') }}"></script>
-
-
-
-
-
-
-
-
-<!-- Control Center for Soft UI Kit: parallax effects, scripts for the example pages etc -->
-<!--  Google Maps Plugin    -->
-
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTTfWur0PDbZWPr7Pmq8K3jiDp0_xUziI"></script>
 <script src="{{ url_for('static', filename='assets/js/soft-design-system.min.js?v=1.1.0') }}" type="text/javascript"></script>
 
+<script>
+/* ── CountUp ── */
+['state1','state3'].forEach(id => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const cu = new CountUp(id, el.getAttribute('countTo'));
+  if (!cu.error) cu.start();
+});
 
-<script type="text/javascript">
+/* ── Scroll reveal ── */
+const io = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 60);
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
 
-  if (document.getElementById('state1')) {
-    const countUp = new CountUp('state1', document.getElementById("state1").getAttribute("countTo"));
-    if (!countUp.error) {
-      countUp.start();
-    } else {
-      console.error(countUp.error);
-    }
-  }
-  if (document.getElementById('state2')) {
-    const countUp1 = new CountUp('state2', document.getElementById("state2").getAttribute("countTo"));
-    if (!countUp1.error) {
-      countUp1.start();
-    } else {
-      console.error(countUp1.error);
-    }
-  }
-  if (document.getElementById('state3')) {
-    const countUp2 = new CountUp('state3', document.getElementById("state3").getAttribute("countTo"));
-    if (!countUp2.error) {
-      countUp2.start();
-    } else {
-      console.error(countUp2.error);
-    };
-  }
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 </script>
 
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
