@@ -167,71 +167,90 @@
 
   {% block content %}{% endblock %}
 
-  <footer class="footer pt-5 mt-5">
-    <div class="container">
-      <div class="row align-items-start">
-
-        <div class="col-lg-6 col-md-12 mb-4">
-          <div class="mb-3 text-center text-lg-start">
-            <span class="font-italic fw-bold" style="font-size: 1.4rem; color: #ffd700;">Stronger Together</span>
+  <footer class="cpda-footer" role="contentinfo">
+    <div class="cpda-footer__inner">
+      <div class="cpda-footer__top">
+        <div class="cpda-footer__brand">
+          <div class="cpda-footer__brand-title">
+            <span class="cpda-footer__brand-name">CPDA</span>
+            <span class="cpda-footer__brand-tagline">Stronger Together</span>
           </div>
 
-          {% set logos = [
-            {'img': 'assets/img/Logo1.png', 'url': url_for('home')},
-            {'img': 'assets/img/Logo2.png', 'url': url_for('home')},
-            {'img': 'assets/img/Logo3.png', 'url': url_for('home')},
-            {'img': 'assets/img/Logo4.png', 'url': url_for('home')}
-          ] %}
+          <p class="cpda-footer__blurb">
+            Working together to build a stronger, more connected future for communities across East-Central Saskatchewan.
+          </p>
 
-          <div class="row g-2 mb-4 justify-content-center justify-content-lg-start">
-            {% for logo in logos %}
-              <div class="col-6 col-md-4 col-lg-2 text-center mb-2">
-                <a href="{{ logo.url }}">
-                  <img src="{{ url_for('static', filename=logo.img) }}" alt="Logo" class="img-fluid" style="max-height:40px;">
-                </a>
-              </div>
-            {% endfor %}
+          <div class="cpda-footer__logos" aria-label="Partner logos">
+            <img src="{{ url_for('static', filename='assets/img/footer/logo1.png') }}" alt="Partner logo 1" loading="lazy">
+            <img src="{{ url_for('static', filename='assets/img/footer/logo2.png') }}" alt="Partner logo 2" loading="lazy">
+            <img src="{{ url_for('static', filename='assets/img/footer/logo3.png') }}" alt="Partner logo 3" loading="lazy">
+            <img src="{{ url_for('static', filename='assets/img/footer/logo4.png') }}" alt="Partner logo 4" loading="lazy">
           </div>
         </div>
 
-        <div class="col-lg-6 col-md-12 mb-4 mt-lg-5">
-          <div class="row justify-content-end">
-
-            <div class="col-6 col-lg-3 text-end mb-2">
-              <a class="nav-link" href="{{ url_for('aboutUs') }}">About Us</a>
-              <a class="nav-link" href="{{ url_for('region') }}">Statistics</a>
-              <a class="nav-link" href="{{ url_for('aboutUs') }}#vision">Our Vision</a>
-            </div>
-
-            <div class="col-6 col-lg-3 text-end mb-2">
-              <a class="nav-link" href="{{ url_for('priorities') }}">Priorities</a>
-              <a class="nav-link" href="{{ url_for('get_involved') }}">Get Involved</a>
-              <a class="nav-link" href="{{ url_for('news_updates') }}">News & Updates</a>
-            </div>
-
-            <div class="col-6 col-lg-3 text-end mb-2">
-              <a class="nav-link" href="{{ url_for('contact_us') }}">Contact Us</a>
-              <a class="nav-link" href="{{ url_for('home') }}">Privacy</a>
-              <a class="nav-link" href="{{ url_for('home') }}">Accessibility</a>
-            </div>
-
+        <nav class="cpda-footer__nav" aria-label="Footer">
+          <div class="cpda-footer__col">
+            <h2 class="cpda-footer__heading">Quick links</h2>
+            <ul class="cpda-footer__list">
+              <li><a class="cpda-footer__link" href="/">Home</a></li>
+              <li><a class="cpda-footer__link" href="/about-us">About Us</a></li>
+              <li><a class="cpda-footer__link" href="/statistics">Statistics</a></li>
+              <li><a class="cpda-footer__link" href="/priorities">Priorities</a></li>
+            </ul>
           </div>
-        </div>
 
+          <div class="cpda-footer__col">
+            <h2 class="cpda-footer__heading">Explore</h2>
+            <ul class="cpda-footer__list">
+              <li><a class="cpda-footer__link" href="/get-involved">Get Involved</a></li>
+              <li><a class="cpda-footer__link" href="/news-updates">News &amp; Updates</a></li>
+              <li><a class="cpda-footer__link" href="/contact-us">Contact</a></li>
+            </ul>
+          </div>
+
+          <div class="cpda-footer__col">
+            <h2 class="cpda-footer__heading">Legal</h2>
+            <ul class="cpda-footer__list">
+              <li><a class="cpda-footer__link" href="/privacy">Privacy</a></li>
+              <li><a class="cpda-footer__link" href="/accessibility">Accessibility</a></li>
+            </ul>
+          </div>
+        </nav>
       </div>
 
-      <div class="row">
-        <div class="col-12">
-          <div class="text-center">
-            <p class="my-4 text-sm">
-              All rights reserved. Copyright © <script>document.write(new Date().getFullYear())</script>
-              Soft UI Design System by <span style="color: #ffd700;">Suncrest</span>.
-            </p>
-          </div>
+      <div class="cpda-footer__divider" aria-hidden="true"></div>
+
+      <div class="cpda-footer__bottom">
+        <p class="cpda-footer__copyright">
+          <span>© <span id="cpda-year">2026</span> Central Prairie Development Alliance.</span>
+          <span class="cpda-footer__muted">All rights reserved.</span>
+        </p>
+
+        <div class="cpda-footer__bottom-right">
+          <a class="cpda-footer__backtotop" href="#top" aria-label="Back to top">
+            Back to top ↑
+          </a>
+
+          <a
+            class="cpda-footer__admin"
+            href="https://cpda-git-main-dev-joshis-projects-ebc4dc68.vercel.app/admin/login"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Admin login"
+            title="Admin login"
+          >
+            Admin
+          </a>
         </div>
       </div>
-
     </div>
+
+    <script>
+      (function () {
+        var el = document.getElementById("cpda-year");
+        if (el) el.textContent = new Date().getFullYear();
+      })();
+    </script>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
