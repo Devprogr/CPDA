@@ -1,94 +1,415 @@
 {% extends "base.html" %}
 {% block content %}
 
-<header class="header-2">
-  <div class="page-header min-vh-100 relative"
-       style="background-image: url('{{ url_for('static', filename='assets/img/transportation.jpg') }}'); background-size: cover; background-position: center;">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-8 mx-auto text-center">
-          <div style="background: rgba(20,20,30,0.70); border-radius: 1rem; display:inline-block; padding: 2rem 2.5rem;">
-            <h1 class="text-white mb-2" style="text-shadow: 3px 3px 12px rgba(0,0,0,0.7);">Transportation</h1>
-            <p class="lead text-white mb-0" style="text-shadow: 3px 3px 12px rgba(0,0,0,0.7);">
-              A crossroads location with highway access that supports trade, commuting, and business movement.
-            </p>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --navy:   #0e1420;
+  --navy2:  #192035;
+  --blue:   #2563a8;
+  --blue2:  #3b82c4;
+  --cream:  #f7f4ef;
+  --slate:  #475569;
+  --fog:    #8896a8;
+  --font-d: 'Cormorant Garamond', Georgia, serif;
+  --font-b: 'Figtree', system-ui, sans-serif;
+  --ease:   cubic-bezier(.22,1,.36,1);
+}
+*, *::before, *::after { box-sizing: border-box; }
+body { background: var(--cream); font-family: var(--font-b); color: var(--navy); margin: 0; }
+
+/* HERO */
+.tr-hero {
+  background: var(--navy);
+  position: relative; overflow: hidden;
+  padding: 8rem 0 5.5rem; min-height: 90vh;
+  display: flex; align-items: center;
+}
+.tr-hero::before {
+  content: "";
+  position: absolute; inset: 0; z-index: 1;
+  background-image:
+    repeating-linear-gradient(90deg, transparent, transparent 48px, rgba(255,255,255,.022) 48px, rgba(255,255,255,.022) 50px),
+    repeating-linear-gradient(0deg, transparent, transparent 48px, rgba(255,255,255,.022) 48px, rgba(255,255,255,.022) 50px);
+  pointer-events: none;
+}
+.tr-hero::after {
+  content: "";
+  position: absolute; inset: 0; z-index: 1;
+  background: radial-gradient(ellipse 65% 40% at 85% 50%, rgba(37,99,168,.22), transparent),
+              radial-gradient(ellipse 40% 55% at 5% 80%, rgba(37,99,168,.1), transparent);
+  pointer-events: none;
+}
+.tr-grain {
+  position: absolute; inset: 0; z-index: 2;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: .5; pointer-events: none;
+}
+.tr-hero-inner { position: relative; z-index: 3; }
+
+.tr-eyebrow {
+  display: inline-flex; align-items: center; gap: .65rem;
+  font-family: var(--font-b); font-size: .7rem; font-weight: 700;
+  letter-spacing: .22em; text-transform: uppercase;
+  color: var(--blue2); margin-bottom: 1.5rem;
+  animation: fadeUp .7s .05s var(--ease) both;
+}
+.tr-eyebrow-bar { width: 28px; height: 2px; background: var(--blue2); border-radius: 2px; }
+
+.tr-title {
+  font-family: var(--font-d);
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  font-weight: 700; line-height: 1.03; letter-spacing: -.02em;
+  color: #fff; margin-bottom: 1.5rem;
+  animation: fadeUp .7s .13s var(--ease) both;
+}
+.tr-title em { display: block; font-style: italic; font-weight: 400; color: var(--blue2); }
+
+.tr-subtitle {
+  font-size: 1.05rem; font-weight: 300; line-height: 1.8;
+  color: rgba(255,255,255,.72); max-width: 52ch;
+  margin-bottom: 2.5rem;
+  animation: fadeUp .7s .2s var(--ease) both;
+}
+.tr-hero-btns { display: flex; flex-wrap: wrap; gap: 1rem; animation: fadeUp .7s .27s var(--ease) both; }
+
+.tr-stat-card {
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 18px; padding: 1.75rem;
+  animation: fadeUp .7s .32s var(--ease) both;
+}
+.tr-stat-item { padding: .85rem 0; }
+.tr-stat-item + .tr-stat-item { border-top: 1px solid rgba(255,255,255,.07); }
+.tr-stat-num {
+  font-family: var(--font-d); font-size: 2.8rem; font-weight: 700;
+  line-height: 1; color: #fff; display: flex; align-items: baseline; gap: .15rem;
+}
+.tr-stat-num span { font-size: 1.3rem; color: var(--blue2); }
+.tr-stat-lbl { font-size: .72rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.42); margin-top: .3rem; }
+
+/* MODE STRIP */
+.tr-modes { background: var(--navy2); border-bottom: 1px solid rgba(255,255,255,.05); }
+.tr-modes-inner {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  gap: 1px; background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.06); border-radius: 16px; overflow: hidden;
+  margin: 0 auto;
+}
+.tr-mode { padding: 2rem 1.5rem; background: var(--navy2); text-align: center; transition: background .2s; }
+.tr-mode:hover { background: rgba(255,255,255,.04); }
+.tr-mode-icon { font-size: 2rem; margin-bottom: .75rem; display: block; }
+.tr-mode-name { font-family: var(--font-d); font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: .3rem; }
+.tr-mode-sub { font-size: .78rem; color: rgba(255,255,255,.4); font-weight: 300; line-height: 1.4; }
+
+/* SECTIONS */
+.tr-section { padding: 5.5rem 0; }
+.tr-section-white { background: #fff; }
+.tr-section-dark { background: var(--navy); position: relative; overflow: hidden; }
+.tr-section-dark::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,.03) 1px, transparent 1px);
+  background-size: 26px 26px; pointer-events: none;
+}
+
+.tr-kicker {
+  font-size: .68rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--blue); display: flex; align-items: center; gap: .55rem; margin-bottom: .8rem;
+}
+.tr-kicker::before { content: ""; width: 20px; height: 2px; background: currentColor; border-radius: 2px; }
+.tr-kicker-light { color: var(--blue2); }
+
+.tr-heading {
+  font-family: var(--font-d); font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 700; line-height: 1.15; letter-spacing: -.01em; color: var(--navy); margin-bottom: 1rem;
+}
+.tr-heading em { font-style: italic; font-weight: 400; color: var(--blue); }
+.tr-heading-light { color: #fff; }
+.tr-heading-light em { color: var(--blue2); }
+
+.tr-body { font-size: .95rem; font-weight: 300; line-height: 1.8; color: var(--slate); max-width: 58ch; }
+.tr-body-light { color: rgba(255,255,255,.62); }
+
+/* INFRA CARDS */
+.tr-infra-card {
+  border-radius: 16px; padding: 2rem 1.75rem; height: 100%;
+  background: #fff; border: 1px solid rgba(14,20,32,.08);
+  box-shadow: 0 2px 16px rgba(14,20,32,.05);
+  position: relative; overflow: hidden;
+  transition: transform .22s var(--ease), box-shadow .22s var(--ease), border-color .22s;
+}
+.tr-infra-card::before {
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--blue), var(--blue2));
+  transform: scaleX(0); transform-origin: left; transition: transform .3s var(--ease);
+}
+.tr-infra-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(14,20,32,.1); border-color: rgba(37,99,168,.15); }
+.tr-infra-card:hover::before { transform: scaleX(1); }
+.tr-infra-icon {
+  width: 46px; height: 46px; border-radius: 12px; background: rgba(37,99,168,.08);
+  display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 1.1rem;
+}
+.tr-infra-title { font-family: var(--font-d); font-size: 1.25rem; font-weight: 700; color: var(--navy); margin-bottom: .5rem; }
+.tr-infra-body { font-size: .875rem; font-weight: 300; color: var(--slate); line-height: 1.75; margin-bottom: 1.25rem; }
+.tr-infra-links { display: flex; flex-direction: column; gap: .5rem; }
+.tr-infra-link {
+  display: inline-flex; align-items: center; gap: .4rem;
+  font-size: .82rem; font-weight: 600; color: var(--blue); text-decoration: none;
+  transition: gap .2s, color .2s;
+}
+.tr-infra-link:hover { gap: .7rem; color: var(--navy); }
+
+/* OPPORTUNITY ITEMS */
+.tr-opp-item {
+  display: flex; align-items: flex-start; gap: 1rem;
+  padding: 1.25rem; border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.06);
+  background: rgba(255,255,255,.03);
+  transition: background .2s, border-color .2s;
+}
+.tr-opp-item:hover { background: rgba(255,255,255,.06); border-color: rgba(59,130,196,.25); }
+.tr-opp-num {
+  font-family: var(--font-d); font-size: 2rem; font-weight: 700;
+  color: rgba(59,130,196,.3); line-height: 1; flex-shrink: 0; width: 2.2rem;
+}
+.tr-opp-title { font-size: .9rem; font-weight: 600; color: #fff; margin-bottom: .3rem; }
+.tr-opp-desc { font-size: .82rem; font-weight: 300; color: rgba(255,255,255,.48); line-height: 1.6; }
+
+/* CTA */
+.tr-cta { background: var(--blue); padding: 4.5rem 0; position: relative; overflow: hidden; }
+.tr-cta::before {
+  content: ""; position: absolute; inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,.06) 1px, transparent 1px);
+  background-size: 22px 22px; pointer-events: none;
+}
+.tr-cta-title { font-family: var(--font-d); font-size: clamp(1.6rem,3vw,2.4rem); font-weight: 700; color: #fff; margin-bottom: .6rem; }
+.tr-cta-body { font-size: .95rem; font-weight: 300; color: rgba(255,255,255,.78); line-height: 1.7; margin: 0; max-width: 55ch; }
+
+/* BUTTONS */
+.btn-prim { display: inline-flex; align-items: center; gap: .5rem; padding: .85rem 1.75rem; border-radius: 999px; background: var(--blue); color: #fff; font-weight: 600; font-size: .9rem; text-decoration: none; font-family: var(--font-b); transition: all .2s var(--ease); }
+.btn-prim:hover { background: var(--blue2); color: #fff; transform: translateY(-2px); box-shadow: 0 10px 28px rgba(37,99,168,.4); }
+.btn-ghost { display: inline-flex; align-items: center; gap: .5rem; padding: .85rem 1.75rem; border-radius: 999px; background: rgba(255,255,255,.08); color: rgba(255,255,255,.8); border: 1.5px solid rgba(255,255,255,.2); font-weight: 600; font-size: .9rem; text-decoration: none; font-family: var(--font-b); transition: all .2s var(--ease); }
+.btn-ghost:hover { background: rgba(255,255,255,.16); color: #fff; transform: translateY(-2px); }
+.btn-white { display: inline-flex; align-items: center; gap: .5rem; padding: .85rem 1.75rem; border-radius: 999px; background: #fff; color: var(--blue); font-weight: 700; font-size: .9rem; text-decoration: none; font-family: var(--font-b); transition: all .2s var(--ease); }
+.btn-white:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0,0,0,.2); color: var(--navy); }
+.btn-outline { display: inline-flex; align-items: center; gap: .5rem; padding: .85rem 1.75rem; border-radius: 999px; background: transparent; color: rgba(255,255,255,.75); border: 1.5px solid rgba(255,255,255,.3); font-weight: 500; font-size: .85rem; text-decoration: none; font-family: var(--font-b); transition: all .2s var(--ease); }
+.btn-outline:hover { background: rgba(255,255,255,.08); color: #fff; }
+
+/* QUICK LINKS */
+.tr-ql { padding: 2.5rem 0; background: var(--cream); }
+.tr-ql-label { font-size: .68rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--fog); margin-bottom: .85rem; }
+.tr-ql-row { display: flex; flex-wrap: wrap; gap: .6rem; }
+.tr-ql-pill { padding: .5rem 1.15rem; border-radius: 999px; background: #fff; border: 1.5px solid rgba(14,20,32,.1); font-size: .82rem; font-weight: 500; color: var(--navy); text-decoration: none; transition: all .18s var(--ease); }
+.tr-ql-pill:hover { background: var(--navy); color: #fff; border-color: var(--navy); transform: translateY(-1px); }
+.tr-ql-dark { background: var(--navy); color: #fff; border-color: var(--navy); }
+.tr-ql-dark:hover { background: #0a0f1a; }
+
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity .55s var(--ease), transform .55s var(--ease); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+@keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+@media (max-width: 991px) { .tr-modes-inner { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 600px) { .tr-title { font-size: 2.8rem; } .tr-modes-inner { grid-template-columns: 1fr; } }
+</style>
+
+<!-- HERO -->
+<section class="tr-hero">
+  <div class="tr-grain"></div>
+  <div class="container tr-hero-inner">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-7">
+        <div class="tr-eyebrow">
+          <span class="tr-eyebrow-bar"></span>
+          East-Central Saskatchewan · Regional Logistics Hub
+        </div>
+        <h1 class="tr-title">
+          Move Goods.<br>
+          <em>Connect Markets.</em>
+        </h1>
+        <p class="tr-subtitle">
+          Yorkton sits at the intersection of two major railways, four provincial highways, and a municipal airport — making it one of Saskatchewan's most strategically connected distribution centres. If your business depends on moving things efficiently, this is your region.
+        </p>
+        <div class="tr-hero-btns">
+          <a href="{{ url_for('contact_us') }}" class="btn-prim">Explore Opportunities <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg></a>
+          <a href="{{ url_for('industries') }}" class="btn-ghost">← All Industries</a>
+        </div>
+      </div>
+      <div class="col-lg-4 offset-lg-1 d-none d-lg-block">
+        <div class="tr-stat-card">
+          <div class="tr-stat-item">
+            <div class="tr-stat-num">2 <span>Rail Lines</span></div>
+            <div class="tr-stat-lbl">CN & CPKC mainlines through Yorkton</div>
+          </div>
+          <div class="tr-stat-item">
+            <div class="tr-stat-num">4 <span>Highways</span></div>
+            <div class="tr-stat-lbl">Hwys 9, 10, 52 & the Yellowhead corridor</div>
+          </div>
+          <div class="tr-stat-item">
+            <div class="tr-stat-num">160<span>+</span></div>
+            <div class="tr-stat-lbl">Countries reached by Sask. exports</div>
+          </div>
+          <div class="tr-stat-item">
+            <div class="tr-stat-num">$13.8<span>B</span></div>
+            <div class="tr-stat-lbl">Provincial highway investment since 2008</div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</header>
+</section>
 
-<div class="container my-5">
-  <div class="row justify-content-center">
-    <div class="col-lg-9">
-
-      <div class="card shadow-sm mb-4">
-        <div class="card-body">
-          <h4 class="mb-2" style="color:#23254a; font-weight:700;">Why location matters</h4>
-          <p class="mb-0">
-            Yorkton is positioned on major highway routes that connect Saskatchewan and Manitoba, supporting logistics,
-            visitor travel, and regional supply chains.
-          </p>
-        </div>
-      </div>
-
-      <div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
-        <div class="col">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="mb-2" style="color:#23254a; font-weight:700;">What’s strong here</h5>
-              <ul class="mb-0">
-                <li>Highway connectivity for regional movement</li>
-                <li>Supports agriculture, processing, and retail supply chains</li>
-                <li>Convenient access for visitors and workers</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="mb-2" style="color:#23254a; font-weight:700;">Opportunities</h5>
-              <ul class="mb-0">
-                <li>Trucking and fleet services</li>
-                <li>Warehousing and distribution</li>
-                <li>Industrial logistics partnerships</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card shadow-sm mb-4">
-        <div class="card-body">
-          <h4 class="mb-3" style="color:#23254a; font-weight:700;">Useful links</h4>
-          <div class="d-flex flex-wrap gap-2">
-            <a class="btn btn-outline-primary" href="https://tourismyorkton.com/getting-here" target="_blank" rel="noopener">Getting Here (Tourism Yorkton)</a>
-            <a class="btn btn-outline-primary" href="https://www.saskatchewan.ca/residents/transportation/highways/highway-hotline" target="_blank" rel="noopener">Sask Highway Hotline</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="d-flex justify-content-between mt-4">
-        <a href="{{ url_for('industries') }}" class="btn btn-outline-primary">&larr; Back to Industry Page</a>
-        <a href="https://www.yorkton.ca/en/build-invest-and-grow/start-a-business.aspx" target="_blank" rel="noopener"
-           class="btn btn-primary" style="background-color:#ed4c1c; border-color:#ed4c1c;">
-          View Business Opportunities
-        </a>
-      </div>
-
-      <div class="card mt-5 shadow-sm">
-        <div class="card-body text-center">
-          <a href="{{ url_for('contact_us') }}" class="btn" style="font-size:15px;">CONTACT US</a>
-          <p class="mb-0 text-muted" style="font-size:14px;">
-            If you want, I can add a “Key Routes” visual block once you confirm which CPDA communities you want pinned.
-          </p>
-        </div>
-      </div>
-
+<!-- 4 MODES STRIP -->
+<div style="background:var(--navy2); padding: 2.5rem 0; border-bottom:1px solid rgba(255,255,255,.05);">
+  <div class="container">
+    <div class="tr-modes-inner reveal">
+      <div class="tr-mode"><span class="tr-mode-icon">🚂</span><div class="tr-mode-name">Rail</div><div class="tr-mode-sub">CN & CPKC dual mainlines</div></div>
+      <div class="tr-mode"><span class="tr-mode-icon">🛣️</span><div class="tr-mode-name">Highway</div><div class="tr-mode-sub">Yellowhead + 3 provincial routes</div></div>
+      <div class="tr-mode"><span class="tr-mode-icon">✈️</span><div class="tr-mode-name">Air</div><div class="tr-mode-sub">YQV Municipal Airport (CYQV)</div></div>
+      <div class="tr-mode"><span class="tr-mode-icon">🚛</span><div class="tr-mode-name">Trucking</div><div class="tr-mode-sub">Major regional distribution centre</div></div>
     </div>
   </div>
 </div>
 
+<!-- INFRASTRUCTURE CARDS -->
+<section class="tr-section">
+  <div class="container">
+    <div class="row mb-5">
+      <div class="col-lg-7">
+        <div class="tr-kicker reveal">Infrastructure Breakdown</div>
+        <h2 class="tr-heading reveal">Four Ways to Move.<br><em>One Strategic Location.</em></h2>
+        <p class="tr-body reveal">Yorkton's multi-modal network is the result of over a century of investment. For businesses that need reliable access to regional, national, and international markets, few locations in Saskatchewan compare.</p>
+      </div>
+    </div>
+    <div class="row g-4">
+
+      <div class="col-md-6 col-lg-3 reveal">
+        <div class="tr-infra-card">
+          <div class="tr-infra-icon">🚂</div>
+          <h4 class="tr-infra-title">Dual Rail Mainlines</h4>
+          <p class="tr-infra-body">Both <strong>CN</strong> and <strong>CPKC</strong> mainlines intersect in Yorkton — connecting producers to ports in Vancouver and Thunder Bay and giving shippers a rare choice of carrier and route for grain, potash, and manufactured goods.</p>
+          <div class="tr-infra-links">
+            <a href="https://www.cn.ca" target="_blank" rel="noopener" class="tr-infra-link">CN Rail Network →</a>
+            <a href="https://www.cpkcr.com" target="_blank" rel="noopener" class="tr-infra-link">CPKC Network →</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3 reveal">
+        <div class="tr-infra-card">
+          <div class="tr-infra-icon">🛣️</div>
+          <h4 class="tr-infra-title">Highway Network</h4>
+          <p class="tr-infra-body">Yorkton is where <strong>Highways 9, 10, 52</strong> and the <strong>Yellowhead (Hwy 16)</strong> converge. The province recently committed to upgrading <strong>Grain Millers Drive</strong> — a 7 km primary-weight industrial corridor north of the city — to accommodate year-round heavy truck traffic.</p>
+          <div class="tr-infra-links">
+            <a href="https://www.saskatchewan.ca/government/news-and-media/2025/august/20/government-of-saskatchewan-to-support-improvement-of-key-industrial-corridor-north-of-yorkton" target="_blank" rel="noopener" class="tr-infra-link">Grain Millers Drive Upgrade →</a>
+            <a href="https://www.saskatchewan.ca/residents/transportation/highway-construction-projects/highway-planning-studies/yorkton-regional-transportation-study" target="_blank" rel="noopener" class="tr-infra-link">Regional Road Plan →</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3 reveal">
+        <div class="tr-infra-card">
+          <div class="tr-infra-icon">✈️</div>
+          <h4 class="tr-infra-title">Yorkton Municipal Airport</h4>
+          <p class="tr-infra-body"><strong>YQV (CYQV)</strong> sits 5.2 km north of the city on Highway 9. The 720-acre facility handles private and commercial fixed-wing and helicopter operations. Regina International connects Yorkton to international destinations for business travel and cargo.</p>
+          <div class="tr-infra-links">
+            <a href="https://www.yorkton.ca/city-services/yorkton-airport/" target="_blank" rel="noopener" class="tr-infra-link">Yorkton Airport Info →</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3 reveal">
+        <div class="tr-infra-card">
+          <div class="tr-infra-icon">🚛</div>
+          <h4 class="tr-infra-title">Trucking & Distribution</h4>
+          <p class="tr-infra-body">As a <strong>major distribution hub</strong> for east-central Saskatchewan, Yorkton is a natural staging point for agricultural and industrial shipments. The Saskatchewan Trucking Association supports operators with advocacy, training, and industry resources.</p>
+          <div class="tr-infra-links">
+            <a href="https://sasktrucking.com" target="_blank" rel="noopener" class="tr-infra-link">Saskatchewan Trucking Association →</a>
+            <a href="https://www.yorkton.ca/build-invest-grow/economic-development/industry-in-yorkton/" target="_blank" rel="noopener" class="tr-infra-link">Industry in Yorkton →</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- INVESTMENT OPPORTUNITIES (dark) -->
+<section class="tr-section tr-section-dark">
+  <div class="container position-relative">
+    <div class="row mb-5">
+      <div class="col-lg-7">
+        <div class="tr-kicker tr-kicker-light reveal">Why Invest Here</div>
+        <h2 class="tr-heading tr-heading-light reveal">Investment Opportunities<br><em>in Transportation</em></h2>
+        <p class="tr-body tr-body-light reveal">Saskatchewan's land-locked geography makes logistics a permanent provincial priority — meaning stable, long-term demand for transportation infrastructure and related services.</p>
+      </div>
+    </div>
+    <div class="row g-3">
+      {% for num, title, desc in [
+        ('01', 'Industrial Services & Maintenance', 'Skilled trades and maintenance services for rail, heavy fleet, and equipment operating across the growing industrial corridor north of Yorkton.'),
+        ('02', 'Warehousing & Cold Storage', 'Strategic warehousing near Grain Millers Drive — purpose-built for the agri-processing and export supply chain expanding in the region.'),
+        ('03', 'Logistics & Supply Chain', 'Third-party logistics, procurement, and vendor services supporting the region\'s agricultural exporters and the province\'s $13.8B highway investment pipeline.'),
+        ('04', 'Workforce Development', 'Training partnerships with regional colleges addressing a documented skilled trades shortage across trucking, rail, and aviation sectors.'),
+        ('05', 'Short-Line Railway Support', 'Saskatchewan\'s Short-Line Railway Improvement Program actively funds track rehabilitation — creating service and supply chain opportunities for private operators.'),
+        ('06', 'Fuel & Fleet Infrastructure', 'The growing industrial corridor north of Yorkton creates consistent demand for fuel distribution, fleet management, and heavy equipment supply.')
+      ] %}
+      <div class="col-md-6 reveal">
+        <div class="tr-opp-item">
+          <div class="tr-opp-num">{{ num }}</div>
+          <div>
+            <div class="tr-opp-title">{{ title }}</div>
+            <div class="tr-opp-desc">{{ desc }}</div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="mt-5 d-flex flex-wrap gap-3 reveal">
+      <a href="{{ url_for('contact_us') }}" class="btn-white">Discuss an Opportunity</a>
+      <a href="https://www.yorkton.ca/build-invest-grow/economic-development/industry-in-yorkton/" target="_blank" rel="noopener" class="btn-outline">City of Yorkton Industry Page</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<section class="tr-cta">
+  <div class="container">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-8 reveal">
+        <h2 class="tr-cta-title">Ready to Move Your Business Forward?</h2>
+        <p class="tr-cta-body">Whether you're a logistics operator, investor, or business looking for a strategically connected base in Saskatchewan — the CPDA region is built for movement. Let's talk.</p>
+      </div>
+      <div class="col-lg-4 text-lg-end reveal">
+        <a href="{{ url_for('contact_us') }}" class="btn-white d-inline-block mb-2">Get in Touch →</a><br>
+        <a href="{{ url_for('region') }}" style="font-size:.82rem;color:rgba(255,255,255,.6);text-decoration:none;">View Full Regional Statistics</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUICK LINKS -->
+<div class="tr-ql">
+  <div class="container">
+    <div class="tr-ql-label reveal">Explore More</div>
+    <div class="tr-ql-row reveal">
+      <a href="{{ url_for('industries') }}" class="tr-ql-pill">← All Industries</a>
+      <a href="/agriculture" class="tr-ql-pill">Agriculture</a>
+      <a href="/agri-process" class="tr-ql-pill">Agrifood Processing</a>
+      <a href="/mining" class="tr-ql-pill">Mining</a>
+      <a href="/tourism" class="tr-ql-pill">Tourism</a>
+      <a href="/health-education" class="tr-ql-pill">Healthcare & Education</a>
+      <a href="{{ url_for('contact_us') }}" class="tr-ql-pill tr-ql-dark">Contact CPDA</a>
+    </div>
+  </div>
+</div>
+
+<script>
+const io = new IntersectionObserver(entries => {
+  entries.forEach((e,i) => { if(e.isIntersecting){ setTimeout(()=>e.target.classList.add('visible'), i*65); io.unobserve(e.target); } });
+}, {threshold:0.07});
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
 {% endblock %}
