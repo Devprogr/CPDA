@@ -1,28 +1,194 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Admin Login</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="container py-5">
-  <h2>Admin Login</h2>
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% for category, message in messages %}
-      <div class="alert alert-{{ category }}">{{ message }}</div>
-    {% endfor %}
-  {% endwith %}
+{% extends "base.html" %}
+{% block title %}Admin Login{% endblock %}
+{% block content %}
 
-  <form method="POST" class="w-50">
-    <div class="mb-3">
-      <label for="username" class="form-label">Username</label>
-      <input name="username" class="form-control" required>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --navy:  #1e2d49;
+    --amber: #c8922a;
+    --cream: #f9f6f0;
+    --muted: #6b7280;
+  }
+
+  .adm-login-page {
+    min-height: 100vh;
+    background: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .adm-login-card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 24px 60px rgba(30,45,73,.14);
+    padding: 3rem;
+    width: 100%;
+    max-width: 420px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Amber top bar */
+  .adm-login-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--amber), #e6b44a, var(--amber));
+    background-size: 200% 100%;
+    animation: shimmer 3s linear infinite;
+  }
+
+  @keyframes shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  .adm-login-icon {
+    width: 56px;
+    height: 56px;
+    background: var(--navy);
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 1.5rem;
+    font-size: 1.4rem;
+  }
+
+  .adm-login-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--navy);
+    text-align: center;
+    margin-bottom: .4rem;
+  }
+
+  .adm-login-sub {
+    font-family: 'DM Sans', sans-serif;
+    font-size: .88rem;
+    color: var(--muted);
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  /* Flash */
+  .adm-flash { margin-bottom: 1.25rem; }
+
+  /* Fields */
+  .adm-field {
+    position: relative;
+    margin-bottom: 1.4rem;
+  }
+
+  .adm-field label {
+    display: block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .78rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: .4rem;
+  }
+
+  .adm-field input {
+    width: 100%;
+    padding: .85rem 1rem;
+    border: 1.5px solid rgba(30,45,73,.15);
+    border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .95rem;
+    color: var(--navy);
+    background: #fafafa;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+  }
+
+  .adm-field input:focus {
+    border-color: var(--amber);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(200,146,42,.10);
+  }
+
+  .adm-login-btn {
+    width: 100%;
+    padding: .95rem;
+    background: var(--navy);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s, transform .18s, box-shadow .18s;
+    margin-top: .5rem;
+  }
+
+  .adm-login-btn:hover {
+    background: #162238;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(30,45,73,.25);
+  }
+
+  .adm-back {
+    display: block;
+    text-align: center;
+    margin-top: 1.25rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .85rem;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color .2s;
+  }
+  .adm-back:hover { color: var(--navy); }
+</style>
+
+<div class="adm-login-page">
+  <div class="adm-login-card">
+
+    <div class="adm-login-icon">⚙️</div>
+    <h1 class="adm-login-title">Admin Login</h1>
+    <p class="adm-login-sub">CPDA Dashboard — restricted access</p>
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="adm-flash">
+      {% for category, message in messages %}
+      <div class="alert alert-{{ category }} alert-dismissible fade show"
+           role="alert" style="border-radius:10px; font-family:'DM Sans',sans-serif; font-size:.88rem;">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+      {% endfor %}
     </div>
-    <div class="mb-3">
-      <label for="password" class="form-label">Password</label>
-      <input name="password" type="password" class="form-control" required>
-    </div>
-    <button type="submit" class="btn btn-primary">Login</button>
-  </form>
-</body>
-</html>
+    {% endif %}
+    {% endwith %}
+
+    <form method="POST" autocomplete="off">
+      <div class="adm-field">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username"
+               placeholder="Enter username" required autofocus>
+      </div>
+
+      <div class="adm-field">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password"
+               placeholder="Enter password" required>
+      </div>
+
+      <button type="submit" class="adm-login-btn">Login to Dashboard →</button>
+    </form>
+
+    <a href="{{ url_for('home') }}" class="adm-back">← Back to website</a>
+  </div>
+</div>
+
+{% endblock %}
