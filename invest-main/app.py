@@ -115,7 +115,7 @@ def create_app():
 
         try:
             resend.Emails.send({
-                "from": "CPDA <onboarding@resend.dev>",
+                "from": "CPDA <noreply@cpda.ca>",
                 "to": [to_email],
                 "subject": subject,
                 "html": html_body,
@@ -381,14 +381,13 @@ def create_app():
                     poster_path = f"posters/{filename}"
                     mime_types  = {"png": "image/png", "jpg": "image/jpeg", "jpeg": "image/jpeg", "pdf": "application/pdf"}
 
-                    # Use authenticated client for storage upload
-                    authed_storage = create_client(supabase_url, supabase_anon_key)
-                    authed_storage.postgrest.auth(access_token)
+                    # Use service role client for storage upload (bypasses RLS cleanly)
+                    content_type = mime_types.get(ext, "application/octet-stream")
 
-                    upload_res = authed_storage.storage.from_("event-posters").upload(
+                    supabase_admin.storage.from_("event-posters").upload(
                         path=poster_path,
                         file=file_bytes,
-                        file_options={"content-type": mime_types.get(ext, "application/octet-stream")}
+                        file_options={"content-type": content_type, "upsert": "false"}
                     )
 
                     # Build public URL
