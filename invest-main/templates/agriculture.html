@@ -1,241 +1,225 @@
 {% extends "base.html" %}
 {% block content %}
 
-<header class="header-2">
-  <div class="page-header min-vh-100 relative"
-       style="background-image: url('{{ url_for('static', filename='assets/img/agriculture.jpg') }}'); 
-              background-size: cover; 
-              background-position: center; 
-              display:flex; 
-              align-items:center;">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-6">
+<style>
+:root {
+  --navy:#141c2e;--navy2:#0d1320;--cream:#f8f4ed;--cream2:#ede8df;
+  --slate:#4a5568;--fog:#8896a8;--font-d:'Cormorant Garamond',Georgia,serif;
+  --font-b:'Figtree',system-ui,sans-serif;--ease:cubic-bezier(.22,1,.36,1);
+  --accent:#3a7d44;--accent2:#64b872;--accent-r:58;--accent-g:125;--accent-b:68;
+  --hero-dark:#071209;--hero-mid:#0f2614;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--cream);font-family:var(--font-b);color:var(--navy)}
+.sec-hero{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--hero-dark) 0%,var(--hero-mid) 55%,#0a1c0d 100%);padding:7rem 0 5.5rem;min-height:90vh;display:flex;align-items:center}
+.sec-hero::before{content:"";position:absolute;inset:0;z-index:1;background-image:linear-gradient(rgba(255,255,255,.028) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.028) 1px,transparent 1px);background-size:52px 52px}
+.sec-hero::after{content:"";position:absolute;z-index:1;width:800px;height:800px;border-radius:50%;background:radial-gradient(circle,rgba(var(--accent-r),var(--accent-g),var(--accent-b),.22) 0%,transparent 68%);top:-280px;left:-180px;pointer-events:none}
+.sec-grain{position:absolute;inset:0;z-index:2;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");opacity:.8}
+.sec-deco-word{position:absolute;z-index:2;right:-1.5rem;top:50%;transform:translateY(-50%);font-family:var(--font-d);font-size:clamp(9rem,18vw,22rem);font-weight:700;line-height:1;letter-spacing:-.04em;color:rgba(var(--accent-r),var(--accent-g),var(--accent-b),.055);pointer-events:none;user-select:none;white-space:nowrap}
+.sec-hero-body{position:relative;z-index:3}
+.sec-eyebrow{display:inline-flex;align-items:center;gap:.65rem;font-family:var(--font-b);font-size:.68rem;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--accent2);margin-bottom:1.6rem;animation:fadeUp .7s .05s var(--ease) both}
+.sec-eyebrow-dot{width:7px;height:7px;border-radius:50%;background:var(--accent2);box-shadow:0 0 12px var(--accent2);animation:blink 2.8s ease infinite}
+.sec-title{font-family:var(--font-d);font-size:clamp(3.4rem,6.5vw,6.2rem);font-weight:700;line-height:.97;letter-spacing:-.022em;color:#fff;margin-bottom:1.75rem;animation:fadeUp .7s .13s var(--ease) both}
+.sec-title em{display:block;font-style:italic;font-weight:400;color:var(--accent2)}
+.sec-subtitle{font-family:var(--font-b);font-size:1.05rem;font-weight:300;color:rgba(255,255,255,.72);line-height:1.82;max-width:52ch;margin-bottom:2.75rem;animation:fadeUp .7s .21s var(--ease) both}
+.sec-hero-ctas{display:flex;gap:1rem;flex-wrap:wrap;animation:fadeUp .7s .29s var(--ease) both}
+.sec-stat-panel{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:22px;padding:2.25rem 2rem;backdrop-filter:blur(12px);animation:fadeUp .7s .37s var(--ease) both}
+.sec-stat-row{padding:1.1rem 0;border-bottom:1px solid rgba(255,255,255,.07)}
+.sec-stat-row:first-child{padding-top:0}.sec-stat-row:last-child{border-bottom:none;padding-bottom:0}
+.sec-stat-num{font-family:var(--font-d);font-size:3.1rem;font-weight:700;color:var(--accent2);line-height:1;margin-bottom:.2rem}
+.sec-stat-num sub{font-size:1.4rem;vertical-align:baseline;color:rgba(255,255,255,.35);font-weight:400}
+.sec-stat-lbl{font-family:var(--font-b);font-size:.7rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.4)}
+.btn-accent{display:inline-flex;align-items:center;gap:.45rem;padding:.84rem 1.85rem;border-radius:999px;background:var(--accent);color:#fff;border:none;font-family:var(--font-b);font-size:.88rem;font-weight:600;text-decoration:none;cursor:pointer;transition:all .22s var(--ease)}
+.btn-accent:hover{filter:brightness(1.18);color:#fff;transform:translateY(-2px);box-shadow:0 12px 30px rgba(var(--accent-r),var(--accent-g),var(--accent-b),.45)}
+.btn-ghost{display:inline-flex;align-items:center;gap:.45rem;padding:.84rem 1.85rem;border-radius:999px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.82);border:1.5px solid rgba(255,255,255,.18);font-family:var(--font-b);font-size:.88rem;font-weight:600;text-decoration:none;transition:all .22s var(--ease)}
+.btn-ghost:hover{background:rgba(255,255,255,.16);color:#fff;border-color:rgba(255,255,255,.35);transform:translateY(-2px)}
+.btn-white{display:inline-flex;align-items:center;gap:.5rem;padding:.9rem 2.1rem;border-radius:999px;background:#fff;color:var(--accent);font-family:var(--font-b);font-size:.9rem;font-weight:700;text-decoration:none;transition:all .22s var(--ease)}
+.btn-white:hover{color:var(--accent);transform:translateY(-2px);box-shadow:0 12px 28px rgba(0,0,0,.22)}
+.btn-white-outline{display:inline-flex;align-items:center;gap:.45rem;font-family:var(--font-b);font-size:.84rem;font-weight:500;color:rgba(255,255,255,.72);text-decoration:none;padding-bottom:2px;border-bottom:1px solid rgba(255,255,255,.3);transition:all .2s}
+.btn-white-outline:hover{color:#fff;border-color:#fff}
+.sec-band{background:var(--navy2);position:relative;overflow:hidden}
+.sec-band::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px);background-size:22px 22px;pointer-events:none}
+.sec-band-inner{display:grid;grid-template-columns:repeat(3,1fr);position:relative;z-index:1}
+.sec-band-item{padding:3rem 2rem;text-align:center;border-right:1px solid rgba(255,255,255,.06)}
+.sec-band-item:last-child{border-right:none}
+.sec-band-val{font-family:var(--font-d);font-size:3.4rem;font-weight:700;color:#fff;line-height:1;margin-bottom:.35rem}
+.sec-band-val span{font-size:1.7rem;color:var(--accent2)}
+.sec-band-lbl{font-family:var(--font-b);font-size:.68rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.38);margin-bottom:.3rem}
+.sec-band-sub{font-family:var(--font-b);font-size:.78rem;font-weight:300;color:rgba(255,255,255,.32);line-height:1.5}
+.sec-section{padding:5.5rem 0;background:var(--cream)}.sec-section-dark{padding:5.5rem 0;background:var(--navy)}
+.sec-kicker{font-family:var(--font-b);font-size:.67rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;display:flex;align-items:center;gap:.55rem;margin-bottom:.9rem}
+.sec-kicker::before{content:"";width:20px;height:2px;background:currentColor;border-radius:2px}
+.sec-heading{font-family:var(--font-d);font-size:clamp(1.9rem,3.5vw,2.9rem);font-weight:700;line-height:1.1;letter-spacing:-.015em}
+.sec-heading em{font-style:italic;font-weight:400}
+.sec-body-text{font-family:var(--font-b);font-size:.93rem;font-weight:300;line-height:1.85;color:var(--slate)}
+.sec-card{background:#fff;border-radius:18px;padding:2rem 1.75rem;height:100%;border-left:3px solid var(--accent);box-shadow:0 3px 18px rgba(20,28,46,.07);transition:transform .22s var(--ease),box-shadow .22s var(--ease)}
+.sec-card:hover{transform:translateY(-4px);box-shadow:0 16px 44px rgba(20,28,46,.12)}
+.sec-card-icon{font-size:2.1rem;margin-bottom:1rem}
+.sec-card-title{font-family:var(--font-d);font-size:1.25rem;font-weight:700;color:var(--navy);margin-bottom:.55rem}
+.sec-card-body{font-family:var(--font-b);font-size:.86rem;font-weight:300;color:var(--slate);line-height:1.78}
+.sec-opp-list{list-style:none;padding:0}
+.sec-opp-item{display:flex;gap:1.1rem;align-items:flex-start;padding:1.25rem 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.sec-opp-item:last-child{border-bottom:none}
+.sec-opp-num{font-family:var(--font-d);font-size:2.2rem;font-weight:700;color:rgba(var(--accent-r),var(--accent-g),var(--accent-b),.28);line-height:1;flex-shrink:0;width:2.8rem}
+.sec-opp-title{font-family:var(--font-b);font-size:.9rem;font-weight:600;color:#fff;margin-bottom:.35rem}
+.sec-opp-desc{font-family:var(--font-b);font-size:.82rem;font-weight:300;color:rgba(255,255,255,.48);line-height:1.65}
+.sec-biz-grid{display:flex;flex-wrap:wrap;gap:.65rem;margin-top:1.5rem}
+.sec-biz-pill{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem 1.25rem;border-radius:999px;background:rgba(var(--accent-r),var(--accent-g),var(--accent-b),.1);border:1.5px solid rgba(var(--accent-r),var(--accent-g),var(--accent-b),.22);color:var(--accent2);font-family:var(--font-b);font-size:.83rem;font-weight:600;text-decoration:none;transition:all .2s var(--ease)}
+.sec-biz-pill:hover{background:var(--accent);color:#fff;border-color:var(--accent);transform:translateY(-1px)}
+.sec-cta{background:var(--accent);padding:5.5rem 0;position:relative;overflow:hidden}
+.sec-cta::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.055) 1px,transparent 1px);background-size:20px 20px;pointer-events:none}
+.sec-cta-title{font-family:var(--font-d);font-size:clamp(1.9rem,3.5vw,3.1rem);font-weight:700;color:#fff;line-height:1.12;margin-bottom:.7rem;position:relative;z-index:1}
+.sec-cta-sub{font-family:var(--font-b);font-size:.95rem;font-weight:300;color:rgba(255,255,255,.74);line-height:1.78;max-width:54ch;position:relative;z-index:1}
+.sec-cta-actions{display:flex;flex-direction:column;align-items:flex-start;gap:.85rem;position:relative;z-index:1}
+@media(min-width:992px){.sec-cta-actions{align-items:flex-end}}
+.sec-nav{background:var(--cream2);padding:2.75rem 0;border-top:1px solid rgba(20,28,46,.08)}
+.sec-nav-label{font-family:var(--font-b);font-size:.64rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--fog);margin-bottom:1.1rem}
+.sec-nav-pills{display:flex;flex-wrap:wrap;gap:.55rem}
+.sec-nav-pill{padding:.52rem 1.2rem;border-radius:999px;background:#fff;border:1.5px solid rgba(20,28,46,.1);font-family:var(--font-b);font-size:.82rem;font-weight:500;color:var(--navy);text-decoration:none;transition:all .18s var(--ease)}
+.sec-nav-pill:hover{background:var(--navy);color:#fff;border-color:var(--navy);transform:translateY(-1px)}
+.sec-nav-pill.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.sec-nav-pill-contact{background:var(--navy);color:#fff;border-color:var(--navy);font-weight:600}
+.sec-nav-pill-contact:hover{background:var(--navy2);border-color:var(--navy2);color:#fff}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(1.9)}}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .58s var(--ease),transform .58s var(--ease)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+@media(max-width:991px){.sec-stat-panel{display:none}.sec-hero{padding:5.5rem 0 4.5rem;min-height:auto}}
+@media(max-width:767px){.sec-title{font-size:3rem}.sec-deco-word{display:none}.sec-band-inner{grid-template-columns:1fr}.sec-band-item{border-right:none;border-bottom:1px solid rgba(255,255,255,.06)}.sec-band-item:last-child{border-bottom:none}}
+</style>
 
-          <div style="
-              background: linear-gradient(90deg, rgba(12,22,32,0.85) 0%, rgba(12,22,32,0.65) 60%, rgba(12,22,32,0) 100%);
-              border-radius: 1rem;
-              padding: 3rem;">
-
-            <h1 class="text-white mb-3"
-                style="font-size: 52px; font-weight:700;">
-                Agriculture
-            </h1>
-
-            <p class="text-light"
-               style="font-size:19px; line-height:1.6;">
-              A strong production base supported by modern storage, processing, and a growing value-added ecosystem around the CPDA region.
-            </p>
-
-          </div>
-
+<section class="sec-hero">
+  <div class="sec-grain"></div>
+  <div class="sec-deco-word">AGRI</div>
+  <div class="container sec-hero-body">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-7">
+        <div class="sec-eyebrow"><span class="sec-eyebrow-dot"></span>CPDA Region · East-Central Saskatchewan</div>
+        <h1 class="sec-title">Agriculture<br><em>Powers This Land</em></h1>
+        <p class="sec-subtitle">Saskatchewan's agricultural sector isn't just the backbone of our economy — it feeds the world. Our region offers some of Canada's most productive farmland, established agri-infrastructure, and a business ecosystem built around one of the planet's most essential industries.</p>
+        <div class="sec-hero-ctas">
+          <a href="{{ url_for('contact_us') }}" class="btn-accent">Explore Investment Opportunities <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg></a>
+          <a href="{{ url_for('industries') }}" class="btn-ghost">← All Sectors</a>
+        </div>
+      </div>
+      <div class="col-lg-4 offset-lg-1 d-none d-lg-block">
+        <div class="sec-stat-panel">
+          <div class="sec-stat-row"><div class="sec-stat-num">8.1<sub>%</sub></div><div class="sec-stat-lbl">of All Regional Businesses</div></div>
+          <div class="sec-stat-row"><div class="sec-stat-num">109<sub>+</sub></div><div class="sec-stat-lbl">Agricultural Operations</div></div>
+          <div class="sec-stat-row"><div class="sec-stat-num">#1</div><div class="sec-stat-lbl">Prairie Pulse Crop Exporter</div></div>
         </div>
       </div>
     </div>
-
   </div>
-</header>
+</section>
 
-<div class="container my-5">
-  <div class="row justify-content-center">
-    <div class="col-lg-10">
-
-      <!-- Sector Snapshot -->
-      <div class="card shadow-sm mb-4">
-        <div class="card-body">
-          <h4 class="mb-2" style="color:#23254a; font-weight:700;">Sector snapshot</h4>
-          <p class="mb-0">
-            The CPDA region sits in a productive prairie area with strong grain and oilseed activity, supported by equipment/service providers,
-            storage and handling, and major value-added processing investments in and around Yorkton.
-          </p>
-        </div>
-      </div>
-
-      <!-- Strength + Opportunities -->
-      <div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
-        <div class="col">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="mb-2" style="color:#23254a; font-weight:700;">What’s strong here</h5>
-              <ul class="mb-0">
-                <li>Commodity production with established farm services and supply chain</li>
-                <li>Grain handling, storage, and trucking/rail connectivity</li>
-                <li>Value-added processing momentum (oilseed + plant protein + ingredients)</li>
-                <li>Workforce and training supports across the broader region</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="mb-2" style="color:#23254a; font-weight:700;">Investment opportunities</h5>
-              <ul class="mb-0">
-                <li>Storage, logistics, and commodity handling expansion</li>
-                <li>Specialty crops, cleaning, and contract services</li>
-                <li>Ag technology and precision services (equipment + data + advisory)</li>
-                <li>Value-added processing and ingredient manufacturing partnerships</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Key Sub-sectors -->
-      <div class="card shadow-sm mb-4">
-        <div class="card-body">
-          <h4 class="mb-3" style="color:#23254a; font-weight:700;">Key sub-sectors</h4>
-
-          <div class="row row-cols-1 row-cols-md-3 g-3">
-            <div class="col">
-              <div class="card h-100 border-0" style="background:#f6f8fb;">
-                <div class="card-body">
-                  <h6 class="mb-2" style="color:#23254a; font-weight:700;">Grains & oilseeds</h6>
-                  <p class="mb-0 text-muted" style="font-size:14px;">
-                    Strong prairie production supported by local storage, procurement, and processing.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="card h-100 border-0" style="background:#f6f8fb;">
-                <div class="card-body">
-                  <h6 class="mb-2" style="color:#23254a; font-weight:700;">Value-added processing</h6>
-                  <p class="mb-0 text-muted" style="font-size:14px;">
-                    Oilseed crushing, ingredient milling, and plant protein growth are key regional strengths.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="card h-100 border-0" style="background:#f6f8fb;">
-                <div class="card-body">
-                  <h6 class="mb-2" style="color:#23254a; font-weight:700;">Ag services ecosystem</h6>
-                  <p class="mb-0 text-muted" style="font-size:14px;">
-                    Equipment, agronomy, inputs, fuel, retail, and logistics that support farm operations.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- Featured Businesses -->
-      <div class="card shadow-sm mb-4">
-        <div class="card-body">
-          <h4 class="mb-1" style="color:#23254a; font-weight:700;">Featured businesses </h4>
-          <p class="text-muted mb-3" style="font-size:14px;">
-            A selection of major employers and value-added operators that help shape the regional agriculture economy.
-          </p>
-
-          <div class="row row-cols-1 row-cols-md-2 g-3">
-
-            <!-- Richardson -->
-            <div class="col">
-              <div class="card h-100">
-                <div class="card-body">
-                  <h6 class="mb-2" style="color:#23254a; font-weight:700;">Richardson (Yorkton)</h6>
-                  <p class="text-muted mb-3" style="font-size:14px;">
-                    A major canola crushing operation in Yorkton supporting value-added processing and export supply chains.
-                  </p>
-                  <a class="btn btn-outline-primary btn-sm"
-                     href="https://www.richardson.ca/"
-                     target="_blank" rel="noopener">Learn more</a>
-                </div>
-              </div>
-            </div>
-
-            <!-- Louis Dreyfus Company -->
-            <div class="col">
-              <div class="card h-100">
-                <div class="card-body">
-                  <h6 class="mb-2" style="color:#23254a; font-weight:700;">Louis Dreyfus Company (Yorkton)</h6>
-                  <p class="text-muted mb-3" style="font-size:14px;">
-                    Yorkton industrial complex with canola processing and new investment in pea protein production capacity.
-                  </p>
-                  <a class="btn btn-outline-primary btn-sm"
-                     href="https://www.ldc.com/"
-                     target="_blank" rel="noopener">Learn more</a>
-                </div>
-              </div>
-            </div>
-
-            <!-- Grain Millers -->
-            <div class="col">
-              <div class="card h-100">
-                <div class="card-body">
-                  <h6 class="mb-2" style="color:#23254a; font-weight:700;">Grain Millers (Yorkton)</h6>
-                  <p class="text-muted mb-3" style="font-size:14px;">
-                    Oat milling presence in Yorkton, sourcing directly from farms and supporting regional processing activity.
-                  </p>
-                  <a class="btn btn-outline-primary btn-sm"
-                     href="https://www.grainmillers.com/"
-                     target="_blank" rel="noopener">Learn more</a>
-                </div>
-              </div>
-            </div>
-
-            <!-- TA Foods -->
-            <div class="col">
-              <div class="card h-100">
-                <div class="card-body">
-                  <h6 class="mb-2" style="color:#23254a; font-weight:700;">TA Foods (Yorkton)</h6>
-                  <p class="text-muted mb-3" style="font-size:14px;">
-                    Ingredient processing and packaging with multiple facilities in and around Yorkton (flax, oilseed, milling, storage).
-                  </p>
-                  <a class="btn btn-outline-primary btn-sm"
-                     href="https://www.tafoods.ca/"
-                     target="_blank" rel="noopener">Learn more</a>
-                </div>
-              </div>
-            </div>
-
-            <!-- Legacy Co-op -->
-            <div class="col">
-              <div class="card h-100">
-                <div class="card-body">
-                  <h6 class="mb-2" style="color:#23254a; font-weight:700;">Legacy Co-op (Yorkton & area)</h6>
-                  <p class="text-muted mb-3" style="font-size:14px;">
-                    A member-owned co-operative serving the region with products and services that support local communities and the rural economy.
-                  </p>
-                  <a class="btn btn-outline-primary btn-sm"
-                     href="https://www.legacyco-op.crs/"
-                     target="_blank" rel="noopener">Learn more</a>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <!-- Bottom buttons -->
-      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mt-4">
-        <a href="{{ url_for('industries') }}" class="btn btn-outline-primary">&larr; Back to Industry Page</a>
-
-        <div class="d-flex gap-2">
-          <a href="{{ url_for('contact_us') }}" class="btn btn-outline-secondary">Request an update</a>
-          <a href="https://www.yorkton.ca/en/build-invest-and-grow/start-a-business.aspx"
-             target="_blank" rel="noopener"
-             class="btn btn-primary" style="background-color:#ed4c1c; border-color:#ed4c1c;">
-            View Business Opportunities
-          </a>
-        </div>
-      </div>
-
-      <div class="card mt-5 shadow-sm">
-        <div class="card-body text-center">
-          <p class="mb-0 text-muted" style="font-size:14px;">
-            Have a verified agriculture or value-added business in the CPDA region? Contact us to be considered for listing.
-          </p>
-        </div>
-      </div>
-
+<div class="sec-band">
+  <div class="container">
+    <div class="sec-band-inner">
+      <div class="sec-band-item reveal"><div class="sec-band-val">150<span>+</span></div><div class="sec-band-lbl">Export Countries</div><div class="sec-band-sub">Saskatchewan grain and pulses ship to markets on every continent.</div></div>
+      <div class="sec-band-item reveal"><div class="sec-band-val">40<span>M+</span></div><div class="sec-band-lbl">Acres of Farmland</div><div class="sec-band-sub">Province-wide, the most productive dark soil belt in North America.</div></div>
+      <div class="sec-band-item reveal"><div class="sec-band-val">4.9<span>%</span></div><div class="sec-band-lbl">Population Growth by 2034</div><div class="sec-band-sub">A growing labour pool and consumer base supporting agri-businesses.</div></div>
     </div>
   </div>
 </div>
 
+<section class="sec-section">
+  <div class="container">
+    <div class="row g-5 align-items-start">
+      <div class="col-lg-5">
+        <div class="sec-kicker reveal" style="color:var(--accent);">Why Agriculture Here</div>
+        <h2 class="sec-heading reveal" style="color:var(--navy);margin-bottom:1.2rem;">Premium Farmland.<br><em>Ready Infrastructure.</em></h2>
+        <p class="sec-body-text reveal" style="margin-bottom:1.2rem;">Saskatchewan's dark fertile soils consistently produce world-class grain, oilseeds, and pulses. Our CPDA region sits at the centre of this agricultural heartland — with grain elevators, processing facilities, and transport connections already in place.</p>
+        <p class="sec-body-text reveal">For outside investors and businesses, this means you're not building from zero. The market, the workers, the roads, and the buyers already exist. You just need to show up.</p>
+        <div class="reveal" style="margin-top:2rem;"><a href="{{ url_for('contact_us') }}" class="btn-accent">Talk to CPDA →</a></div>
+      </div>
+      <div class="col-lg-6 offset-lg-1">
+        <div class="row g-3">
+          <div class="col-sm-6 reveal"><div class="sec-card"><div class="sec-card-icon">🌾</div><div class="sec-card-title">Grain &amp; Oilseeds</div><p class="sec-card-body">Wheat, canola, barley, and flax grown across thousands of acres — with established elevator and export infrastructure to move product efficiently.</p></div></div>
+          <div class="col-sm-6 reveal"><div class="sec-card"><div class="sec-card-icon">🫘</div><div class="sec-card-title">Pulse Crops</div><p class="sec-card-body">Lentils, peas, and chickpeas — Saskatchewan is the world's largest pulse exporter, and our region is a prime growing area for high-value crops.</p></div></div>
+          <div class="col-sm-6 reveal"><div class="sec-card"><div class="sec-card-icon">🐄</div><div class="sec-card-title">Livestock</div><p class="sec-card-body">Cattle, hog, and poultry operations supply regional and national markets, with forage production supporting herds across our communities.</p></div></div>
+          <div class="col-sm-6 reveal"><div class="sec-card"><div class="sec-card-icon">🚜</div><div class="sec-card-title">Agri-Technology</div><p class="sec-card-body">Precision agriculture, GPS-guided equipment, and drone-assisted crop management are reshaping how our producers operate — and where providers can enter.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec-section-dark">
+  <div class="container">
+    <div class="row g-5">
+      <div class="col-lg-5">
+        <div class="sec-kicker reveal" style="color:var(--accent2);">Open Opportunities</div>
+        <h2 class="sec-heading reveal" style="color:#fff;margin-bottom:1.1rem;">Where Outside Businesses<br><em style="color:var(--accent2);">Can Enter &amp; Grow</em></h2>
+        <p class="sec-body-text reveal" style="color:rgba(255,255,255,.58);margin-bottom:1.5rem;">Agriculture supports a vast ecosystem beyond the farm gate. Equipment, inputs, processing, storage, logistics, and digital tools are all growth areas where outside businesses can enter our region with minimal friction and strong demand.</p>
+        <a href="{{ url_for('contact_us') }}" class="btn-accent reveal">Ask About Entry Points →</a>
+      </div>
+      <div class="col-lg-6 offset-lg-1 reveal">
+        <ul class="sec-opp-list">
+          <li class="sec-opp-item"><div class="sec-opp-num">01</div><div><div class="sec-opp-title">Agri-Input &amp; Equipment Supply</div><div class="sec-opp-desc">Seed, fertilizer, chemicals, and machinery — local farms represent consistent, high-volume purchasing power year-round.</div></div></li>
+          <li class="sec-opp-item"><div class="sec-opp-num">02</div><div><div class="sec-opp-title">Processing &amp; Value-Add</div><div class="sec-opp-desc">Primary grain processing, pulse cleaning, and specialty crop handling are underrepresented locally — high-demand opportunity for incoming processors.</div></div></li>
+          <li class="sec-opp-item"><div class="sec-opp-num">03</div><div><div class="sec-opp-title">Cold Storage &amp; Logistics</div><div class="sec-opp-desc">Refrigerated storage, grain handling, and transport coordination services are needed to connect our producers with premium markets.</div></div></li>
+          <li class="sec-opp-item"><div class="sec-opp-num">04</div><div><div class="sec-opp-title">Precision Ag Technology</div><div class="sec-opp-desc">Drone services, soil sensors, yield mapping, and farm management software are being adopted rapidly — and providers are scarce regionally.</div></div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec-section">
+  <div class="container">
+    <div class="row"><div class="col-lg-8">
+      <div class="sec-kicker reveal" style="color:var(--accent);">Useful Links</div>
+      <h2 class="sec-heading reveal" style="color:var(--navy);margin-bottom:.9rem;">Resources &amp; Partners</h2>
+      <p class="sec-body-text reveal" style="max-width:58ch;margin-bottom:0;">Connect with agricultural organizations active in our region to explore partnership and business entry opportunities.</p>
+      <div class="sec-biz-grid reveal">
+        <a href="https://www.agcanada.com/" target="_blank" rel="noopener" class="sec-biz-pill">Ag Canada <svg width="10" height="10" viewBox="0 0 20 20" fill="currentColor"><path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/><path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/></svg></a>
+        <a href="https://www.agwest.sk.ca/" target="_blank" rel="noopener" class="sec-biz-pill">Agwest SK <svg width="10" height="10" viewBox="0 0 20 20" fill="currentColor"><path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/><path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/></svg></a>
+        <a href="https://www.yorkton.ca/en/build-invest-and-grow/start-a-business.aspx" target="_blank" rel="noopener" class="sec-biz-pill">Yorkton Business Portal <svg width="10" height="10" viewBox="0 0 20 20" fill="currentColor"><path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/><path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/></svg></a>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<section class="sec-cta">
+  <div class="container">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-7 reveal">
+        <h2 class="sec-cta-title">Ready to grow your business in Saskatchewan's agricultural heartland?</h2>
+        <p class="sec-cta-sub">The CPDA team can connect you with regional producers, processing partners, and business setup support. The land is ready. The market is real. Let's talk.</p>
+      </div>
+      <div class="col-lg-5 reveal">
+        <div class="sec-cta-actions">
+          <a href="{{ url_for('contact_us') }}" class="btn-white">Contact the CPDA Team <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg></a>
+          <a href="{{ url_for('industries') }}" class="btn-white-outline">← Back to All Sectors</a>
+          <a href="https://www.yorkton.ca/en/build-invest-and-grow/start-a-business.aspx" target="_blank" class="btn-white-outline">Business Opportunities Portal →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<nav class="sec-nav" aria-label="Other sectors">
+  <div class="container">
+    <div class="sec-nav-label reveal">Explore Other Sectors</div>
+    <div class="sec-nav-pills reveal">
+      <span class="sec-nav-pill active">🌾 Agriculture</span>
+      <a href="{{ url_for('agri_process') }}" class="sec-nav-pill">🏭 Agrifood Processing</a>
+      <a href="{{ url_for('mining') }}" class="sec-nav-pill">⛏️ Mining</a>
+      <a href="{{ url_for('tourism') }}" class="sec-nav-pill">🏕️ Tourism</a>
+      <a href="{{ url_for('transportation') }}" class="sec-nav-pill">🚛 Transportation</a>
+      <a href="{{ url_for('health_education') }}" class="sec-nav-pill">🏥 Healthcare &amp; Education</a>
+      <a href="{{ url_for('contact_us') }}" class="sec-nav-pill sec-nav-pill-contact">Contact CPDA →</a>
+    </div>
+  </div>
+</nav>
+
+<script>
+const _io=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*65);_io.unobserve(e.target)}})},{threshold:0.07});
+document.querySelectorAll('.reveal').forEach(el=>_io.observe(el));
+</script>
 {% endblock %}
