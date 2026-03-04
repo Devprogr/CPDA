@@ -1,138 +1,184 @@
-{% extends "base.html" %}
+<!-- ══════════════════════════════════════════════════════════
+     AGRIFOOD PROCESSING — agri-process.html
+     Accent: Amber/Saffron #c47a2b / #e8a84c
+══════════════════════════════════════════════════════════ -->
+{% extends "base.html" %}{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400;1,700&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#141c2e;--navy2:#0d1320;--cream:#f8f4ed;--cream2:#ede8df;--slate:#4a5568;--fog:#8896a8;--font-d:'Cormorant Garamond',Georgia,serif;--font-b:'Figtree',system-ui,sans-serif;--ease:cubic-bezier(.22,1,.36,1);--accent:#c47a2b;--accent2:#e8a84c;--accent-r:196;--accent-g:122;--accent-b:43;--hero-dark:#1a1004;--hero-mid:#2e1c08}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}body{background:var(--cream);font-family:var(--font-b);color:var(--navy)}
+.sec-hero{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--hero-dark) 0%,var(--hero-mid) 55%,#1a1004 100%);padding:7rem 0 5.5rem;min-height:90vh;display:flex;align-items:center}
+.sec-hero::before{content:"";position:absolute;inset:0;z-index:1;background-image:linear-gradient(rgba(255,255,255,.028) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.028) 1px,transparent 1px);background-size:52px 52px}
+.sec-hero::after{content:"";position:absolute;z-index:1;width:800px;height:800px;border-radius:50%;background:radial-gradient(circle,rgba(196,122,43,.22) 0%,transparent 68%);top:-280px;left:-180px;pointer-events:none}
+.sec-grain{position:absolute;inset:0;z-index:2;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");opacity:.8}
+.sec-deco-word{position:absolute;z-index:2;right:-1.5rem;top:50%;transform:translateY(-50%);font-family:var(--font-d);font-size:clamp(6rem,13vw,16rem);font-weight:700;line-height:1;letter-spacing:-.04em;color:rgba(196,122,43,.055);pointer-events:none;user-select:none;white-space:nowrap}
+.sec-hero-body{position:relative;z-index:3}
+.sec-eyebrow{display:inline-flex;align-items:center;gap:.65rem;font-family:var(--font-b);font-size:.68rem;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--accent2);margin-bottom:1.6rem;animation:fadeUp .7s .05s var(--ease) both}
+.sec-eyebrow-dot{width:7px;height:7px;border-radius:50%;background:var(--accent2);box-shadow:0 0 12px var(--accent2);animation:blink 2.8s ease infinite}
+.sec-title{font-family:var(--font-d);font-size:clamp(3rem,6vw,5.8rem);font-weight:700;line-height:.97;letter-spacing:-.022em;color:#fff;margin-bottom:1.75rem;animation:fadeUp .7s .13s var(--ease) both}
+.sec-title em{display:block;font-style:italic;font-weight:400;color:var(--accent2)}
+.sec-subtitle{font-family:var(--font-b);font-size:1.05rem;font-weight:300;color:rgba(255,255,255,.72);line-height:1.82;max-width:52ch;margin-bottom:2.75rem;animation:fadeUp .7s .21s var(--ease) both}
+.sec-hero-ctas{display:flex;gap:1rem;flex-wrap:wrap;animation:fadeUp .7s .29s var(--ease) both}
+.sec-stat-panel{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:22px;padding:2.25rem 2rem;backdrop-filter:blur(12px);animation:fadeUp .7s .37s var(--ease) both}
+.sec-stat-row{padding:1.1rem 0;border-bottom:1px solid rgba(255,255,255,.07)}.sec-stat-row:first-child{padding-top:0}.sec-stat-row:last-child{border-bottom:none;padding-bottom:0}
+.sec-stat-num{font-family:var(--font-d);font-size:3.1rem;font-weight:700;color:var(--accent2);line-height:1;margin-bottom:.2rem}
+.sec-stat-num sub{font-size:1.4rem;vertical-align:baseline;color:rgba(255,255,255,.35);font-weight:400}
+.sec-stat-lbl{font-family:var(--font-b);font-size:.7rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.4)}
+.btn-accent{display:inline-flex;align-items:center;gap:.45rem;padding:.84rem 1.85rem;border-radius:999px;background:var(--accent);color:#fff;border:none;font-family:var(--font-b);font-size:.88rem;font-weight:600;text-decoration:none;transition:all .22s var(--ease)}
+.btn-accent:hover{filter:brightness(1.18);color:#fff;transform:translateY(-2px);box-shadow:0 12px 30px rgba(196,122,43,.45)}
+.btn-ghost{display:inline-flex;align-items:center;gap:.45rem;padding:.84rem 1.85rem;border-radius:999px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.82);border:1.5px solid rgba(255,255,255,.18);font-family:var(--font-b);font-size:.88rem;font-weight:600;text-decoration:none;transition:all .22s var(--ease)}
+.btn-ghost:hover{background:rgba(255,255,255,.16);color:#fff;border-color:rgba(255,255,255,.35);transform:translateY(-2px)}
+.btn-white{display:inline-flex;align-items:center;gap:.5rem;padding:.9rem 2.1rem;border-radius:999px;background:#fff;color:var(--accent);font-family:var(--font-b);font-size:.9rem;font-weight:700;text-decoration:none;transition:all .22s var(--ease)}
+.btn-white:hover{color:var(--accent);transform:translateY(-2px);box-shadow:0 12px 28px rgba(0,0,0,.22)}
+.btn-white-outline{display:inline-flex;align-items:center;gap:.45rem;font-family:var(--font-b);font-size:.84rem;font-weight:500;color:rgba(255,255,255,.72);text-decoration:none;padding-bottom:2px;border-bottom:1px solid rgba(255,255,255,.3);transition:all .2s}
+.btn-white-outline:hover{color:#fff;border-color:#fff}
+.sec-band{background:var(--navy2);position:relative;overflow:hidden}
+.sec-band::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px);background-size:22px 22px;pointer-events:none}
+.sec-band-inner{display:grid;grid-template-columns:repeat(3,1fr);position:relative;z-index:1}
+.sec-band-item{padding:3rem 2rem;text-align:center;border-right:1px solid rgba(255,255,255,.06)}.sec-band-item:last-child{border-right:none}
+.sec-band-val{font-family:var(--font-d);font-size:3.4rem;font-weight:700;color:#fff;line-height:1;margin-bottom:.35rem}
+.sec-band-val span{font-size:1.7rem;color:var(--accent2)}
+.sec-band-lbl{font-family:var(--font-b);font-size:.68rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.38);margin-bottom:.3rem}
+.sec-band-sub{font-family:var(--font-b);font-size:.78rem;font-weight:300;color:rgba(255,255,255,.32);line-height:1.5}
+.sec-section{padding:5.5rem 0;background:var(--cream)}.sec-section-dark{padding:5.5rem 0;background:var(--navy)}
+.sec-kicker{font-family:var(--font-b);font-size:.67rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;display:flex;align-items:center;gap:.55rem;margin-bottom:.9rem}
+.sec-kicker::before{content:"";width:20px;height:2px;background:currentColor;border-radius:2px}
+.sec-heading{font-family:var(--font-d);font-size:clamp(1.9rem,3.5vw,2.9rem);font-weight:700;line-height:1.1;letter-spacing:-.015em}
+.sec-heading em{font-style:italic;font-weight:400}
+.sec-body-text{font-family:var(--font-b);font-size:.93rem;font-weight:300;line-height:1.85;color:var(--slate)}
+.sec-card{background:#fff;border-radius:18px;padding:2rem 1.75rem;height:100%;border-left:3px solid var(--accent);box-shadow:0 3px 18px rgba(20,28,46,.07);transition:transform .22s var(--ease),box-shadow .22s var(--ease)}
+.sec-card:hover{transform:translateY(-4px);box-shadow:0 16px 44px rgba(20,28,46,.12)}
+.sec-card-icon{font-size:2.1rem;margin-bottom:1rem}
+.sec-card-title{font-family:var(--font-d);font-size:1.25rem;font-weight:700;color:var(--navy);margin-bottom:.55rem}
+.sec-card-body{font-family:var(--font-b);font-size:.86rem;font-weight:300;color:var(--slate);line-height:1.78}
+.sec-opp-list{list-style:none;padding:0}
+.sec-opp-item{display:flex;gap:1.1rem;align-items:flex-start;padding:1.25rem 0;border-bottom:1px solid rgba(255,255,255,.06)}.sec-opp-item:last-child{border-bottom:none}
+.sec-opp-num{font-family:var(--font-d);font-size:2.2rem;font-weight:700;color:rgba(196,122,43,.28);line-height:1;flex-shrink:0;width:2.8rem}
+.sec-opp-title{font-family:var(--font-b);font-size:.9rem;font-weight:600;color:#fff;margin-bottom:.35rem}
+.sec-opp-desc{font-family:var(--font-b);font-size:.82rem;font-weight:300;color:rgba(255,255,255,.48);line-height:1.65}
+.sec-biz-grid{display:flex;flex-wrap:wrap;gap:.65rem;margin-top:1.5rem}
+.sec-biz-pill{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem 1.25rem;border-radius:999px;background:rgba(196,122,43,.1);border:1.5px solid rgba(196,122,43,.22);color:var(--accent2);font-family:var(--font-b);font-size:.83rem;font-weight:600;text-decoration:none;transition:all .2s var(--ease)}
+.sec-biz-pill:hover{background:var(--accent);color:#fff;border-color:var(--accent);transform:translateY(-1px)}
+.sec-cta{background:var(--accent);padding:5.5rem 0;position:relative;overflow:hidden}
+.sec-cta::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.055) 1px,transparent 1px);background-size:20px 20px;pointer-events:none}
+.sec-cta-title{font-family:var(--font-d);font-size:clamp(1.9rem,3.5vw,3.1rem);font-weight:700;color:#fff;line-height:1.12;margin-bottom:.7rem;position:relative;z-index:1}
+.sec-cta-sub{font-family:var(--font-b);font-size:.95rem;font-weight:300;color:rgba(255,255,255,.74);line-height:1.78;max-width:54ch;position:relative;z-index:1}
+.sec-cta-actions{display:flex;flex-direction:column;align-items:flex-start;gap:.85rem;position:relative;z-index:1}
+@media(min-width:992px){.sec-cta-actions{align-items:flex-end}}
+.sec-nav{background:var(--cream2);padding:2.75rem 0;border-top:1px solid rgba(20,28,46,.08)}
+.sec-nav-label{font-family:var(--font-b);font-size:.64rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--fog);margin-bottom:1.1rem}
+.sec-nav-pills{display:flex;flex-wrap:wrap;gap:.55rem}
+.sec-nav-pill{padding:.52rem 1.2rem;border-radius:999px;background:#fff;border:1.5px solid rgba(20,28,46,.1);font-family:var(--font-b);font-size:.82rem;font-weight:500;color:var(--navy);text-decoration:none;transition:all .18s var(--ease)}
+.sec-nav-pill:hover{background:var(--navy);color:#fff;border-color:var(--navy);transform:translateY(-1px)}
+.sec-nav-pill.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.sec-nav-pill-contact{background:var(--navy);color:#fff;border-color:var(--navy);font-weight:600}
+.sec-nav-pill-contact:hover{background:var(--navy2);border-color:var(--navy2);color:#fff}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(1.9)}}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .58s var(--ease),transform .58s var(--ease)}.reveal.visible{opacity:1;transform:translateY(0)}
+@media(max-width:991px){.sec-stat-panel{display:none}.sec-hero{padding:5.5rem 0 4.5rem;min-height:auto}}
+@media(max-width:767px){.sec-title{font-size:3rem}.sec-deco-word{display:none}.sec-band-inner{grid-template-columns:1fr}.sec-band-item{border-right:none;border-bottom:1px solid rgba(255,255,255,.06)}.sec-band-item:last-child{border-bottom:none}}
+</style>
 
-{% block content %}
-
-<header class="header-2">
-  <div class="page-header min-vh-100 relative" style="background-image: url('{{ url_for('static', filename='assets/img/industries.jpg') }}'); background-size: cover; background-position: center;">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-8 mx-auto text-center">
-          <div style="background: rgba(20,20,30,0.7); border-radius: 1rem; display: inline-block; padding: 2rem 2.5rem;">
-            <h1 class="text-white mb-3" style="text-shadow: 3px 3px 12px rgba(0,0,0,0.7);">Agricultural Processing</h1>
-            <p class="lead text-white mb-0" style="text-shadow: 3px 3px 12px rgba(0,0,0,0.7);">
-              Discover how agricultural processing powers our region’s growth—creating jobs, adding value to local products, and driving innovation for a sustainable future.
-            </p>
-          </div>
+<section class="sec-hero">
+  <div class="sec-grain"></div>
+  <div class="sec-deco-word">PROCESS</div>
+  <div class="container sec-hero-body">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-7">
+        <div class="sec-eyebrow"><span class="sec-eyebrow-dot"></span>CPDA Region · East-Central Saskatchewan</div>
+        <h1 class="sec-title">Agrifood<br><em>Processing</em></h1>
+        <p class="sec-subtitle">Saskatchewan grows it — and our region is increasingly where it gets transformed. From grain milling to specialty food production, agrifood processing is one of the highest-growth opportunities for outside businesses entering our economy.</p>
+        <div class="sec-hero-ctas">
+          <a href="{{ url_for('contact_us') }}" class="btn-accent">Explore Investment Opportunities <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg></a>
+          <a href="{{ url_for('industries') }}" class="btn-ghost">← All Sectors</a>
+        </div>
+      </div>
+      <div class="col-lg-4 offset-lg-1 d-none d-lg-block">
+        <div class="sec-stat-panel">
+          <div class="sec-stat-row"><div class="sec-stat-num">6.8<sub>%</sub></div><div class="sec-stat-lbl">of Regional Businesses</div></div>
+          <div class="sec-stat-row"><div class="sec-stat-num">$1.4<sub>B+</sub></div><div class="sec-stat-lbl">Provincial Food Processing Output</div></div>
+          <div class="sec-stat-row"><div class="sec-stat-num">↑</div><div class="sec-stat-lbl">Fastest Growing Sector</div></div>
         </div>
       </div>
     </div>
   </div>
-</header>
+</section>
 
-<div class="container my-5">
-  <div class="row justify-content-center">
-    <div class="col-lg-9">
-      <h1 class="mb-4" style="color: #ed4c1c; font-weight: 700;">Agricultural Processing</h1>
-      <div class="card shadow-sm mb-4">
-        <div class="card-body">
-          <h4 class="mb-3 d-flex align-items-center" style="color: #23254a;">
-            <i class="fas fa-seedling me-2" style="color:#ed4c1c;"></i>Overview
-          </h4>
-          <p>
-            Agricultural processing is a vital sector driving regional economic growth, employment, and innovation. The <strong>ESAP Capacity for Growth</strong> report (August 2025) highlights the significance of agricultural processing in supporting local producers, enhancing value addition, and strengthening supply chains across the region.
-          </p>
-        </div>
-      </div>
-      <div class="card shadow-sm mb-4">
-        <div class="card-body">
-          <h4 class="mb-3 d-flex align-items-center" style="color: #23254a;">
-            <i class="fas fa-chart-line me-2" style="color:#ed4c1c;"></i>Regional Significance
-          </h4>
-          <ul>
-            <li><strong>Economic Impact:</strong> Agricultural processing contributes substantially to regional GDP, with expanding facilities and investments supporting both primary producers and downstream industries.</li>
-            <li><strong>Employment:</strong> The sector is a major employer, offering jobs in processing plants, logistics, quality assurance, and management.</li>
-            <li><strong>Innovation:</strong> Adoption of new technologies and sustainable practices is increasing efficiency and product quality, positioning the region as a leader in agri-food innovation.</li>
-          </ul>
-        </div>
-      </div>
-      <div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
-        <div class="col">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body text-center">
-              <i class="fas fa-bread-slice fa-2x mb-2" style="color:#ed4c1c;"></i>
-              <h5 class="card-title" style="color:#23254a;">Grain Milling</h5>
-              <p class="card-text">Local mills process wheat, corn, and other grains, supplying both domestic and export markets.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body text-center">
-              <i class="fas fa-drumstick-bite fa-2x mb-2" style="color:#ed4c1c;"></i>
-              <h5 class="card-title" style="color:#23254a;">Meat &amp; Dairy Processing</h5>
-              <p class="card-text">Facilities handle livestock and dairy products, ensuring high standards for safety and quality.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body text-center">
-              <i class="fas fa-apple-alt fa-2x mb-2" style="color:#ed4c1c;"></i>
-              <h5 class="card-title" style="color:#23254a;">Fruit &amp; Vegetable Processing</h5>
-              <p class="card-text">Regional plants produce canned, frozen, and packaged goods, supporting local growers and extending market reach.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body text-center">
-              <i class="fas fa-box-open fa-2x mb-2" style="color:#ed4c1c;"></i>
-              <h5 class="card-title" style="color:#23254a;">Value-Added Products</h5>
-              <p class="card-text">Specialty foods, organic lines, and ready-to-eat products are expanding, meeting consumer demand and opening new markets.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <hr style="border-top:2px solid #ed4c1c; opacity:0.2;">
-      <div class="card shadow-sm mb-4">
-        <div class="card-body">
-          <h4 class="mb-3 d-flex align-items-center" style="color: #23254a;">
-            <i class="fas fa-chart-bar me-2" style="color:#ed4c1c;"></i>Growth Opportunities
-          </h4>
-          <ul>
-            <li><strong>Capacity Expansion:</strong> Investments in infrastructure and technology are increasing processing capacity, enabling the region to handle larger volumes and diversify product offerings.</li>
-            <li><strong>Sustainability:</strong> Focus on energy efficiency, waste reduction, and circular economy practices is enhancing environmental performance.</li>
-            <li><strong>Export Potential:</strong> Improved logistics and compliance with international standards are boosting export opportunities for processed agricultural goods.</li>
-          </ul>
-        </div>
-      </div>
-      <div class="card shadow-sm mb-4">
-        <div class="card-body">
-          <h4 class="mb-3 d-flex align-items-center" style="color: #23254a;">
-            <i class="fas fa-users fa-lg me-2" style="color:#ed4c1c;"></i>Supporting Local Producers
-          </h4>
-          <p>
-            Agricultural processing facilities provide reliable markets for local farmers, stabilize prices, and encourage adoption of best practices. Collaboration between processors, producers, and research institutions is fostering innovation and resilience in the sector.
-          </p>
-        </div>
-      </div>
-      <div class="card shadow-sm mb-4">
-        <div class="card-body">
-          <h4 class="mb-3 d-flex align-items-center" style="color: #23254a;">
-            <i class="fas fa-forward fa-lg me-2" style="color:#ed4c1c;"></i>Future Outlook
-          </h4>
-          <p>
-            With continued investment and strategic planning, agricultural processing is set to remain a cornerstone of regional development, supporting sustainable growth and prosperity.
-          </p>
-        </div>
-      </div>
-      <div class="d-flex justify-content-between mt-4">
-        <a href="{{ url_for('industries') }}" class="btn btn-outline-primary">
-          &larr; Back to Industry Page
-        </a>
-        <a href="https://www.yorkton.ca/en/build-invest-and-grow/start-a-business.aspx" class="btn btn-primary" style="background-color: #ed4c1c; border-color: #ed4c1c;">
-          View Business Opportunities
-        </a>
-      </div>
-      <div class="card mt-5 shadow-sm">
-        <div class="card-body text-center">
-          <h6 class="mb-2" style="color:#ed4c1c;">
-            <a href="{{ url_for('contact_us') }}" class="btn" style="font-size: 15px;">CONTACT US</a>
-          </h6>
-          <p class="mb-0 text-muted">This page is based on the ESAP Capacity for Growth - Regional Processing Significance report (August 2025). For more details or to access the full report, please contact the Regional Development Office.</p>
-        </div>
-      </div>
+<div class="sec-band"><div class="container"><div class="sec-band-inner">
+  <div class="sec-band-item reveal"><div class="sec-band-val">Raw<span>→ Retail</span></div><div class="sec-band-lbl">Value-Add Chain</div><div class="sec-band-sub">Transforming commodities into packaged, exportable food products with premium margins.</div></div>
+  <div class="sec-band-item reveal"><div class="sec-band-val">150<span>+</span></div><div class="sec-band-lbl">Countries Already Importing</div><div class="sec-band-sub">Saskatchewan's food products reach global shelves through established trade relationships.</div></div>
+  <div class="sec-band-item reveal"><div class="sec-band-val">Low<span> Cost</span></div><div class="sec-band-lbl">Operating Environment</div><div class="sec-band-sub">Land, labour, and energy costs significantly below major urban centres.</div></div>
+</div></div></div>
+
+<section class="sec-section"><div class="container">
+  <div class="row g-5 align-items-start">
+    <div class="col-lg-5">
+      <div class="sec-kicker reveal" style="color:var(--accent);">Why Processing Here</div>
+      <h2 class="sec-heading reveal" style="color:var(--navy);margin-bottom:1.2rem;">Grow Where the<br><em>Ingredients Are.</em></h2>
+      <p class="sec-body-text reveal" style="margin-bottom:1.2rem;">Most agrifood processors import raw materials. In our region, the raw materials surround you — which means shorter supply chains, fresher inputs, lower transport costs, and stronger margins from day one.</p>
+      <p class="sec-body-text reveal">The CPDA region is actively seeking processors to convert our agricultural wealth into shelf-ready products, creating jobs and keeping more value local.</p>
+      <div class="reveal" style="margin-top:2rem;"><a href="{{ url_for('contact_us') }}" class="btn-accent">Talk to CPDA →</a></div>
     </div>
+    <div class="col-lg-6 offset-lg-1"><div class="row g-3">
+      <div class="col-sm-6 reveal"><div class="sec-card"><div class="sec-card-icon">🌾</div><div class="sec-card-title">Grain Milling &amp; Flour</div><p class="sec-card-body">Proximity to wheat and specialty grain production makes our region ideal for flour milling, flaking, and grain-based food ingredient manufacturing.</p></div></div>
+      <div class="col-sm-6 reveal"><div class="sec-card"><div class="sec-card-icon">🫘</div><div class="sec-card-title">Pulse Processing</div><p class="sec-card-body">Lentil splitting, chickpea flour, and pulse ingredient production — world demand is growing and our raw supply is unmatched globally.</p></div></div>
+      <div class="col-sm-6 reveal"><div class="sec-card"><div class="sec-card-icon">🥩</div><div class="sec-card-title">Meat &amp; Protein</div><p class="sec-card-body">Regional livestock supply creates opportunities for abattoirs, meat processing, specialty products, and plant-based protein development.</p></div></div>
+      <div class="col-sm-6 reveal"><div class="sec-card"><div class="sec-card-icon">🛢️</div><div class="sec-card-title">Canola &amp; Oilseed</div><p class="sec-card-body">Edible oil extraction, margarine production, and specialty oils — canola is abundant and underprocessed locally, representing a direct opportunity.</p></div></div>
+    </div></div>
   </div>
-</div>
+</div></section>
+
+<section class="sec-section-dark"><div class="container">
+  <div class="row g-5">
+    <div class="col-lg-5">
+      <div class="sec-kicker reveal" style="color:var(--accent2);">Open Opportunities</div>
+      <h2 class="sec-heading reveal" style="color:#fff;margin-bottom:1.1rem;">Where to Enter<br><em style="color:var(--accent2);">the Value Chain</em></h2>
+      <p class="sec-body-text reveal" style="color:rgba(255,255,255,.58);margin-bottom:1.5rem;">From co-packing to cold storage to specialty ingredient production, the agrifood processing value chain has multiple entry points — each with genuine regional demand and minimal existing competition.</p>
+      <a href="{{ url_for('contact_us') }}" class="btn-accent reveal">Ask About Entry Points →</a>
+    </div>
+    <div class="col-lg-6 offset-lg-1 reveal"><ul class="sec-opp-list">
+      <li class="sec-opp-item"><div class="sec-opp-num">01</div><div><div class="sec-opp-title">Value-Added Processing Facilities</div><div class="sec-opp-desc">Establish processing plants close to raw supply, reduce input costs, and access provincial grants for food manufacturing infrastructure.</div></div></li>
+      <li class="sec-opp-item"><div class="sec-opp-num">02</div><div><div class="sec-opp-title">Co-Packing &amp; Contract Manufacturing</div><div class="sec-opp-desc">Many regional producers lack packaging capacity — a co-packing business can serve dozens of local brands from one facility with consistent demand.</div></div></li>
+      <li class="sec-opp-item"><div class="sec-opp-num">03</div><div><div class="sec-opp-title">Cold Storage &amp; Ingredient Warehousing</div><div class="sec-opp-desc">Refrigerated and dry storage capacity is in short supply, creating a logistics bottleneck that represents a direct opportunity for incoming operators.</div></div></li>
+      <li class="sec-opp-item"><div class="sec-opp-num">04</div><div><div class="sec-opp-title">Specialty &amp; Functional Foods</div><div class="sec-opp-desc">Plant-based protein, gluten-free, and health-focused product lines can be manufactured locally using our diverse crop base and entering premium global markets.</div></div></li>
+    </ul></div>
+  </div>
+</div></section>
+
+<section class="sec-section"><div class="container"><div class="row"><div class="col-lg-8">
+  <div class="sec-kicker reveal" style="color:var(--accent);">Useful Links</div>
+  <h2 class="sec-heading reveal" style="color:var(--navy);margin-bottom:.9rem;">Resources &amp; Partners</h2>
+  <p class="sec-body-text reveal" style="max-width:58ch;margin-bottom:0;">Key organizations supporting agrifood processing investment and development in Saskatchewan.</p>
+  <div class="sec-biz-grid reveal">
+    <a href="https://www.agwest.sk.ca/" target="_blank" rel="noopener" class="sec-biz-pill">Agwest SK <svg width="10" height="10" viewBox="0 0 20 20" fill="currentColor"><path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/><path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/></svg></a>
+    <a href="https://www.foodandbeveragemanitoba.ca/" target="_blank" rel="noopener" class="sec-biz-pill">Food &amp; Bev Canada <svg width="10" height="10" viewBox="0 0 20 20" fill="currentColor"><path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/><path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/></svg></a>
+    <a href="https://www.yorkton.ca/en/build-invest-and-grow/start-a-business.aspx" target="_blank" rel="noopener" class="sec-biz-pill">Yorkton Business Portal <svg width="10" height="10" viewBox="0 0 20 20" fill="currentColor"><path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/><path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/></svg></a>
+  </div>
+</div></div></div></section>
+
+<section class="sec-cta"><div class="container">
+  <div class="row align-items-center g-4">
+    <div class="col-lg-7 reveal"><h2 class="sec-cta-title">Ready to build a processing business at the source?</h2><p class="sec-cta-sub">The CPDA region offers raw material access, low operating costs, and a team ready to help you get established. Let's connect.</p></div>
+    <div class="col-lg-5 reveal"><div class="sec-cta-actions">
+      <a href="{{ url_for('contact_us') }}" class="btn-white">Contact the CPDA Team <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg></a>
+      <a href="{{ url_for('industries') }}" class="btn-white-outline">← Back to All Sectors</a>
+      <a href="https://www.yorkton.ca/en/build-invest-and-grow/start-a-business.aspx" target="_blank" class="btn-white-outline">Business Opportunities Portal →</a>
+    </div></div>
+  </div>
+</div></section>
+
+<nav class="sec-nav"><div class="container">
+  <div class="sec-nav-label reveal">Explore Other Sectors</div>
+  <div class="sec-nav-pills reveal">
+    <a href="{{ url_for('agriculture') }}" class="sec-nav-pill">🌾 Agriculture</a>
+    <span class="sec-nav-pill active">🏭 Agrifood Processing</span>
+    <a href="{{ url_for('mining') }}" class="sec-nav-pill">⛏️ Mining</a>
+    <a href="{{ url_for('tourism') }}" class="sec-nav-pill">🏕️ Tourism</a>
+    <a href="{{ url_for('transportation') }}" class="sec-nav-pill">🚛 Transportation</a>
+    <a href="{{ url_for('health_education') }}" class="sec-nav-pill">🏥 Healthcare &amp; Education</a>
+    <a href="{{ url_for('contact_us') }}" class="sec-nav-pill sec-nav-pill-contact">Contact CPDA →</a>
+  </div>
+</div></nav>
+<script>const _io=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*65);_io.unobserve(e.target)}})},{threshold:0.07});document.querySelectorAll('.reveal').forEach(el=>_io.observe(el));</script>
 {% endblock %}
