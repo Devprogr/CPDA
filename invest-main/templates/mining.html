@@ -1,96 +1,742 @@
 {% extends "base.html" %}
 {% block content %}
 
-<header class="header-2">
-  <div class="page-header min-vh-100 relative"
-       style="background-image: url('{{ url_for('static', filename='assets/img/mining.jpg') }}'); background-size: cover; background-position: center;">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-8 mx-auto text-center">
-          <div style="background: rgba(20,20,30,0.70); border-radius: 1rem; display:inline-block; padding: 2rem 2.5rem;">
-            <h1 class="text-white mb-2" style="text-shadow: 3px 3px 12px rgba(0,0,0,0.7);">Mining</h1>
-            <p class="lead text-white mb-0" style="text-shadow: 3px 3px 12px rgba(0,0,0,0.7);">
-              Potash strength in the broader region, supported by established infrastructure and long-term operations.
-            </p>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ══════════════════════════════════════════
+   CPDA SECTOR PAGE — DESIGN SYSTEM
+   Accent color vars change per sector.
+   Everything else is shared.
+══════════════════════════════════════════ */
+:root {
+  --navy:      #141c2e;
+  --navy2:     #0d1320;
+  --cream:     #f8f4ed;
+  --cream2:    #ede8df;
+  --slate:     #4a5568;
+  --fog:       #8896a8;
+  --gold:      #b8893a;
+  --gold2:     #d4a85a;
+  --font-d:    'Cormorant Garamond', Georgia, serif;
+  --font-b:    'Figtree', system-ui, sans-serif;
+  --ease:      cubic-bezier(.22,1,.36,1);
+
+  /* ── Mining: deep mineral violet ── */
+  --accent:    #6b4f9e;
+  --accent2:   #9b7fd4;
+  --accent-r:  107;
+  --accent-g:  79;
+  --accent-b:  158;
+  --hero-dark: #0e0b18;
+  --hero-mid:  #1a1330;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--cream); font-family: var(--font-b); color: var(--navy); }
+
+/* ───────────────────────────────────────
+   HERO — no photo, maximum impact
+─────────────────────────────────────── */
+.sec-hero {
+  position: relative; overflow: hidden;
+  background: linear-gradient(135deg, var(--hero-dark) 0%, var(--hero-mid) 55%, #120d22 100%);
+  padding: 7rem 0 5.5rem;
+  min-height: 90vh;
+  display: flex; align-items: center;
+}
+
+/* Geometric grid lines */
+.sec-hero::before {
+  content: "";
+  position: absolute; inset: 0; z-index: 1;
+  background-image:
+    linear-gradient(rgba(255,255,255,.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.028) 1px, transparent 1px);
+  background-size: 52px 52px;
+}
+
+/* Accent glow blob top-left */
+.sec-hero::after {
+  content: "";
+  position: absolute; z-index: 1;
+  width: 800px; height: 800px; border-radius: 50%;
+  background: radial-gradient(circle,
+    rgba(var(--accent-r),var(--accent-g),var(--accent-b),.22) 0%,
+    transparent 68%);
+  top: -280px; left: -180px; pointer-events: none;
+}
+
+/* Grain noise overlay */
+.sec-grain {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: .8;
+}
+
+/* Giant decorative word — creates depth without a photo */
+.sec-deco-word {
+  position: absolute; z-index: 2;
+  right: -1.5rem; top: 50%; transform: translateY(-50%);
+  font-family: var(--font-d); font-size: clamp(9rem, 18vw, 22rem);
+  font-weight: 700; line-height: 1; letter-spacing: -.04em;
+  color: rgba(var(--accent-r),var(--accent-g),var(--accent-b),.055);
+  pointer-events: none; user-select: none; white-space: nowrap;
+}
+
+.sec-hero-body { position: relative; z-index: 3; }
+
+/* Eyebrow pill */
+.sec-eyebrow {
+  display: inline-flex; align-items: center; gap: .65rem;
+  font-family: var(--font-b); font-size: .68rem; font-weight: 700;
+  letter-spacing: .24em; text-transform: uppercase;
+  color: var(--accent2); margin-bottom: 1.6rem;
+  animation: fadeUp .7s .05s var(--ease) both;
+}
+.sec-eyebrow-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--accent2);
+  box-shadow: 0 0 12px var(--accent2);
+  animation: blink 2.8s ease infinite;
+}
+
+/* Hero title — large serif, high contrast */
+.sec-title {
+  font-family: var(--font-d);
+  font-size: clamp(3.4rem, 6.5vw, 6.2rem);
+  font-weight: 700; line-height: .97; letter-spacing: -.022em;
+  color: #fff; margin-bottom: 1.75rem;
+  animation: fadeUp .7s .13s var(--ease) both;
+}
+.sec-title em {
+  display: block; font-style: italic; font-weight: 400;
+  color: var(--accent2);
+}
+
+.sec-subtitle {
+  font-family: var(--font-b); font-size: 1.05rem; font-weight: 300;
+  color: rgba(255,255,255,.72); line-height: 1.82; max-width: 52ch;
+  margin-bottom: 2.75rem;
+  animation: fadeUp .7s .21s var(--ease) both;
+}
+
+.sec-hero-ctas {
+  display: flex; gap: 1rem; flex-wrap: wrap;
+  animation: fadeUp .7s .29s var(--ease) both;
+}
+
+/* Stats panel — replaces hero image with hard data */
+.sec-stat-panel {
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 22px; padding: 2.25rem 2rem;
+  backdrop-filter: blur(12px);
+  animation: fadeUp .7s .37s var(--ease) both;
+}
+.sec-stat-row {
+  padding: 1.1rem 0;
+  border-bottom: 1px solid rgba(255,255,255,.07);
+}
+.sec-stat-row:first-child { padding-top: 0; }
+.sec-stat-row:last-child  { border-bottom: none; padding-bottom: 0; }
+.sec-stat-num {
+  font-family: var(--font-d); font-size: 3.1rem; font-weight: 700;
+  color: var(--accent2); line-height: 1; margin-bottom: .2rem;
+}
+.sec-stat-num sub {
+  font-size: 1.4rem; vertical-align: baseline;
+  color: rgba(255,255,255,.35); font-weight: 400;
+}
+.sec-stat-lbl {
+  font-family: var(--font-b); font-size: .7rem; font-weight: 600;
+  letter-spacing: .13em; text-transform: uppercase;
+  color: rgba(255,255,255,.4);
+}
+
+/* ───────────────────────────────────────
+   BUTTONS
+─────────────────────────────────────── */
+.btn-accent {
+  display: inline-flex; align-items: center; gap: .45rem;
+  padding: .84rem 1.85rem; border-radius: 999px;
+  background: var(--accent); color: #fff; border: none;
+  font-family: var(--font-b); font-size: .88rem; font-weight: 600;
+  text-decoration: none; cursor: pointer;
+  transition: all .22s var(--ease);
+}
+.btn-accent:hover {
+  filter: brightness(1.18); color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(var(--accent-r),var(--accent-g),var(--accent-b),.45);
+}
+
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: .45rem;
+  padding: .84rem 1.85rem; border-radius: 999px;
+  background: rgba(255,255,255,.08); color: rgba(255,255,255,.82);
+  border: 1.5px solid rgba(255,255,255,.18);
+  font-family: var(--font-b); font-size: .88rem; font-weight: 600;
+  text-decoration: none; transition: all .22s var(--ease);
+}
+.btn-ghost:hover {
+  background: rgba(255,255,255,.16); color: #fff;
+  border-color: rgba(255,255,255,.35); transform: translateY(-2px);
+}
+
+.btn-white {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .9rem 2.1rem; border-radius: 999px;
+  background: #fff; color: var(--accent);
+  font-family: var(--font-b); font-size: .9rem; font-weight: 700;
+  text-decoration: none; transition: all .22s var(--ease);
+}
+.btn-white:hover {
+  color: var(--accent); transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0,0,0,.22);
+}
+
+.btn-white-outline {
+  display: inline-flex; align-items: center; gap: .45rem;
+  font-family: var(--font-b); font-size: .84rem; font-weight: 500;
+  color: rgba(255,255,255,.72); text-decoration: none;
+  padding-bottom: 2px; border-bottom: 1px solid rgba(255,255,255,.3);
+  transition: all .2s;
+}
+.btn-white-outline:hover { color: #fff; border-color: #fff; }
+
+/* ───────────────────────────────────────
+   DATA BAND (replaces empty hero space)
+─────────────────────────────────────── */
+.sec-band {
+  background: var(--navy2); padding: 0;
+  position: relative; overflow: hidden;
+}
+.sec-band::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,.03) 1px, transparent 1px);
+  background-size: 22px 22px; pointer-events: none;
+}
+.sec-band-inner {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  position: relative; z-index: 1;
+}
+.sec-band-item {
+  padding: 3rem 2rem; text-align: center;
+  border-right: 1px solid rgba(255,255,255,.06);
+}
+.sec-band-item:last-child { border-right: none; }
+.sec-band-val {
+  font-family: var(--font-d); font-size: 3.4rem; font-weight: 700;
+  color: #fff; line-height: 1; margin-bottom: .35rem;
+}
+.sec-band-val span { font-size: 1.7rem; color: var(--accent2); }
+.sec-band-lbl {
+  font-family: var(--font-b); font-size: .68rem; font-weight: 700;
+  letter-spacing: .15em; text-transform: uppercase;
+  color: rgba(255,255,255,.38); margin-bottom: .3rem;
+}
+.sec-band-sub {
+  font-family: var(--font-b); font-size: .78rem; font-weight: 300;
+  color: rgba(255,255,255,.32); line-height: 1.5;
+}
+
+/* ───────────────────────────────────────
+   CONTENT SECTIONS
+─────────────────────────────────────── */
+.sec-section  { padding: 5.5rem 0; background: var(--cream); }
+.sec-section-dark { padding: 5.5rem 0; background: var(--navy); }
+
+.sec-kicker {
+  font-family: var(--font-b); font-size: .67rem; font-weight: 700;
+  letter-spacing: .22em; text-transform: uppercase;
+  display: flex; align-items: center; gap: .55rem;
+  margin-bottom: .9rem;
+}
+.sec-kicker::before {
+  content: ""; width: 20px; height: 2px;
+  background: currentColor; border-radius: 2px;
+}
+
+.sec-heading {
+  font-family: var(--font-d);
+  font-size: clamp(1.9rem, 3.5vw, 2.9rem);
+  font-weight: 700; line-height: 1.1; letter-spacing: -.015em;
+}
+.sec-heading em { font-style: italic; font-weight: 400; }
+
+.sec-body-text {
+  font-family: var(--font-b); font-size: .93rem; font-weight: 300;
+  line-height: 1.85; color: var(--slate);
+}
+
+/* Feature cards */
+.sec-card {
+  background: #fff; border-radius: 18px;
+  padding: 2rem 1.75rem; height: 100%;
+  border-left: 3px solid var(--accent);
+  box-shadow: 0 3px 18px rgba(20,28,46,.07);
+  transition: transform .22s var(--ease), box-shadow .22s var(--ease);
+}
+.sec-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 44px rgba(20,28,46,.12);
+}
+.sec-card-icon { font-size: 2.1rem; margin-bottom: 1rem; }
+.sec-card-title {
+  font-family: var(--font-d); font-size: 1.25rem; font-weight: 700;
+  color: var(--navy); margin-bottom: .55rem;
+}
+.sec-card-body {
+  font-family: var(--font-b); font-size: .86rem; font-weight: 300;
+  color: var(--slate); line-height: 1.78;
+}
+
+/* Numbered opportunity list */
+.sec-opp-list { list-style: none; padding: 0; }
+.sec-opp-item {
+  display: flex; gap: 1.1rem; align-items: flex-start;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.sec-opp-item:last-child { border-bottom: none; }
+.sec-opp-num {
+  font-family: var(--font-d); font-size: 2.2rem; font-weight: 700;
+  color: rgba(var(--accent-r),var(--accent-g),var(--accent-b),.28);
+  line-height: 1; flex-shrink: 0; width: 2.8rem; padding-top: .05rem;
+}
+.sec-opp-title {
+  font-family: var(--font-b); font-size: .9rem; font-weight: 600;
+  color: #fff; margin-bottom: .35rem;
+}
+.sec-opp-desc {
+  font-family: var(--font-b); font-size: .82rem; font-weight: 300;
+  color: rgba(255,255,255,.48); line-height: 1.65;
+}
+
+/* Business link pills */
+.sec-biz-grid { display: flex; flex-wrap: wrap; gap: .65rem; margin-top: 1.5rem; }
+.sec-biz-pill {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .55rem 1.25rem; border-radius: 999px;
+  background: rgba(var(--accent-r),var(--accent-g),var(--accent-b),.1);
+  border: 1.5px solid rgba(var(--accent-r),var(--accent-g),var(--accent-b),.22);
+  color: var(--accent2); font-family: var(--font-b);
+  font-size: .83rem; font-weight: 600; text-decoration: none;
+  transition: all .2s var(--ease);
+}
+.sec-biz-pill:hover {
+  background: var(--accent); color: #fff;
+  border-color: var(--accent); transform: translateY(-1px);
+}
+
+/* ───────────────────────────────────────
+   CTA BAND
+─────────────────────────────────────── */
+.sec-cta {
+  background: var(--accent); padding: 5.5rem 0;
+  position: relative; overflow: hidden;
+}
+.sec-cta::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,.055) 1px, transparent 1px);
+  background-size: 20px 20px; pointer-events: none;
+}
+.sec-cta::after {
+  content: "";
+  position: absolute; right: -6rem; top: -6rem;
+  width: 420px; height: 420px; border-radius: 50%;
+  background: rgba(255,255,255,.04); pointer-events: none;
+}
+.sec-cta-title {
+  font-family: var(--font-d);
+  font-size: clamp(1.9rem, 3.5vw, 3.1rem);
+  font-weight: 700; color: #fff; line-height: 1.12;
+  margin-bottom: .7rem; position: relative; z-index: 1;
+}
+.sec-cta-sub {
+  font-family: var(--font-b); font-size: .95rem; font-weight: 300;
+  color: rgba(255,255,255,.74); line-height: 1.78; max-width: 54ch;
+  position: relative; z-index: 1;
+}
+.sec-cta-actions {
+  display: flex; flex-direction: column;
+  align-items: flex-start; gap: .85rem;
+  position: relative; z-index: 1;
+}
+@media(min-width:992px){ .sec-cta-actions { align-items: flex-end; } }
+
+/* ───────────────────────────────────────
+   SECTOR NAV (reused across all pages)
+─────────────────────────────────────── */
+.sec-nav {
+  background: var(--cream2);
+  padding: 2.75rem 0;
+  border-top: 1px solid rgba(20,28,46,.08);
+}
+.sec-nav-label {
+  font-family: var(--font-b); font-size: .64rem; font-weight: 700;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--fog); margin-bottom: 1.1rem;
+}
+.sec-nav-pills { display: flex; flex-wrap: wrap; gap: .55rem; }
+.sec-nav-pill {
+  padding: .52rem 1.2rem; border-radius: 999px;
+  background: #fff; border: 1.5px solid rgba(20,28,46,.1);
+  font-family: var(--font-b); font-size: .82rem; font-weight: 500;
+  color: var(--navy); text-decoration: none;
+  transition: all .18s var(--ease);
+}
+.sec-nav-pill:hover {
+  background: var(--navy); color: #fff;
+  border-color: var(--navy); transform: translateY(-1px);
+}
+.sec-nav-pill.active {
+  background: var(--accent); color: #fff;
+  border-color: var(--accent);
+}
+.sec-nav-pill-contact {
+  background: var(--navy); color: #fff;
+  border-color: var(--navy); font-weight: 600;
+}
+.sec-nav-pill-contact:hover {
+  background: var(--navy2); border-color: var(--navy2); color: #fff;
+}
+
+/* ───────────────────────────────────────
+   ANIMATIONS & SCROLL REVEAL
+─────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(20px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes blink {
+  0%,100% { opacity:1; transform:scale(1); }
+  50%      { opacity:.45; transform:scale(1.9); }
+}
+.reveal {
+  opacity: 0; transform: translateY(18px);
+  transition: opacity .58s var(--ease), transform .58s var(--ease);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ───────────────────────────────────────
+   RESPONSIVE
+─────────────────────────────────────── */
+@media(max-width:991px) {
+  .sec-stat-panel { display: none; }
+  .sec-hero { padding: 5.5rem 0 4.5rem; min-height: auto; }
+}
+@media(max-width:767px) {
+  .sec-title { font-size: 3rem; }
+  .sec-deco-word { display: none; }
+  .sec-band-inner { grid-template-columns: 1fr; }
+  .sec-band-item {
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+  }
+  .sec-band-item:last-child { border-bottom: none; }
+}
+</style>
+
+
+<!-- ══════════════════════════════════════
+     HERO — typographic, no image needed
+══════════════════════════════════════ -->
+<section class="sec-hero">
+  <div class="sec-grain"></div>
+  <div class="sec-deco-word">MINING</div>
+
+  <div class="container sec-hero-body">
+    <div class="row align-items-center g-5">
+
+      <!-- Left: text -->
+      <div class="col-lg-7">
+        <div class="sec-eyebrow">
+          <span class="sec-eyebrow-dot"></span>
+          CPDA Region · East-Central Saskatchewan
+        </div>
+        <h1 class="sec-title">
+          Mining &amp;<br>
+          <em>Mineral Wealth</em>
+        </h1>
+        <p class="sec-subtitle">
+          Saskatchewan sits on one of the planet's largest potash reserves. Our region is home to long-running mine operations, a deep skilled trades workforce, and the infrastructure networks that move product to global markets.
+        </p>
+        <div class="sec-hero-ctas">
+          <a href="{{ url_for('contact_us') }}" class="btn-accent">
+            Explore Investment Opportunities
+            <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+          </a>
+          <a href="{{ url_for('industries') }}" class="btn-ghost">← All Sectors</a>
+        </div>
+      </div>
+
+      <!-- Right: stat panel (replaces hero image) -->
+      <div class="col-lg-4 offset-lg-1 d-none d-lg-block">
+        <div class="sec-stat-panel">
+          <div class="sec-stat-row">
+            <div class="sec-stat-num">#1 <sub>globally</sub></div>
+            <div class="sec-stat-lbl">Potash Exporter — Canada</div>
+          </div>
+          <div class="sec-stat-row">
+            <div class="sec-stat-num">31<sub>%</sub></div>
+            <div class="sec-stat-lbl">of World's Potash Reserves</div>
+          </div>
+          <div class="sec-stat-row">
+            <div class="sec-stat-num">$6<sub>B+</sub></div>
+            <div class="sec-stat-lbl">Annual Export Value</div>
           </div>
         </div>
       </div>
+
     </div>
   </div>
-</header>
+</section>
 
-<div class="container my-5">
-  <div class="row justify-content-center">
-    <div class="col-lg-9">
 
-      <div class="card shadow-sm mb-4">
-        <div class="card-body">
-          <h4 class="mb-2" style="color:#23254a; font-weight:700;">Sector Snapshot</h4>
-          <p class="mb-0">
-            Potash operations in Saskatchewan remain globally significant. In the wider Yorkton-area region,
-            Esterhazy is a major potash centre operated by The Mosaic Company. 
-          </p>
-        </div>
+<!-- ══════════════════════════════════════
+     DATA BAND
+══════════════════════════════════════ -->
+<div class="sec-band">
+  <div class="container">
+    <div class="sec-band-inner">
+      <div class="sec-band-item reveal">
+        <div class="sec-band-val">Esterhazy<span></span></div>
+        <div class="sec-band-lbl">Major Potash Centre</div>
+        <div class="sec-band-sub">Operated by The Mosaic Company — one of the world's highest-capacity mines.</div>
       </div>
-
-      <div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
-        <div class="col">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="mb-2" style="color:#23254a; font-weight:700;">What’s strong here</h5>
-              <ul class="mb-0">
-                <li>Established potash operations and supply networks</li>
-                <li>Skilled trades workforce and safety culture</li>
-                <li>Transport links for industrial movement</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="mb-2" style="color:#23254a; font-weight:700;">Investment opportunities</h5>
-              <ul class="mb-0">
-                <li>Industrial services and maintenance support</li>
-                <li>Workforce training partnerships</li>
-                <li>Supply chain + procurement vendor onboarding</li>
-              </ul>
-            </div>
-          </div>
-        </div>
+      <div class="sec-band-item reveal">
+        <div class="sec-band-val">150<span>+</span></div>
+        <div class="sec-band-lbl">Countries Supplied</div>
+        <div class="sec-band-sub">Saskatchewan potash feeds agriculture across every continent, every year.</div>
       </div>
-
-      <div class="card shadow-sm mb-4">
-        <div class="card-body">
-          <h4 class="mb-3" style="color:#23254a; font-weight:700;">Major businesses to highlight</h4>
-          <div class="d-flex flex-wrap gap-2">
-            <a class="btn btn-outline-primary" href="https://mosaicco.com/" target="_blank" rel="noopener">Mosaic</a>
-          </div>
-          <p class="text-muted mt-3 mb-0" style="font-size:14px;">
-            Potash context: Esterhazy (operator: Mosaic) is a major Saskatchewan potash centre.
-          </p>
-        </div>
+      <div class="sec-band-item reveal">
+        <div class="sec-band-val">1,000<span>s</span></div>
+        <div class="sec-band-lbl">Skilled Trade Jobs</div>
+        <div class="sec-band-sub">Electricians, welders, engineers, and mechanics available across the region.</div>
       </div>
-
-      <div class="d-flex justify-content-between mt-4">
-        <a href="{{ url_for('industries') }}" class="btn btn-outline-primary">&larr; Back to Industry Page</a>
-        <a href="https://www.yorkton.ca/en/build-invest-and-grow/start-a-business.aspx" target="_blank" rel="noopener"
-           class="btn btn-primary" style="background-color:#ed4c1c; border-color:#ed4c1c;">
-          View Business Opportunities
-        </a>
-      </div>
-
-      <div class="card mt-5 shadow-sm">
-        <div class="card-body text-center">
-          <a href="{{ url_for('contact_us') }}" class="btn" style="font-size:15px;">CONTACT US</a>
-          <p class="mb-0 text-muted" style="font-size:14px;">
-            If you want a “local supplier list” (trades, vendors, services), we can add a verified directory section.
-          </p>
-        </div>
-      </div>
-
     </div>
   </div>
 </div>
+
+
+<!-- ══════════════════════════════════════
+     WHY INVEST
+══════════════════════════════════════ -->
+<section class="sec-section">
+  <div class="container">
+    <div class="row g-5 align-items-start">
+
+      <!-- Left: context -->
+      <div class="col-lg-5">
+        <div class="sec-kicker reveal" style="color:var(--accent);">Why Mining Here</div>
+        <h2 class="sec-heading reveal" style="color:var(--navy); margin-bottom:1.2rem;">
+          World-Class Reserves.<br>
+          <em>Built to Supply the Globe.</em>
+        </h2>
+        <p class="sec-body-text reveal" style="margin-bottom:1.5rem;">
+          Saskatchewan is not a peripheral mining region — it is the centre of the world's potash supply. Our CPDA communities sit within reach of Esterhazy, one of the highest-capacity mines on earth, meaning established supply chains, experienced workers, and a full business ecosystem are already in place.
+        </p>
+        <p class="sec-body-text reveal">
+          For businesses outside the province, this represents a ready-made market for industrial services, workforce training, logistics, and technology — without the need to build from scratch.
+        </p>
+        <div class="reveal" style="margin-top:2rem;">
+          <a href="{{ url_for('contact_us') }}" class="btn-accent">Talk to CPDA →</a>
+        </div>
+      </div>
+
+      <!-- Right: feature cards -->
+      <div class="col-lg-6 offset-lg-1">
+        <div class="row g-3">
+          <div class="col-sm-6 reveal">
+            <div class="sec-card">
+              <div class="sec-card-icon">⛏️</div>
+              <div class="sec-card-title">Established Operations</div>
+              <p class="sec-card-body">Decades of mining history means infrastructure, supplier relationships, and community knowledge are already built and functioning.</p>
+            </div>
+          </div>
+          <div class="col-sm-6 reveal">
+            <div class="sec-card">
+              <div class="sec-card-icon">🔧</div>
+              <div class="sec-card-title">Skilled Trades Workforce</div>
+              <p class="sec-card-body">Electricians, welders, heavy equipment operators, and engineers with direct mine-site experience available locally across the CPDA region.</p>
+            </div>
+          </div>
+          <div class="col-sm-6 reveal">
+            <div class="sec-card">
+              <div class="sec-card-icon">🚂</div>
+              <div class="sec-card-title">Transport Infrastructure</div>
+              <p class="sec-card-body">Rail, highway, and logistics networks built for industrial scale — product moves efficiently from our region to export terminals and global buyers.</p>
+            </div>
+          </div>
+          <div class="col-sm-6 reveal">
+            <div class="sec-card">
+              <div class="sec-card-icon">🌍</div>
+              <div class="sec-card-title">Stable Global Demand</div>
+              <p class="sec-card-body">Food production growth drives consistent potash demand. Long-term contracts and established buyer relationships make this a reliable sector.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     INVESTMENT OPPORTUNITIES
+══════════════════════════════════════ -->
+<section class="sec-section-dark">
+  <div class="container">
+    <div class="row g-5">
+
+      <div class="col-lg-5">
+        <div class="sec-kicker reveal" style="color:var(--accent2);">Open Opportunities</div>
+        <h2 class="sec-heading reveal" style="color:#fff; margin-bottom:1.1rem;">
+          Where Outside Businesses<br>
+          <em style="color:var(--accent2);">Can Enter &amp; Grow</em>
+        </h2>
+        <p class="sec-body-text reveal" style="color:rgba(255,255,255,.58); margin-bottom:1.5rem;">
+          You don't need to own a mine to benefit from mining. The industry creates hundreds of adjacent roles — procurement, training, maintenance, technology — all accessible to businesses willing to set up in or partner with the CPDA region.
+        </p>
+        <a href="{{ url_for('contact_us') }}" class="btn-accent reveal">Ask About Entry Points →</a>
+      </div>
+
+      <div class="col-lg-6 offset-lg-1 reveal">
+        <ul class="sec-opp-list">
+          <li class="sec-opp-item">
+            <div class="sec-opp-num">01</div>
+            <div>
+              <div class="sec-opp-title">Industrial Services &amp; Maintenance</div>
+              <div class="sec-opp-desc">Ongoing maintenance contracts, seasonal shutdowns, and equipment repair create steady, predictable demand for skilled service providers year-round.</div>
+            </div>
+          </li>
+          <li class="sec-opp-item">
+            <div class="sec-opp-num">02</div>
+            <div>
+              <div class="sec-opp-title">Supply Chain &amp; Vendor Onboarding</div>
+              <div class="sec-opp-desc">Major operations actively seek local suppliers for equipment, PPE, industrial chemicals, and materials — entry points exist for verified regional vendors.</div>
+            </div>
+          </li>
+          <li class="sec-opp-item">
+            <div class="sec-opp-num">03</div>
+            <div>
+              <div class="sec-opp-title">Workforce Training &amp; Safety</div>
+              <div class="sec-opp-desc">Mines require ongoing safety certification, trade upgrading, and first-aid training — a growing and underserved niche for specialized training businesses.</div>
+            </div>
+          </li>
+          <li class="sec-opp-item">
+            <div class="sec-opp-num">04</div>
+            <div>
+              <div class="sec-opp-title">Automation &amp; Technology</div>
+              <div class="sec-opp-desc">Predictive maintenance, sensor networks, and autonomous equipment are transforming mining — and our region needs the technology providers to match.</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     KEY BUSINESSES
+══════════════════════════════════════ -->
+<section class="sec-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="sec-kicker reveal" style="color:var(--accent);">Active in Our Region</div>
+        <h2 class="sec-heading reveal" style="color:var(--navy); margin-bottom:.9rem;">
+          Key Industry Players
+        </h2>
+        <p class="sec-body-text reveal" style="max-width:58ch; margin-bottom:0;">
+          These organizations operate directly within or adjacent to the CPDA region. They represent established relationships, supply chain access, and partnership opportunities for incoming businesses.
+        </p>
+        <div class="sec-biz-grid reveal">
+          <a href="https://mosaicco.com/" target="_blank" rel="noopener" class="sec-biz-pill">
+            Mosaic Company
+            <svg width="10" height="10" viewBox="0 0 20 20" fill="currentColor"><path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/><path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/></svg>
+          </a>
+          <a href="https://www.saskmining.ca/" target="_blank" rel="noopener" class="sec-biz-pill">
+            Sask Mining Association
+            <svg width="10" height="10" viewBox="0 0 20 20" fill="currentColor"><path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/><path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/></svg>
+          </a>
+          <a href="https://www.yorkton.ca/en/build-invest-and-grow/start-a-business.aspx" target="_blank" rel="noopener" class="sec-biz-pill">
+            Yorkton Business Portal
+            <svg width="10" height="10" viewBox="0 0 20 20" fill="currentColor"><path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/><path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     CTA BAND — strong close
+══════════════════════════════════════ -->
+<section class="sec-cta">
+  <div class="container">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-7 reveal">
+        <h2 class="sec-cta-title">
+          Ready to enter Saskatchewan's<br>mining supply chain?
+        </h2>
+        <p class="sec-cta-sub">
+          The CPDA team connects outside businesses with local procurement contacts, workforce resources, site introductions, and business setup support across the region. No obligation — just a conversation.
+        </p>
+      </div>
+      <div class="col-lg-5 reveal">
+        <div class="sec-cta-actions">
+          <a href="{{ url_for('contact_us') }}" class="btn-white">
+            Contact the CPDA Team
+            <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+          </a>
+          <a href="{{ url_for('industries') }}" class="btn-white-outline">← Back to All Sectors</a>
+          <a href="https://www.yorkton.ca/en/build-invest-and-grow/start-a-business.aspx" target="_blank" class="btn-white-outline">Business Opportunities Portal →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     SECTOR NAV — reused on every page
+══════════════════════════════════════ -->
+<nav class="sec-nav" aria-label="Other sectors">
+  <div class="container">
+    <div class="sec-nav-label reveal">Explore Other Sectors</div>
+    <div class="sec-nav-pills reveal">
+      <a href="{{ url_for('agriculture') }}"    class="sec-nav-pill">🌾 Agriculture</a>
+      <a href="{{ url_for('agri_process') }}"   class="sec-nav-pill">🏭 Agrifood Processing</a>
+      <span                                      class="sec-nav-pill active">⛏️ Mining</span>
+      <a href="{{ url_for('tourism') }}"         class="sec-nav-pill">🏕️ Tourism</a>
+      <a href="{{ url_for('transportation') }}"  class="sec-nav-pill">🚛 Transportation</a>
+      <a href="{{ url_for('health_education') }}" class="sec-nav-pill">🏥 Healthcare &amp; Education</a>
+      <a href="{{ url_for('contact_us') }}"      class="sec-nav-pill sec-nav-pill-contact">Contact CPDA →</a>
+    </div>
+  </div>
+</nav>
+
+
+<script>
+/* Scroll reveal */
+const _io = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 65);
+      _io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.07 });
+document.querySelectorAll('.reveal').forEach(el => _io.observe(el));
+</script>
 
 {% endblock %}
