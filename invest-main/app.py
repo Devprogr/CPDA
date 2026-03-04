@@ -28,17 +28,18 @@ def create_app():
         SESSION_COOKIE_SECURE=True,
     )
 
-    # Supabase anon client (for public queries)
-    supabase_url = os.getenv("SUPABASE_URL")
-    supabase_anon_key = os.getenv("SUPABASE_ANON_KEY")
+    # Supabase clients
+    supabase_url         = os.getenv("SUPABASE_URL")
+    supabase_anon_key    = os.getenv("SUPABASE_ANON_KEY")
     supabase_service_key = os.getenv("SUPABASE_SERVICE_KEY")
 
     if not supabase_url or not supabase_anon_key:
         raise RuntimeError("Missing SUPABASE_URL or SUPABASE_ANON_KEY in environment variables.")
 
+    # Anon client — public queries
     supabase: Client = create_client(supabase_url, supabase_anon_key)
 
-    # Service role client — bypasses RLS, used for admin operations
+    # Service role client — bypasses RLS, used for admin ops & storage uploads
     supabase_admin: Client = create_client(supabase_url, supabase_service_key) if supabase_service_key else supabase
 
     # Resend email
@@ -47,8 +48,12 @@ def create_app():
     # Admin creds
     admin_username = os.getenv("ADMIN_USERNAME", "admin")
     admin_password = os.getenv("ADMIN_PASSWORD", "change_me")
+    admin_email    = os.getenv("ADMIN_EMAIL", "")
+    site_url       = os.getenv("SITE_URL", "https://cpda.ca")
 
-    # ---------------- HELPERS ----------------
+    # ─────────────────────────────────────────
+    # HELPERS
+    # ─────────────────────────────────────────
 
     def _is_member_logged_in() -> bool:
         return bool(session.get("member_access_token"))
@@ -57,56 +62,53 @@ def create_app():
         return bool(session.get("admin_logged_in"))
 
     def normalize_dt(dt_str):
+        """Ensure datetime string has seconds for Postgres."""
         if dt_str and len(dt_str) == 16:
             return dt_str + ":00"
         return dt_str or None
 
-    def send_approval_email(to_email: str, event_title: str, start_at: str, location: str = None, status: str = "APPROVED"):
-        """Send email notification to event submitter when approved or declined."""
+    def send_approval_email(to_email: str, event_title: str, start_at: str,
+                             location: str = None, status: str = "APPROVED"):
+        """Email the event submitter when their event is approved or declined."""
         if not resend.api_key:
-            print("RESEND_API_KEY not set — skipping email")
+            print("RESEND_API_KEY not set — skipping submitter email")
             return
 
         if status == "APPROVED":
-            subject = f"✅ Your event '{event_title}' has been approved!"
-            color = "#16a34a"
+            subject     = f"✅ Your event '{event_title}' has been approved!"
+            color       = "#16a34a"
             status_text = "approved"
-            body_line = "Your event is now live on the CPDA website and visible to the community."
-            icon = "✅"
+            body_line   = "Your event is now live on the CPDA website and visible to the community."
+            icon        = "✅"
         else:
-            subject = f"Your event '{event_title}' was not approved"
-            color = "#dc2626"
+            subject     = f"Your event '{event_title}' was not approved"
+            color       = "#dc2626"
             status_text = "declined"
-            body_line = "Unfortunately your event did not meet our posting guidelines. Please contact us if you have questions."
-            icon = "❌"
+            body_line   = "Unfortunately your event did not meet our posting guidelines. Please contact us if you have questions."
+            icon        = "❌"
 
-        date_display = start_at[:10] if start_at else "TBD"
+        date_display     = start_at[:10] if start_at else "TBD"
         location_display = location or "TBD"
 
         html_body = f"""
-        <div style="font-family:'Helvetica Neue',Arial,sans-serif; max-width:560px; margin:0 auto; background:#f9f6f0; padding:2rem; border-radius:16px;">
-          <div style="background:#1e2d49; border-radius:12px; padding:2rem; text-align:center; margin-bottom:1.5rem;">
-            <h1 style="color:#ffffff; font-size:1.6rem; margin:0 0 .4rem;">{icon} Event {status_text.title()}</h1>
-            <p style="color:rgba(255,255,255,.7); margin:0; font-size:.9rem;">CPDA — Central Prairie Development Association</p>
+        <div style="font-family:'Helvetica Neue',Arial,sans-serif;max-width:560px;margin:0 auto;background:#f9f6f0;padding:2rem;border-radius:16px;">
+          <div style="background:#1e2d49;border-radius:12px;padding:2rem;text-align:center;margin-bottom:1.5rem;">
+            <h1 style="color:#fff;font-size:1.6rem;margin:0 0 .4rem;">{icon} Event {status_text.title()}</h1>
+            <p style="color:rgba(255,255,255,.7);margin:0;font-size:.9rem;">CPDA — Central Prairie Development Association</p>
           </div>
-
-          <div style="background:#ffffff; border-radius:12px; padding:2rem; margin-bottom:1rem; border-left:4px solid {color};">
-            <h2 style="color:#1e2d49; font-size:1.2rem; margin:0 0 .5rem;">{event_title}</h2>
-            <p style="color:#6b7280; font-size:.88rem; margin:0 0 .25rem;">📅 {date_display}</p>
-            <p style="color:#6b7280; font-size:.88rem; margin:0;">📍 {location_display}</p>
+          <div style="background:#fff;border-radius:12px;padding:2rem;margin-bottom:1rem;border-left:4px solid {color};">
+            <h2 style="color:#1e2d49;font-size:1.2rem;margin:0 0 .5rem;">{event_title}</h2>
+            <p style="color:#6b7280;font-size:.88rem;margin:0 0 .25rem;">📅 {date_display}</p>
+            <p style="color:#6b7280;font-size:.88rem;margin:0;">📍 {location_display}</p>
           </div>
-
-          <p style="color:#374151; font-size:.95rem; line-height:1.6; padding:0 .5rem;">{body_line}</p>
-
-          <div style="text-align:center; margin-top:1.5rem;">
-            <a href="https://cpda.ca/news-updates"
-               style="background:#1e2d49; color:#ffffff; padding:.75rem 2rem; border-radius:999px;
-                      text-decoration:none; font-size:.9rem; font-weight:600;">
+          <p style="color:#374151;font-size:.95rem;line-height:1.6;padding:0 .5rem;">{body_line}</p>
+          <div style="text-align:center;margin-top:1.5rem;">
+            <a href="{site_url}/news-updates"
+               style="background:#1e2d49;color:#fff;padding:.75rem 2rem;border-radius:999px;text-decoration:none;font-size:.9rem;font-weight:600;">
               View on CPDA Website
             </a>
           </div>
-
-          <p style="color:#9ca3af; font-size:.78rem; text-align:center; margin-top:1.5rem;">
+          <p style="color:#9ca3af;font-size:.78rem;text-align:center;margin-top:1.5rem;">
             Questions? Contact us at
             <a href="mailto:cpda.info@suncrestcollege.ca" style="color:#c8922a;">cpda.info@suncrestcollege.ca</a>
           </p>
@@ -115,16 +117,67 @@ def create_app():
 
         try:
             resend.Emails.send({
-                "from": "CPDA <noreply@cpda.ca>",
-                "to": [to_email],
+                "from":    "CPDA <onboarding@resend.dev>",
+                "to":      [to_email],
                 "subject": subject,
-                "html": html_body,
+                "html":    html_body,
             })
-            print(f"Email sent to {to_email} — {status}")
+            print(f"Submitter email sent to {to_email} — {status}")
         except Exception as e:
-            print(f"Email send error: {e}")
+            print(f"Submitter email error: {e}")
 
-    # ---------------- PUBLIC ROUTES ----------------
+    def send_admin_notification(event_title: str, owner_email: str,
+                                 start_at: str, location: str = None):
+        """Notify admin when a new event is submitted for review."""
+        if not resend.api_key:
+            print("RESEND_API_KEY not set — skipping admin notification")
+            return
+
+        if not admin_email:
+            print("ADMIN_EMAIL not set — skipping admin notification")
+            return
+
+        date_display     = start_at[:10] if start_at else "TBD"
+        location_display = location or "Not specified"
+
+        html_body = f"""
+        <div style="font-family:'Helvetica Neue',Arial,sans-serif;max-width:560px;margin:0 auto;background:#f9f6f0;padding:2rem;border-radius:16px;">
+          <div style="background:#1e2d49;border-radius:12px;padding:2rem;text-align:center;margin-bottom:1.5rem;">
+            <h1 style="color:#fff;font-size:1.6rem;margin:0 0 .4rem;">🕐 New Event Pending Review</h1>
+            <p style="color:rgba(255,255,255,.7);margin:0;font-size:.9rem;">CPDA Admin Notification</p>
+          </div>
+          <div style="background:#fff;border-radius:12px;padding:2rem;margin-bottom:1rem;border-left:4px solid #c8922a;">
+            <h2 style="color:#1e2d49;font-size:1.2rem;margin:0 0 .75rem;">{event_title}</h2>
+            <p style="color:#6b7280;font-size:.88rem;margin:0 0 .25rem;">📅 {date_display}</p>
+            <p style="color:#6b7280;font-size:.88rem;margin:0 0 .25rem;">📍 {location_display}</p>
+            <p style="color:#6b7280;font-size:.88rem;margin:0;">👤 Submitted by: {owner_email}</p>
+          </div>
+          <p style="color:#374151;font-size:.95rem;line-height:1.6;padding:0 .5rem;">
+            A new event has been submitted and is waiting for your approval.
+          </p>
+          <div style="text-align:center;margin-top:1.5rem;">
+            <a href="{site_url}/admin/login"
+               style="background:#1e2d49;color:#fff;padding:.75rem 2rem;border-radius:999px;text-decoration:none;font-size:.9rem;font-weight:600;">
+              Review in Admin Dashboard →
+            </a>
+          </div>
+        </div>
+        """
+
+        try:
+            resend.Emails.send({
+                "from":    "CPDA <onboarding@resend.dev>",
+                "to":      [admin_email],
+                "subject": f"🕐 New event pending review: {event_title}",
+                "html":    html_body,
+            })
+            print(f"Admin notification sent to {admin_email}")
+        except Exception as e:
+            print(f"Admin notification error: {e}")
+
+    # ─────────────────────────────────────────
+    # PUBLIC ROUTES
+    # ─────────────────────────────────────────
 
     @app.route("/")
     def home():
@@ -160,7 +213,7 @@ def create_app():
                 .execute()
             events = res.data or []
         except Exception as e:
-            print("News updates events fetch error:", e)
+            print("News updates fetch error:", e)
             events = []
         return render_template("news-updates.html", events=events)
 
@@ -202,25 +255,25 @@ def create_app():
 
     @app.route("/region")
     def region():
-        years = ["2024", "2023", "2022", "2021"]
+        years       = ["2024", "2023", "2022", "2021"]
         populations = [86781, 86298, 86005, 86547]
-        age_groups = [
+        age_groups  = [
             "85 years and over", "80 to 84 years", "75 to 79 years", "70 to 74 years",
-            "65 to 69 years", "60 to 64 years", "55 to 59 years", "50 to 54 years",
-            "45 to 49 years", "40 to 44 years", "35 to 39 years", "30 to 34 years",
-            "25 to 29 years", "20 to 24 years", "15 to 19 years", "10 to 14 years",
-            "5 to 9 years", "0 to 4 years"
+            "65 to 69 years",    "60 to 64 years", "55 to 59 years", "50 to 54 years",
+            "45 to 49 years",    "40 to 44 years", "35 to 39 years", "30 to 34 years",
+            "25 to 29 years",    "20 to 24 years", "15 to 19 years", "10 to 14 years",
+            "5 to 9 years",      "0 to 4 years"
         ]
-        men = [-200, -300, -400, -500, -600, -700, -800, -900, -950, -1000, -950, -900, -850, -800, -750, -700, -650, -600]
-        women = [250, 350, 450, 550, 650, 750, 850, 950, 1000, 1050, 1000, 950, 900, 850, 800, 750, 700, 650]
+        men    = [-200,-300,-400,-500,-600,-700,-800,-900,-950,-1000,-950,-900,-850,-800,-750,-700,-650,-600]
+        women  = [ 250, 350, 450, 550, 650, 750, 850, 950,1000, 1050,1000, 950, 900, 850, 800, 750, 700, 650]
         income_labels = [
-            "$200,000 and over", "$150,000 to 199,999", "$125,000 to 149,999", "$100,000 to 124,999",
-            "$90,000 to 99,999", "$80,000 to 89,999", "$70,000 to 79,999", "$60,000 to 69,999",
-            "$50,000 to 59,999", "$45,000 to 49,999", "$40,000 to 44,999", "$35,000 to 39,999",
-            "$30,000 to 34,999", "$25,000 to 29,999", "$20,000 to 24,999", "$15,000 to 19,999",
-            "$10,000 to 14,999", "$5,000 to 9,999", "Under $5,000"
+            "$200,000 and over",   "$150,000 to 199,999", "$125,000 to 149,999", "$100,000 to 124,999",
+            "$90,000 to 99,999",   "$80,000 to 89,999",   "$70,000 to 79,999",   "$60,000 to 69,999",
+            "$50,000 to 59,999",   "$45,000 to 49,999",   "$40,000 to 44,999",   "$35,000 to 39,999",
+            "$30,000 to 34,999",   "$25,000 to 29,999",   "$20,000 to 24,999",   "$15,000 to 19,999",
+            "$10,000 to 14,999",   "$5,000 to 9,999",     "Under $5,000"
         ]
-        households_2024 = [716, 1535, 1321, 1554, 936, 915, 982, 1013, 1111, 678, 622, 675, 592, 633, 843, 337, 140, 62, 40]
+        households_2024 = [716,1535,1321,1554,936,915,982,1013,1111,678,622,675,592,633,843,337,140,62,40]
         return render_template(
             "region.html",
             years=years, populations=populations, age_groups=age_groups,
@@ -233,8 +286,8 @@ def create_app():
         if contact_form.validate_on_submit():
             try:
                 supabase.table("contact_messages").insert({
-                    "name": contact_form.name.data,
-                    "email": contact_form.email.data,
+                    "name":    contact_form.name.data,
+                    "email":   contact_form.email.data,
                     "message": contact_form.message.data
                 }).execute()
                 flash("Your message has been sent successfully!", "success")
@@ -244,7 +297,9 @@ def create_app():
                 flash("Something went wrong. Please try again later.", "danger")
         return render_template("contact-us.html", form=contact_form)
 
-    # ---------------- MEMBERS AUTH ----------------
+    # ─────────────────────────────────────────
+    # MEMBER AUTH
+    # ─────────────────────────────────────────
 
     @app.route("/membership")
     def membership():
@@ -253,7 +308,7 @@ def create_app():
     @app.route("/auth/login", methods=["GET", "POST"])
     def auth_login():
         if request.method == "POST":
-            email = (request.form.get("email") or "").strip().lower()
+            email    = (request.form.get("email") or "").strip().lower()
             password = request.form.get("password") or ""
             if not email or not password:
                 flash("Please enter email and password.", "danger")
@@ -273,9 +328,9 @@ def create_app():
     @app.route("/auth/register", methods=["GET", "POST"])
     def auth_register():
         if request.method == "POST":
-            email = (request.form.get("email") or "").strip().lower()
+            email    = (request.form.get("email") or "").strip().lower()
             password = request.form.get("password") or ""
-            confirm = request.form.get("confirm_password") or ""
+            confirm  = request.form.get("confirm_password") or ""
             if not email or not password:
                 flash("Please enter email and password.", "danger")
                 return render_template("auth/register.html")
@@ -329,7 +384,9 @@ def create_app():
         user = session.get("member_user", {})
         return render_template("members/dashboard.html", user=user)
 
-    # ---------------- EVENTS ----------------
+    # ─────────────────────────────────────────
+    # EVENTS
+    # ─────────────────────────────────────────
 
     @app.route("/events")
     def events():
@@ -364,8 +421,8 @@ def create_app():
                 poster_url  = None
 
                 if poster_file and poster_file.filename:
-                    allowed = {"png", "jpg", "jpeg", "pdf"}
-                    ext = poster_file.filename.rsplit(".", 1)[-1].lower()
+                    allowed      = {"png", "jpg", "jpeg", "pdf"}
+                    ext          = poster_file.filename.rsplit(".", 1)[-1].lower()
 
                     if ext not in allowed:
                         flash("Only PNG, JPG, or PDF files are allowed.", "danger")
@@ -376,24 +433,21 @@ def create_app():
                         flash("Poster file must be under 5MB.", "danger")
                         return render_template("events/submit.html")
 
-                    # Unique filename to avoid collisions
-                    filename    = f"{uuid.uuid4().hex}.{ext}"
-                    poster_path = f"posters/{filename}"
-                    mime_types  = {"png": "image/png", "jpg": "image/jpeg", "jpeg": "image/jpeg", "pdf": "application/pdf"}
-
-                    # Use service role client for storage upload (bypasses RLS cleanly)
+                    mime_types   = {"png": "image/png", "jpg": "image/jpeg", "jpeg": "image/jpeg", "pdf": "application/pdf"}
+                    filename     = f"{uuid.uuid4().hex}.{ext}"
+                    poster_path  = f"posters/{filename}"
                     content_type = mime_types.get(ext, "application/octet-stream")
 
+                    # Service role bypasses storage RLS cleanly
                     supabase_admin.storage.from_("event-posters").upload(
                         path=poster_path,
                         file=file_bytes,
                         file_options={"content-type": content_type, "upsert": "false"}
                     )
 
-                    # Build public URL
                     poster_url = f"{supabase_url}/storage/v1/object/public/event-posters/{poster_path}"
 
-                # ── Insert event ──
+                # ── Insert event record ──
                 payload = {
                     "owner_id":    owner_id,
                     "owner_email": owner_email,
@@ -411,19 +465,30 @@ def create_app():
                 authed_client.postgrest.auth(access_token)
                 authed_client.table("events").insert(payload).execute()
 
+                # ── Notify admin of new submission ──
+                send_admin_notification(
+                    event_title=title,
+                    owner_email=owner_email,
+                    start_at=normalize_dt(start_at),
+                    location=location or None
+                )
+
                 flash("✅ Event submitted! Admin will review within 2 business days.", "success")
                 return redirect(url_for("event_submit"))
 
             except Exception as e:
                 import traceback
-                print("Event insert exception:", repr(e))
+                print("=== EVENT SUBMIT ERROR ===")
+                print(repr(e))
                 print(traceback.format_exc())
-                flash("Could not submit event. Try again.", "danger")
+                flash(f"Could not submit event. ({type(e).__name__}: {str(e)})", "danger")
                 return render_template("events/submit.html")
 
         return render_template("events/submit.html")
 
-    # ---------------- ADMIN ----------------
+    # ─────────────────────────────────────────
+    # ADMIN
+    # ─────────────────────────────────────────
 
     @app.route("/admin/login", methods=["GET", "POST"])
     def admin_login():
@@ -443,7 +508,6 @@ def create_app():
         flash("Logged out.", "info")
         return redirect(url_for("admin_login"))
 
-    # Combined admin dashboard — events + contact messages in tabs
     @app.route("/admin")
     def admin_dashboard():
         if not _is_admin_logged_in():
@@ -451,9 +515,7 @@ def create_app():
 
         try:
             events_res = supabase_admin.table("events")\
-                .select("*")\
-                .order("created_at", desc=True)\
-                .execute()
+                .select("*").order("created_at", desc=True).execute()
             all_events = events_res.data or []
         except Exception as e:
             print("Admin events error:", e)
@@ -461,9 +523,7 @@ def create_app():
 
         try:
             messages_res = supabase_admin.table("contact_messages")\
-                .select("*")\
-                .order("id", desc=True)\
-                .execute()
+                .select("*").order("id", desc=True).execute()
             messages = messages_res.data or []
         except Exception as e:
             print("Admin messages error:", e)
@@ -475,13 +535,11 @@ def create_app():
 
         return render_template(
             "admin/dashboard.html",
-            pending=pending,
-            approved=approved,
-            declined=declined,
-            messages=messages
+            pending=pending, approved=approved,
+            declined=declined, messages=messages
         )
 
-    # Keep old contact messages URL working
+    # Keep old URL working
     @app.route("/admin/contact-messages")
     def contact_messages():
         if not _is_admin_logged_in():
@@ -493,17 +551,15 @@ def create_app():
         if not _is_admin_logged_in():
             return redirect(url_for("admin_login"))
         try:
-            # Fetch event details first for email
             event_res = supabase_admin.table("events").select("*").eq("id", event_id).single().execute()
-            event = event_res.data
+            event     = event_res.data
 
-            # Update status
             supabase_admin.table("events").update({
-                "status": "APPROVED",
+                "status":     "APPROVED",
                 "decided_at": "now()"
             }).eq("id", event_id).execute()
 
-            # Send approval email
+            # Email submitter
             if event and event.get("owner_email"):
                 send_approval_email(
                     to_email=event["owner_email"],
@@ -526,14 +582,14 @@ def create_app():
             return redirect(url_for("admin_login"))
         try:
             event_res = supabase_admin.table("events").select("*").eq("id", event_id).single().execute()
-            event = event_res.data
+            event     = event_res.data
 
             supabase_admin.table("events").update({
-                "status": "DECLINED",
+                "status":     "DECLINED",
                 "decided_at": "now()"
             }).eq("id", event_id).execute()
 
-            # Send decline email
+            # Email submitter
             if event and event.get("owner_email"):
                 send_approval_email(
                     to_email=event["owner_email"],
