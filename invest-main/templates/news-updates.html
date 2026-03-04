@@ -1,406 +1,1114 @@
 {% extends "base.html" %}
 {% block content %}
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
-  .nu-hero {
-    position: relative;
-    min-height: 80vh;
-    background-image: url('{{ url_for("static", filename="assets/img/new_updates_hero_image.png") }}');
-    background-size: cover;
-    background-position: center;
-    border-bottom-left-radius: 24px;
-    border-bottom-right-radius: 24px;
-    overflow: hidden;
-  }
-  .nu-hero::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      110deg,
-      rgba(10,22,44,.88) 0%,
-      rgba(10,22,44,.55) 55%,
-      rgba(10,22,44,.35) 100%
-    );
-  }
-  .nu-hero-inner {
-    position: relative;
-    z-index: 2;
-    padding: 7.5rem 0 4.5rem;
-  }
-  .nu-card {
-    border: 0;
-    border-radius: 18px;
-    box-shadow: 0 10px 30px rgba(0,0,0,.06);
-    background: #fff;
-  }
-  .nu-soft { background: #f7f9fc; border-radius: 18px; }
-  .nu-sticky { position: sticky; top: 86px; z-index: 20; }
-  .nu-tab { border-radius: 999px !important; font-weight: 700; }
-  .nu-item { transition: transform .18s ease, box-shadow .18s ease; }
-  .nu-item:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(0,0,0,.10); }
-  .nu-date { font-size: .9rem; color: #6b7280; white-space: nowrap; }
-  .nu-dot { width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 0 6px rgba(30,45,73,.10); margin-top: 7px; }
-  .nu-line { width: 2px; background: rgba(30,45,73,.12); flex: 0 0 2px; }
-  .nu-qr { max-width: 170px; border-radius: 14px; box-shadow: 0 10px 22px rgba(0,0,0,.10); }
-  .nu-muted { color: #6b7280; }
-  .nu-badge-events    { background: #16a34a; }
-  .nu-badge-announce  { background: #2563eb; }
-  .nu-badge-progress  { background: #f59e0b; color: #111827; }
-  .nu-badge-community { background: #7c3aed; }
-  .nu-fade-in { animation: nuFade .35s ease; }
+/* ─────────────────────────────────────────
+   DESIGN TOKENS
+───────────────────────────────────────── */
+:root {
+  --ink:      #1a1f2e;
+  --ink2:     #2d3550;
+  --gold:     #b8893a;
+  --gold2:    #d4a85a;
+  --parchment:#f8f4ed;
+  --parchment2:#f0e9dc;
+  --slate:    #4a5568;
+  --fog:      #8896a8;
+  --white:    #ffffff;
+  --border:   rgba(26,31,46,.10);
+  --radius:   16px;
+  --shadow-sm:0 2px 12px rgba(26,31,46,.07);
+  --shadow-md:0 8px 32px rgba(26,31,46,.11);
+  --shadow-lg:0 20px 56px rgba(26,31,46,.16);
+  --font-display:'Cormorant Garamond', Georgia, serif;
+  --font-body:   'Figtree', system-ui, sans-serif;
+  --ease-out:    cubic-bezier(.22,1,.36,1);
+}
 
-  /* Community submitted event card styling */
-  .nu-community-banner {
-    background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
-    border-left: 4px solid #7c3aed;
-    border-radius: 14px;
-  }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--parchment); color: var(--ink); }
 
-  /* Section divider */
-  .nu-section-label {
-    font-size: .75rem;
-    font-weight: 800;
-    letter-spacing: .12em;
-    text-transform: uppercase;
-    color: #9ca3af;
-    padding: .25rem 0;
-    border-bottom: 2px solid #f3f4f6;
-    margin-bottom: 1.25rem;
-  }
+/* ─────────────────────────────────────────
+   HERO
+───────────────────────────────────────── */
+.nu-hero {
+  position: relative;
+  min-height: 92vh;
+  background-image: url('{{ url_for("static", filename="assets/img/new_updates_hero_image.png") }}');
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+}
 
-  @keyframes nuFade {
-    from { opacity: .2; transform: translateY(6px); }
-    to   { opacity: 1;  transform: translateY(0); }
-  }
+/* Cinematic vignette gradient */
+.nu-hero::before {
+  content: "";
+  position: absolute; inset: 0; z-index: 1;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 100%, rgba(10,14,28,.95) 0%, transparent 70%),
+    linear-gradient(to bottom, rgba(10,14,28,.25) 0%, rgba(10,14,28,.0) 40%, rgba(10,14,28,.55) 75%, rgba(10,14,28,.95) 100%);
+}
+
+/* Grain texture overlay */
+.nu-hero::after {
+  content: "";
+  position: absolute; inset: 0; z-index: 2;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: .6;
+  pointer-events: none;
+}
+
+.nu-hero-content {
+  position: relative; z-index: 3;
+  width: 100%;
+  padding: 0 0 5rem;
+}
+
+.nu-hero-rule {
+  width: 56px; height: 2px;
+  background: var(--gold2);
+  margin-bottom: 1.25rem;
+  animation: slideRight .9s var(--ease-out) both;
+}
+
+.nu-hero-eyebrow {
+  font-family: var(--font-body);
+  font-size: .72rem; font-weight: 700;
+  letter-spacing: .22em; text-transform: uppercase;
+  color: var(--gold2);
+  margin-bottom: .9rem;
+  animation: fadeUp .8s .1s var(--ease-out) both;
+}
+
+.nu-hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(3.5rem, 7vw, 6.5rem);
+  font-weight: 700;
+  color: #fff;
+  line-height: .98;
+  letter-spacing: -.02em;
+  margin-bottom: 1.4rem;
+  animation: fadeUp .8s .18s var(--ease-out) both;
+}
+
+.nu-hero h1 em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--gold2);
+}
+
+.nu-hero-desc {
+  font-family: var(--font-body);
+  font-size: 1rem; font-weight: 300;
+  color: rgba(255,255,255,.75);
+  max-width: 50ch; line-height: 1.75;
+  margin-bottom: 2.5rem;
+  animation: fadeUp .8s .26s var(--ease-out) both;
+}
+
+/* Hero stats */
+.nu-hero-stats {
+  display: flex; gap: 2.5rem; flex-wrap: wrap;
+  animation: fadeUp .8s .34s var(--ease-out) both;
+}
+.nu-stat-val {
+  font-family: var(--font-display);
+  font-size: 2.5rem; font-weight: 700;
+  color: #fff; line-height: 1;
+}
+.nu-stat-lbl {
+  font-family: var(--font-body);
+  font-size: .7rem; font-weight: 600;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: rgba(255,255,255,.42);
+  margin-top: .25rem;
+}
+
+/* Scroll hint */
+.nu-scroll-hint {
+  position: absolute;
+  bottom: 2rem; left: 50%; transform: translateX(-50%);
+  z-index: 3;
+  display: flex; flex-direction: column; align-items: center; gap: .4rem;
+  font-family: var(--font-body); font-size: .65rem; letter-spacing: .16em;
+  text-transform: uppercase; color: rgba(255,255,255,.4);
+  animation: float 2.6s ease-in-out infinite;
+}
+.nu-scroll-hint::after {
+  content: "";
+  width: 1px; height: 36px;
+  background: linear-gradient(to bottom, rgba(255,255,255,.35), transparent);
+}
+
+/* ─────────────────────────────────────────
+   FILTERBAR
+───────────────────────────────────────── */
+.nu-filterbar {
+  position: sticky; top: 78px; z-index: 40;
+  margin: 2.5rem 0 2rem;
+}
+
+.nu-filterbar-pill {
+  background: rgba(255,255,255,.96);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-radius: 999px;
+  padding: .55rem .7rem;
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+  box-shadow: var(--shadow-md), 0 0 0 1px var(--border);
+}
+
+.nu-tabs { display: flex; gap: .3rem; flex-wrap: wrap; }
+
+.nu-tab {
+  padding: .48rem 1.1rem;
+  border-radius: 999px; border: none; background: none;
+  font-family: var(--font-body); font-size: .82rem; font-weight: 600;
+  color: var(--fog); cursor: pointer;
+  transition: all .22s var(--ease-out);
+  white-space: nowrap;
+}
+.nu-tab:hover { color: var(--ink); background: rgba(26,31,46,.06); }
+.nu-tab.active {
+  background: var(--ink);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(26,31,46,.28);
+}
+
+.nu-search-box {
+  position: relative; flex: 1; min-width: 190px; max-width: 280px;
+}
+.nu-search-box svg {
+  position: absolute; left: .85rem; top: 50%; transform: translateY(-50%);
+  color: var(--fog); pointer-events: none; width: 14px; height: 14px;
+}
+#nuSearch {
+  width: 100%;
+  padding: .5rem 1rem .5rem 2.2rem;
+  border: 1.5px solid var(--border); border-radius: 999px;
+  font-family: var(--font-body); font-size: .83rem; color: var(--ink);
+  background: #fafaf8; outline: none;
+  transition: all .22s;
+}
+#nuSearch:focus {
+  border-color: var(--gold); background: #fff;
+  box-shadow: 0 0 0 3.5px rgba(184,137,58,.14);
+}
+
+/* ─────────────────────────────────────────
+   FEATURED BANNER
+───────────────────────────────────────── */
+.nu-featured {
+  background: var(--ink);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 2.25rem;
+  position: relative;
+  box-shadow: var(--shadow-lg);
+}
+
+/* Gold accent bar */
+.nu-featured::before {
+  content: "";
+  position: absolute; top: 0; left: 0; right: 0; height: 3px; z-index: 2;
+  background: linear-gradient(90deg, var(--gold), var(--gold2), var(--gold));
+  background-size: 200%;
+  animation: shimmer 4s linear infinite;
+}
+
+/* Subtle dot-matrix background */
+.nu-featured::after {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,.045) 1px, transparent 1px);
+  background-size: 22px 22px;
+  pointer-events: none;
+}
+
+.nu-featured-inner {
+  position: relative; z-index: 1;
+  display: grid; grid-template-columns: 1fr 220px;
+}
+
+.nu-featured-body { padding: 2.75rem 2.75rem 2.75rem; }
+
+.nu-featured-kicker {
+  display: inline-flex; align-items: center; gap: .5rem;
+  font-family: var(--font-body); font-size: .68rem; font-weight: 700;
+  letter-spacing: .16em; text-transform: uppercase;
+  color: var(--gold2); margin-bottom: 1rem;
+}
+.nu-featured-kicker::before {
+  content: "";
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--gold2);
+  box-shadow: 0 0 10px var(--gold2);
+  animation: pulse 2s ease infinite;
+}
+
+.nu-featured h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 700; color: #fff; line-height: 1.15;
+  margin-bottom: .75rem;
+}
+
+.nu-featured-meta {
+  display: flex; flex-wrap: wrap; gap: .4rem 1.4rem;
+  margin-bottom: 1.5rem;
+}
+.nu-featured-meta span {
+  font-family: var(--font-body); font-size: .82rem;
+  color: rgba(255,255,255,.52);
+  display: flex; align-items: center; gap: .35rem;
+}
+
+.nu-featured-desc {
+  font-family: var(--font-body); font-size: .92rem; font-weight: 300;
+  color: rgba(255,255,255,.68); line-height: 1.75;
+  max-width: 54ch; margin-bottom: 1.75rem;
+}
+
+.nu-featured-ctas { display: flex; gap: .75rem; flex-wrap: wrap; }
+
+/* Buttons */
+.nu-btn-gold {
+  padding: .68rem 1.5rem;
+  background: var(--gold); color: #fff; border: none; border-radius: 999px;
+  font-family: var(--font-body); font-size: .85rem; font-weight: 600;
+  text-decoration: none; cursor: pointer;
+  display: inline-flex; align-items: center; gap: .4rem;
+  transition: all .22s var(--ease-out);
+}
+.nu-btn-gold:hover {
+  background: var(--gold2); color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(184,137,58,.4);
+}
+
+.nu-btn-outline {
+  padding: .68rem 1.5rem;
+  background: rgba(255,255,255,.08); color: rgba(255,255,255,.85);
+  border: 1.5px solid rgba(255,255,255,.18); border-radius: 999px;
+  font-family: var(--font-body); font-size: .85rem; font-weight: 600;
+  cursor: pointer;
+  display: inline-flex; align-items: center; gap: .4rem;
+  transition: all .22s var(--ease-out); text-decoration: none;
+}
+.nu-btn-outline:hover {
+  background: rgba(255,255,255,.15); color: #fff;
+  border-color: rgba(255,255,255,.35);
+  transform: translateY(-2px);
+}
+
+/* QR Panel */
+.nu-featured-qr {
+  border-left: 1px solid rgba(255,255,255,.07);
+  background: rgba(255,255,255,.03);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 2rem; gap: .75rem;
+}
+.nu-featured-qr img {
+  width: 130px; height: 130px; object-fit: cover;
+  border-radius: 12px; border: 2px solid rgba(255,255,255,.12);
+  cursor: pointer;
+  transition: transform .25s; display: block;
+}
+.nu-featured-qr img:hover { transform: scale(1.04); }
+.nu-featured-qr p {
+  font-family: var(--font-body); font-size: .68rem; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: rgba(255,255,255,.3); text-align: center;
+}
+
+/* ─────────────────────────────────────────
+   MAIN GRID
+───────────────────────────────────────── */
+.nu-grid { display: grid; grid-template-columns: 1fr 300px; gap: 1.75rem; align-items: start; }
+
+/* ─────────────────────────────────────────
+   FEED CONTAINER
+───────────────────────────────────────── */
+.nu-feed {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.nu-feed-header {
+  padding: 1.4rem 1.75rem 1.1rem;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nu-feed-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem; font-weight: 700; color: var(--ink);
+}
+.nu-feed-count {
+  font-family: var(--font-body); font-size: .78rem; font-weight: 600;
+  color: var(--fog);
+}
+
+/* Section divider label */
+.nu-divider {
+  display: flex; align-items: center; gap: .75rem;
+  padding: .9rem 1.75rem .5rem;
+  font-family: var(--font-body); font-size: .65rem; font-weight: 700;
+  letter-spacing: .18em; text-transform: uppercase; color: #b0b9c8;
+}
+.nu-divider::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+
+/* ─────────────────────────────────────────
+   COMMUNITY EVENT CARD — INLINE POSTER
+───────────────────────────────────────── */
+.nu-event-card {
+  margin: .6rem .875rem 1.1rem;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(45,53,80,.10);
+  background: linear-gradient(160deg, #fdfcff 0%, #f7f5ff 100%);
+  box-shadow: 0 2px 10px rgba(45,53,80,.07);
+  transition: transform .24s var(--ease-out), box-shadow .24s var(--ease-out);
+}
+.nu-event-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 38px rgba(45,53,80,.13);
+}
+
+/* Side-by-side: poster | details */
+.nu-event-card-layout {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  min-height: 155px;
+}
+
+/* Poster column */
+.nu-poster-col {
+  position: relative; overflow: hidden;
+  cursor: pointer; background: var(--ink);
+  flex-shrink: 0;
+}
+.nu-poster-col img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  transition: transform .5s var(--ease-out), filter .4s ease;
+}
+.nu-poster-col:hover img {
+  transform: scale(1.08);
+  filter: brightness(.75) saturate(1.1);
+}
+.nu-poster-overlay {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(26,31,46,.0);
+  transition: background .3s;
+}
+.nu-poster-col:hover .nu-poster-overlay { background: rgba(26,31,46,.38); }
+.nu-zoom-icon {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(255,255,255,.9);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: scale(.5) rotate(-10deg);
+  transition: all .28s var(--ease-out);
+  color: var(--ink); font-size: .82rem;
+}
+.nu-poster-col:hover .nu-zoom-icon { opacity: 1; transform: scale(1) rotate(0deg); }
+
+/* No-poster placeholder */
+.nu-no-poster {
+  background: linear-gradient(135deg, #eeeaff, #ddd6fe);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.4rem; color: rgba(109,40,217,.2);
+}
+
+/* Details column */
+.nu-event-details {
+  padding: 1.1rem 1.2rem;
+  display: flex; flex-direction: column; justify-content: center; gap: .38rem;
+}
+
+.nu-event-top {
+  display: flex; align-items: flex-start;
+  justify-content: space-between; gap: .5rem; flex-wrap: wrap;
+}
+
+/* Badges */
+.nu-badge {
+  display: inline-flex; align-items: center; gap: .28rem;
+  font-family: var(--font-body); font-size: .65rem; font-weight: 700;
+  letter-spacing: .07em; text-transform: uppercase;
+  padding: .24rem .62rem; border-radius: 999px;
+}
+.badge-community { background: #ede9fe; color: #5b21b6; }
+.badge-event     { background: #dcfce7; color: #166534; }
+.badge-announce  { background: #dbeafe; color: #1e40af; }
+.badge-progress  { background: #fef3c7; color: #92400e; }
+
+.nu-event-date {
+  font-family: var(--font-body); font-size: .76rem;
+  color: var(--fog); white-space: nowrap;
+}
+
+.nu-event-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem; font-weight: 700;
+  color: var(--ink); line-height: 1.25;
+}
+
+.nu-event-loc {
+  font-family: var(--font-body); font-size: .78rem;
+  color: var(--fog);
+  display: flex; align-items: center; gap: .28rem;
+}
+.nu-event-loc svg { color: var(--gold); flex-shrink: 0; }
+
+.nu-event-desc {
+  font-family: var(--font-body); font-size: .8rem; font-weight: 300;
+  color: var(--slate); line-height: 1.6;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+
+/* ─────────────────────────────────────────
+   TIMELINE ITEMS (hardcoded updates)
+───────────────────────────────────────── */
+.nu-tl-item {
+  display: flex; gap: 1rem;
+  padding: 1.05rem 1.75rem;
+  border-bottom: 1px solid rgba(26,31,46,.045);
+  transition: background .18s;
+}
+.nu-tl-item:last-child { border-bottom: none; }
+.nu-tl-item:hover { background: #fafbfd; }
+
+.nu-tl-track {
+  display: flex; flex-direction: column; align-items: center; padding-top: .3rem;
+}
+.nu-dot {
+  width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0;
+}
+.dot-green  { background: #16a34a; box-shadow: 0 0 0 4px rgba(22,163,74,.13); }
+.dot-blue   { background: #2563eb; box-shadow: 0 0 0 4px rgba(37,99,235,.13); }
+.dot-gold   { background: var(--gold); box-shadow: 0 0 0 4px rgba(184,137,58,.15); }
+.nu-tl-line { width: 2px; flex: 1; min-height: 18px; background: var(--border); margin-top: 5px; border-radius: 1px; }
+
+.nu-tl-body { flex: 1; }
+.nu-tl-head {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: .4rem; margin-bottom: .3rem;
+}
+.nu-tl-title {
+  font-family: var(--font-body); font-size: .9rem; font-weight: 600; color: var(--ink);
+}
+.nu-tl-date { font-family: var(--font-body); font-size: .76rem; color: var(--fog); white-space: nowrap; }
+.nu-tl-sub  { font-family: var(--font-body); font-size: .8rem; color: var(--slate); line-height: 1.55; }
+.nu-tl-sub a { color: var(--gold); text-decoration: none; }
+.nu-tl-sub a:hover { text-decoration: underline; }
+
+/* ─────────────────────────────────────────
+   SIDEBAR
+───────────────────────────────────────── */
+.nu-sidebar { display: flex; flex-direction: column; gap: 1.25rem; }
+
+.nu-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.nu-card-head {
+  padding: 1.05rem 1.4rem .85rem;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nu-card-title {
+  font-family: var(--font-display); font-size: 1rem; font-weight: 700; color: var(--ink);
+}
+
+.nu-card-body { padding: 1rem 1.4rem 1.25rem; }
+
+/* Poster widget */
+.nu-widget-poster {
+  width: 100%; border-radius: 10px; object-fit: cover;
+  max-height: 250px; display: block; cursor: pointer;
+  transition: transform .3s var(--ease-out), box-shadow .3s;
+}
+.nu-widget-poster:hover {
+  transform: scale(1.02);
+  box-shadow: 0 12px 32px rgba(26,31,46,.18);
+}
+
+/* Quick links */
+.nu-quick-list { display: flex; flex-direction: column; gap: .42rem; }
+.nu-quick-btn {
+  display: flex; align-items: center; gap: .7rem;
+  padding: .62rem .9rem; border-radius: 10px;
+  text-decoration: none; border: 1px solid var(--border);
+  font-family: var(--font-body); font-size: .83rem; font-weight: 500;
+  color: var(--ink); background: var(--parchment);
+  transition: all .18s var(--ease-out);
+}
+.nu-quick-icon {
+  width: 26px; height: 26px; border-radius: 7px; background: var(--ink);
+  color: #fff; display: grid; place-items: center; flex-shrink: 0; font-size: .7rem;
+  transition: background .18s;
+}
+.nu-quick-btn:hover {
+  background: var(--ink); color: #fff; border-color: var(--ink);
+  transform: translateX(3px);
+}
+.nu-quick-btn:hover .nu-quick-icon { background: rgba(255,255,255,.18); }
+
+/* CTA card */
+.nu-cta-card {
+  background: linear-gradient(145deg, var(--ink) 0%, var(--ink2) 100%);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-lg);
+  position: relative; overflow: hidden;
+}
+.nu-cta-card::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,.04) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+.nu-cta-card h5 {
+  font-family: var(--font-display); font-size: 1.1rem; font-weight: 700;
+  color: #fff; margin-bottom: .4rem; position: relative;
+}
+.nu-cta-card p {
+  font-family: var(--font-body); font-size: .8rem; font-weight: 300;
+  color: rgba(255,255,255,.55); margin-bottom: 1.1rem; line-height: 1.6; position: relative;
+}
+.nu-cta-card .nu-btn-gold { position: relative; width: 100%; justify-content: center; }
+
+/* ─────────────────────────────────────────
+   EMPTY STATE
+───────────────────────────────────────── */
+.nu-empty {
+  display: none; text-align: center; padding: 3.5rem 2rem;
+  background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow-md);
+  margin-top: 1.5rem;
+}
+.nu-empty-icon { font-size: 2.8rem; margin-bottom: 1rem; }
+.nu-empty h5 { font-family: var(--font-display); font-size: 1.15rem; font-weight: 700; color: var(--ink); margin-bottom: .4rem; }
+.nu-empty p  { font-family: var(--font-body); font-size: .87rem; color: var(--fog); }
+
+/* ─────────────────────────────────────────
+   LIGHTBOX
+───────────────────────────────────────── */
+.nu-lightbox {
+  display: none; position: fixed; inset: 0;
+  background: rgba(10,14,28,.94);
+  z-index: 9998; align-items: center; justify-content: center;
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+}
+.nu-lightbox.open { display: flex; animation: lbFade .25s ease; }
+.nu-lb-img {
+  max-width: min(88vw, 680px); max-height: 86vh;
+  border-radius: 14px; object-fit: contain;
+  box-shadow: 0 40px 100px rgba(0,0,0,.6);
+  animation: lbPop .32s var(--ease-out);
+}
+.nu-lb-close {
+  position: fixed; top: 1.4rem; right: 1.4rem;
+  width: 40px; height: 40px; border-radius: 50%;
+  background: rgba(255,255,255,.1); border: 1.5px solid rgba(255,255,255,.18);
+  color: #fff; font-size: .95rem; display: grid; place-items: center;
+  cursor: pointer; transition: background .2s;
+}
+.nu-lb-close:hover { background: rgba(255,255,255,.22); }
+
+/* ─────────────────────────────────────────
+   QR MODAL
+───────────────────────────────────────── */
+.nu-modal-bg {
+  display: none; position: fixed; inset: 0;
+  background: rgba(10,14,28,.72); z-index: 9995;
+  align-items: center; justify-content: center;
+  backdrop-filter: blur(6px);
+}
+.nu-modal-bg.open { display: flex; }
+.nu-modal-box {
+  background: #fff; border-radius: 20px; padding: 2rem;
+  text-align: center; width: 90%; max-width: 310px;
+  box-shadow: 0 40px 100px rgba(0,0,0,.28);
+  animation: lbPop .3s var(--ease-out);
+}
+.nu-modal-box h5 { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--ink); margin-bottom: 1rem; }
+.nu-modal-box img { width: 200px; height: 200px; object-fit: cover; border-radius: 12px; margin-bottom: .75rem; }
+.nu-modal-close {
+  margin-top: .5rem; padding: .48rem 1.5rem; border-radius: 999px;
+  border: 1.5px solid var(--border); background: none;
+  font-family: var(--font-body); font-size: .83rem; color: var(--fog);
+  cursor: pointer; transition: all .2s;
+}
+.nu-modal-close:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+/* ─────────────────────────────────────────
+   ANIMATIONS
+───────────────────────────────────────── */
+@keyframes fadeUp    { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+@keyframes slideRight{ from{width:0} to{width:56px} }
+@keyframes shimmer   { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+@keyframes pulse     { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.65;transform:scale(1.5)} }
+@keyframes float     { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(7px)} }
+@keyframes lbFade    { from{opacity:0} to{opacity:1} }
+@keyframes lbPop     { from{opacity:0;transform:scale(.9)} to{opacity:1;transform:scale(1)} }
+
+/* Scroll-reveal (JS applies these) */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .55s var(--ease-out), transform .55s var(--ease-out);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ─────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────── */
+@media (max-width: 980px) {
+  .nu-grid { grid-template-columns: 1fr; }
+  .nu-featured-inner { grid-template-columns: 1fr; }
+  .nu-featured-qr { border-left: none; border-top: 1px solid rgba(255,255,255,.07); flex-direction: row; gap: 1rem; padding: 1.25rem 2.75rem; justify-content: flex-start; }
+}
+@media (max-width: 600px) {
+  .nu-event-card-layout { grid-template-columns: 1fr; }
+  .nu-poster-col { height: 175px; }
+  .nu-hero h1 { font-size: 3.2rem; }
+  .nu-filterbar-pill { border-radius: 16px; }
+  .nu-tabs { gap: .25rem; }
+  .nu-featured-body { padding: 1.75rem; }
+}
 </style>
 
-<!-- HERO -->
+<!-- ══════════════════════════════════════════
+     HERO
+══════════════════════════════════════════ -->
 <section class="nu-hero">
-  <div class="container nu-hero-inner">
-    <div class="row justify-content-center">
-      <div class="col-lg-9 text-center text-white">
-        <h1 class="mb-2" style="font-weight:900; letter-spacing:.4px; color:#ffffff; text-shadow: 0 8px 28px rgba(0,0,0,.45);">
-          News &amp; Updates
-        </h1>
-        <p class="mb-0" style="max-width:72ch; margin:0 auto; color:rgba(255,255,255,.92); text-shadow:0 6px 22px rgba(0,0,0,.35);">
-          Regional collaboration, upcoming events, and progress across the CPDA region.
+  <div class="container nu-hero-content">
+    <div class="row">
+      <div class="col-lg-9">
+        <div class="nu-hero-rule"></div>
+        <p class="nu-hero-eyebrow">Central Prairie Development Association</p>
+        <h1>News &amp;<br><em>Updates</em></h1>
+        <p class="nu-hero-desc">
+          Regional collaboration, upcoming events, and progress shaping the communities of the Central Prairie.
         </p>
+        <div class="nu-hero-stats">
+          <div>
+            <div class="nu-stat-val">{{ events|length if events else '0' }}</div>
+            <div class="nu-stat-lbl">Live Events</div>
+          </div>
+          <div>
+            <div class="nu-stat-val">3</div>
+            <div class="nu-stat-lbl">Active Programs</div>
+          </div>
+          <div>
+            <div class="nu-stat-val">86K+</div>
+            <div class="nu-stat-lbl">Region Population</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+  <div class="nu-scroll-hint">Scroll</div>
 </section>
 
-<div class="container my-5">
+<div class="container" style="padding-bottom: 5rem;">
 
-  <!-- FILTER BAR -->
-  <div class="nu-sticky mb-4">
-    <div class="nu-card p-3">
-      <div class="row g-3 align-items-center">
-        <div class="col-lg-7">
-          <div class="btn-group flex-wrap" role="group" aria-label="filters">
-            <button class="btn btn-outline-dark nu-tab active" data-filter="all">All</button>
-            <button class="btn btn-outline-dark nu-tab" data-filter="events">Events</button>
-            <button class="btn btn-outline-dark nu-tab" data-filter="announcements">Announcements</button>
-            <button class="btn btn-outline-dark nu-tab" data-filter="progress">Progress</button>
-          </div>
-        </div>
-        <div class="col-lg-5">
-          <input id="nuSearch" class="form-control" placeholder="Search updates (e.g., March 10, membership, housing)…" />
-          <div class="small nu-muted mt-2">Tip: You can filter + search at the same time.</div>
-        </div>
+  <!-- ═══ FILTER BAR ═══ -->
+  <div class="nu-filterbar">
+    <div class="nu-filterbar-pill">
+      <div class="nu-tabs" role="group" aria-label="Content filters">
+        <button class="nu-tab active" data-filter="all">All</button>
+        <button class="nu-tab" data-filter="events">Events</button>
+        <button class="nu-tab" data-filter="announcements">Announcements</button>
+        <button class="nu-tab" data-filter="progress">Progress</button>
+      </div>
+      <div class="nu-search-box">
+        <svg viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/>
+        </svg>
+        <input id="nuSearch" placeholder="Search updates…" aria-label="Search updates">
       </div>
     </div>
   </div>
 
-  <!-- FEATURED EVENT (hardcoded, pinned) -->
-  <div class="nu-card p-4 mb-4 nu-item nu-fade-in"
+  <!-- ═══ FEATURED EVENT ═══ -->
+  <div class="nu-featured reveal"
        data-type="events"
-       data-search="next esap cpda quarterly session march 10 cote first nation rsvp register">
-    <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-2">
-      <div class="d-flex align-items-center gap-2">
-        <span class="badge nu-badge-events text-white" style="border-radius:999px; padding:.35rem .75rem; font-weight:700;">
-          Featured Event
-        </span>
-        <span class="nu-date">March 10 • 10:00–12:00</span>
-      </div>
-      <span class="nu-date">Cote First Nation</span>
-    </div>
-    <div class="row g-4 align-items-center">
-      <div class="col-lg-8">
-        <h3 class="mb-2" style="color:#1e2d49; font-weight:900;">Next ESAP &amp; CPDA Quarterly Session</h3>
-        <p class="nu-muted mb-3" style="max-width:65ch;">
-          To register for the March 10th meeting at Cote First Nation, please use the RSVP link below or scan the QR code.
-        </p>
-        <div class="d-flex flex-wrap gap-2">
-          <a class="btn btn-primary btn-lg" href="https://forms.office.com/r/xHXBVihBJF" target="_blank">Register / RSVP</a>
-          <button class="btn btn-outline-dark btn-lg" type="button" data-bs-toggle="modal" data-bs-target="#qrModal">View QR Code</button>
+       data-search="next esap cpda quarterly session march 10 cote first nation rsvp register featured">
+    <div class="nu-featured-inner">
+      <div class="nu-featured-body">
+        <div class="nu-featured-kicker">Featured Event</div>
+        <h2>Next ESAP &amp; CPDA<br>Quarterly Session</h2>
+        <div class="nu-featured-meta">
+          <span>
+            <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg>
+            March 10 &nbsp;·&nbsp; 10:00–12:00
+          </span>
+          <span>
+            <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/></svg>
+            Cote First Nation
+          </span>
         </div>
-        <div class="small nu-muted mt-2">Secure Microsoft Forms registration.</div>
+        <p class="nu-featured-desc">
+          To register for the March 10th meeting, use the RSVP link below or scan the QR code. Secure Microsoft Forms registration.
+        </p>
+        <div class="nu-featured-ctas">
+          <a class="nu-btn-gold" href="https://forms.office.com/r/xHXBVihBJF" target="_blank">
+            <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/><path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/></svg>
+            Register / RSVP
+          </a>
+          <button class="nu-btn-outline" onclick="openQr()">
+            <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 4a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm2 2V5h1v1H5zM3 13a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1v-3zm2 2v-1h1v1H5zM13 3a1 1 0 00-1 1v3a1 1 0 001 1h3a1 1 0 001-1V4a1 1 0 00-1-1h-3zm1 2v1h1V5h-1z" clip-rule="evenodd"/><path d="M11 4a1 1 0 10-2 0v1a1 1 0 002 0V4zM10 7a1 1 0 011 1v1h2a1 1 0 110 2h-3a1 1 0 01-1-1V8a1 1 0 011-1zM16 9a1 1 0 100 2 1 1 0 000-2zM9 13a1 1 0 011-1h1a1 1 0 110 2v2a1 1 0 11-2 0v-3zM7 11a1 1 0 100-2H4a1 1 0 100 2h3zM17 13a1 1 0 01-1 1h-2a1 1 0 110-2h2a1 1 0 011 1zM16 17a1 1 0 100-2h-3a1 1 0 100 2h3z"/></svg>
+            View QR Code
+          </button>
+        </div>
       </div>
-      <div class="col-lg-4 text-center">
+      <div class="nu-featured-qr">
         <img src="{{ url_for('static', filename='assets/img/esap_cpda_march10_qr.jpg') }}"
-             alt="QR Code for March 10 RSVP" class="img-fluid nu-qr" />
-        <div class="small nu-muted mt-2">Scan to register</div>
+             alt="QR Code for March 10 RSVP"
+             onclick="openLightbox(this.src)">
+        <p>Scan to register</p>
       </div>
     </div>
   </div>
 
-  <!-- MAIN GRID -->
-  <div class="row g-4">
+  <!-- ═══ MAIN GRID ═══ -->
+  <div class="nu-grid">
 
-    <!-- LEFT: Timeline Feed -->
-    <div class="col-lg-8">
-      <div class="nu-card p-4 mb-4">
-        <div class="d-flex align-items-center justify-content-between mb-3">
-          <h4 class="mb-0" style="color:#1e2d49; font-weight:900;">Updates Feed</h4>
-          <span class="nu-muted small">Newest items on top</span>
+    <!-- ── LEFT: Feed ── -->
+    <div>
+      <div class="nu-feed reveal">
+        <div class="nu-feed-header">
+          <span class="nu-feed-title">Updates Feed</span>
+          <span class="nu-feed-count">Newest first</span>
         </div>
 
-        <!-- ======================================================
-             DYNAMIC: Community-submitted events from Supabase
-             Shown at TOP of feed, sorted by start_at ascending
-        ======================================================= -->
+        <!-- ══ DYNAMIC: Community submitted events ══ -->
         {% if events %}
-        <div class="nu-section-label">📅 Community Submitted Events</div>
+        <div class="nu-divider" id="lbl-community">📅 Community Events</div>
 
         {% for event in events %}
-        {% set search_text = (event.title ~ ' ' ~ (event.location or '') ~ ' ' ~ (event.description or '') ~ ' community submitted event') | lower %}
-        <div class="d-flex gap-3 mb-4 nu-item p-3 nu-community-banner nu-fade-in"
-             data-type="events"
-             data-search="{{ search_text }}">
-          <div class="d-flex flex-column align-items-center">
-            <div class="nu-dot" style="background:#7c3aed;"></div>
-            <div class="nu-line flex-grow-1 mt-2"></div>
-          </div>
-          <div class="w-100">
-            <div class="d-flex justify-content-between flex-wrap gap-2 mb-1">
-              <div class="d-flex align-items-center gap-2 flex-wrap">
-                <span class="badge nu-badge-community text-white" style="border-radius:999px; padding:.35rem .75rem; font-weight:700;">
-                  Event
-                </span>
-                <strong>{{ event.title }}</strong>
-              </div>
-              <span class="nu-date">
-                {{ event.start_at[:10] }}
-                {% if event.start_at[11:16] %} • {{ event.start_at[11:16] }}{% endif %}
-                {% if event.end_at %} – {{ event.end_at[11:16] }}{% endif %}
-              </span>
-            </div>
-            {% if event.location %}
-            <div class="nu-muted small">📍 {{ event.location }}</div>
-            {% endif %}
-            {% if event.description %}
-            <div class="small nu-muted mt-1">{{ event.description | truncate(160) }}</div>
-            {% endif %}
+        {% set s = (event.title ~ ' ' ~ (event.location or '') ~ ' ' ~ (event.description or '') ~ ' community submitted event') | lower %}
+        <div class="nu-event-card reveal" data-type="events" data-search="{{ s }}">
+          <div class="nu-event-card-layout">
+
+            <!-- Poster inline -->
             {% if event.poster_url %}
-            <div class="mt-2">
-              <a href="{{ event.poster_url }}" target="_blank" class="btn btn-sm btn-outline-secondary">
-                View Poster
-              </a>
+            <div class="nu-poster-col"
+                 onclick="openLightbox('{{ event.poster_url }}')"
+                 role="button" tabindex="0"
+                 aria-label="View poster for {{ event.title }}">
+              <img src="{{ event.poster_url }}"
+                   alt="Poster for {{ event.title }}"
+                   loading="lazy">
+              <div class="nu-poster-overlay">
+                <div class="nu-zoom-icon">
+                  <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M5 8a1 1 0 011-1h1V6a1 1 0 012 0v1h1a1 1 0 110 2H9v1a1 1 0 11-2 0V9H6a1 1 0 01-1-1zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"/></svg>
+                </div>
+              </div>
             </div>
+            {% else %}
+            <div class="nu-no-poster">📅</div>
             {% endif %}
+
+            <!-- Details -->
+            <div class="nu-event-details">
+              <div class="nu-event-top">
+                <span class="nu-badge badge-community">
+                  <svg width="9" height="9" viewBox="0 0 20 20" fill="currentColor"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"/></svg>
+                  Community
+                </span>
+                <span class="nu-event-date">
+                  {{ event.start_at[:10] }}{% if event.start_at[11:16] %} · {{ event.start_at[11:16] }}{% endif %}{% if event.end_at %} – {{ event.end_at[11:16] }}{% endif %}
+                </span>
+              </div>
+              <div class="nu-event-title">{{ event.title }}</div>
+              {% if event.location %}
+              <div class="nu-event-loc">
+                <svg width="10" height="10" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/></svg>
+                {{ event.location }}
+              </div>
+              {% endif %}
+              {% if event.description %}
+              <p class="nu-event-desc">{{ event.description }}</p>
+              {% endif %}
+            </div>
+
           </div>
         </div>
         {% endfor %}
 
-        <div class="nu-section-label mt-2">📌 CPDA Updates</div>
+        <div class="nu-divider" id="lbl-cpda">📌 CPDA Updates</div>
         {% endif %}
-        <!-- END DYNAMIC EVENTS -->
+        <!-- ══ END DYNAMIC ══ -->
 
-        <!-- HARDCODED: Workshop -->
-        <div class="d-flex gap-3 mb-4 nu-item p-3 rounded nu-soft nu-fade-in"
-             data-type="events"
-             data-search="community builders workshop peter kenyon melville may 8 sponsored suncrest college city cic sask seda">
-          <div class="d-flex flex-column align-items-center">
-            <div class="nu-dot" style="background:#16a34a;"></div>
-            <div class="nu-line flex-grow-1 mt-2"></div>
+        <!-- Workshop -->
+        <div class="nu-tl-item reveal" data-type="events"
+             data-search="community builders workshop peter kenyon melville may 8 suncrest college cic sask seda">
+          <div class="nu-tl-track">
+            <div class="nu-dot dot-green"></div>
+            <div class="nu-tl-line"></div>
           </div>
-          <div class="w-100">
-            <div class="d-flex justify-content-between flex-wrap gap-2">
-              <div class="d-flex align-items-center gap-2">
-                <span class="badge nu-badge-events text-white" style="border-radius:999px; padding:.35rem .75rem; font-weight:700;">Event</span>
-                <strong>Community Builders Workshop (Peter Kenyon)</strong>
+          <div class="nu-tl-body">
+            <div class="nu-tl-head">
+              <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
+                <span class="nu-badge badge-event">Event</span>
+                <span class="nu-tl-title">Community Builders Workshop — Peter Kenyon</span>
               </div>
-              <span class="nu-date">May 8 • 9:00am–4:00pm</span>
+              <span class="nu-tl-date">May 8 · 9:00am–4:00pm</span>
             </div>
-            <div class="nu-muted">Melville</div>
-            <div class="small nu-muted mt-2">Sponsored by Suncrest College, City of Melville, CIC Sask, SEDA</div>
+            <div class="nu-tl-sub">📍 Melville &nbsp;·&nbsp; Presented by Suncrest College, City of Melville, CIC Sask &amp; SEDA</div>
           </div>
         </div>
 
-        <!-- HARDCODED: Membership -->
-        <div class="d-flex gap-3 mb-4 nu-item p-3 rounded nu-soft nu-fade-in"
-             data-type="announcements"
+        <!-- Membership -->
+        <div class="nu-tl-item reveal" data-type="announcements"
              data-search="annual membership fees invoice cpda info suncrestcollege">
-          <div class="d-flex flex-column align-items-center">
-            <div class="nu-dot" style="background:#2563eb;"></div>
-            <div class="nu-line flex-grow-1 mt-2"></div>
+          <div class="nu-tl-track">
+            <div class="nu-dot dot-blue"></div>
+            <div class="nu-tl-line"></div>
           </div>
-          <div class="w-100">
-            <div class="d-flex justify-content-between flex-wrap gap-2">
-              <div class="d-flex align-items-center gap-2">
-                <span class="badge nu-badge-announce text-white" style="border-radius:999px; padding:.35rem .75rem; font-weight:700;">Announcement</span>
-                <strong>Annual Membership Fees</strong>
+          <div class="nu-tl-body">
+            <div class="nu-tl-head">
+              <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
+                <span class="nu-badge badge-announce">Announcement</span>
+                <span class="nu-tl-title">Annual Membership Fees</span>
               </div>
-              <span class="nu-date">Now Due</span>
+              <span class="nu-tl-date">Now Due</span>
             </div>
-            <div class="nu-muted mt-1">
-              Please contact <a href="mailto:cpda.info@suncrestcollege.ca">cpda.info@suncrestcollege.ca</a> for your invoice.
+            <div class="nu-tl-sub">
+              Contact <a href="mailto:cpda.info@suncrestcollege.ca">cpda.info@suncrestcollege.ca</a> for your invoice.
             </div>
           </div>
         </div>
 
-        <!-- HARDCODED: Progress -->
-        <div class="d-flex gap-3 nu-item p-3 rounded nu-soft nu-fade-in"
-             data-type="progress"
-             data-search="build canada homes program regional application yorkton tribal council cpda info">
-          <div class="d-flex flex-column align-items-center">
-            <div class="nu-dot" style="background:#f59e0b;"></div>
+        <!-- Progress -->
+        <div class="nu-tl-item reveal" data-type="progress"
+             data-search="build canada homes program regional application yorkton tribal council">
+          <div class="nu-tl-track">
+            <div class="nu-dot dot-gold"></div>
           </div>
-          <div class="w-100">
-            <div class="d-flex justify-content-between flex-wrap gap-2">
-              <div class="d-flex align-items-center gap-2">
-                <span class="badge nu-badge-progress" style="border-radius:999px; padding:.35rem .75rem; font-weight:700;">Progress</span>
-                <strong>Build Canada Homes Program (Regional Application)</strong>
+          <div class="nu-tl-body">
+            <div class="nu-tl-head">
+              <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
+                <span class="nu-badge badge-progress">Progress</span>
+                <span class="nu-tl-title">Build Canada Homes Program — Regional Application</span>
               </div>
-              <span class="nu-date">In Progress</span>
+              <span class="nu-tl-date">In Progress</span>
             </div>
-            <div class="nu-muted mt-1">
-              For information, contact <a href="mailto:cpda.info@suncrestcollege.ca">cpda.info@suncrestcollege.ca</a>
-              or the <strong>Yorkton Tribal Council</strong>.
+            <div class="nu-tl-sub">
+              Contact <a href="mailto:cpda.info@suncrestcollege.ca">cpda.info@suncrestcollege.ca</a> or the <strong>Yorkton Tribal Council</strong> for info.
             </div>
           </div>
         </div>
 
-      </div><!-- end nu-card -->
+      </div><!-- end nu-feed -->
+    </div>
 
-      <!-- Submit CTA — visible to all, prompts login if needed -->
-      <div class="nu-card p-4 nu-fade-in d-flex align-items-center justify-content-between flex-wrap gap-3">
-        <div>
-          <h6 class="mb-1" style="color:#1e2d49; font-weight:900;">Have a community event to share?</h6>
-          <div class="small nu-muted">Members can submit events for admin approval.</div>
-        </div>
-        <a href="{{ url_for('event_submit') }}" class="btn btn-dark">Submit an Event →</a>
-      </div>
+    <!-- ── RIGHT: Sidebar ── -->
+    <div class="nu-sidebar">
 
-    </div><!-- end col-lg-8 -->
-
-    <!-- RIGHT: Poster + Quick Links -->
-    <div class="col-lg-4">
-
-      <!-- Poster -->
-      <div class="nu-card p-4 mb-4 nu-item nu-fade-in"
-           data-type="events"
-           data-search="workshop poster community builders melville peter kenyon view full size qr">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <h5 class="mb-0" style="color:#1e2d49; font-weight:900;">Workshop Poster</h5>
-          <a class="btn btn-sm btn-outline-dark"
+      <!-- Workshop poster -->
+      <div class="nu-card reveal" data-type="events"
+           data-search="workshop poster community builders melville peter kenyon">
+        <div class="nu-card-head">
+          <span class="nu-card-title">Workshop Poster</span>
+          <a class="nu-btn-gold" style="font-size:.72rem; padding:.3rem .8rem;"
              href="{{ url_for('static', filename='assets/img/community_workshop_melville.jpg') }}"
-             target="_blank">View full size</a>
+             target="_blank">Full size</a>
         </div>
-        <a href="{{ url_for('static', filename='assets/img/community_workshop_melville.jpg') }}" target="_blank">
+        <div class="nu-card-body">
           <img src="{{ url_for('static', filename='assets/img/community_workshop_melville.jpg') }}"
-               alt="Community Builders Workshop poster - Peter Kenyon"
-               class="img-fluid rounded"
-               style="width:100%; max-height:320px; object-fit:cover; object-position:top;" />
-        </a>
-        <div class="small nu-muted mt-2">Click "View full size" to read details and scan the poster QR code.</div>
+               alt="Community Builders Workshop poster"
+               class="nu-widget-poster"
+               onclick="openLightbox(this.src)"
+               loading="lazy">
+          <p style="font-family:var(--font-body);font-size:.72rem;color:var(--fog);margin-top:.5rem;text-align:center;">
+            Click poster to enlarge
+          </p>
+        </div>
       </div>
 
-      <!-- Quick Actions -->
-      <div class="nu-card p-4 nu-fade-in">
-        <h5 class="mb-3" style="color:#1e2d49; font-weight:900;">Quick Actions</h5>
-        <div class="d-grid gap-2">
-          <a class="btn btn-outline-dark" href="https://forms.office.com/r/xHXBVihBJF" target="_blank">RSVP: March 10 Session</a>
-          <a class="btn btn-outline-dark" href="mailto:cpda.info@suncrestcollege.ca">Email CPDA</a>
-          <a class="btn btn-outline-dark" href="/contact-us">Contact Page</a>
-          <a class="btn btn-outline-dark" href="{{ url_for('event_submit') }}">Submit an Event</a>
+      <!-- Quick links -->
+      <div class="nu-card reveal">
+        <div class="nu-card-head"><span class="nu-card-title">Quick Actions</span></div>
+        <div class="nu-card-body">
+          <div class="nu-quick-list">
+            <a class="nu-quick-btn" href="https://forms.office.com/r/xHXBVihBJF" target="_blank">
+              <span class="nu-quick-icon">
+                <svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>
+              </span>
+              RSVP: March 10 Session
+            </a>
+            <a class="nu-quick-btn" href="mailto:cpda.info@suncrestcollege.ca">
+              <span class="nu-quick-icon">
+                <svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg>
+              </span>
+              Email CPDA
+            </a>
+            <a class="nu-quick-btn" href="/contact-us">
+              <span class="nu-quick-icon">
+                <svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd"/></svg>
+              </span>
+              Contact Page
+            </a>
+          </div>
         </div>
-        <hr class="my-3"/>
-        <div class="small nu-muted">Looking for something specific? Use the search bar above.</div>
+      </div>
+
+      <!-- CTA: Submit event -->
+      <div class="nu-cta-card reveal">
+        <h5>Share a Community Event</h5>
+        <p>Members can submit events for admin review and community visibility.</p>
+        <a href="{{ url_for('event_submit') }}" class="nu-btn-gold">
+          <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+          Submit an Event
+        </a>
       </div>
 
     </div>
-  </div><!-- end row -->
+  </div><!-- end nu-grid -->
 
   <!-- Empty state -->
-  <div id="nuEmpty" class="nu-card p-4 mt-4 text-center d-none">
-    <h5 class="mb-1" style="color:#1e2d49; font-weight:900;">No results found</h5>
-    <div class="nu-muted">Try another keyword or switch the filter.</div>
+  <div id="nuEmpty" class="nu-empty">
+    <div class="nu-empty-icon">🔍</div>
+    <h5>No results found</h5>
+    <p>Try a different keyword or switch the filter above.</p>
   </div>
 
+</div><!-- end container -->
+
+<!-- ═══ LIGHTBOX ═══ -->
+<div class="nu-lightbox" id="nuLightbox" onclick="closeLightbox()"
+     role="dialog" aria-modal="true" aria-label="Image viewer">
+  <button class="nu-lb-close" onclick="closeLightbox()" aria-label="Close">
+    <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+  </button>
+  <img src="" alt="Event poster" class="nu-lb-img" id="nuLbImg" onclick="event.stopPropagation()">
 </div>
 
-<!-- QR Modal -->
-<div class="modal fade" id="qrModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content" style="border-radius:18px;">
-      <div class="modal-header">
-        <h5 class="modal-title" style="color:#1e2d49; font-weight:900;">March 10 RSVP QR Code</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body text-center">
-        <img src="{{ url_for('static', filename='assets/img/esap_cpda_march10_qr.jpg') }}"
-             alt="QR Code for March 10 RSVP"
-             class="img-fluid rounded shadow-sm"
-             style="max-width:260px;" />
-        <div class="small nu-muted mt-2">Scan to register</div>
-      </div>
-      <div class="modal-footer">
-        <a class="btn btn-primary" href="https://forms.office.com/r/xHXBVihBJF" target="_blank">Open RSVP Link</a>
-        <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Close</button>
-      </div>
+<!-- ═══ QR MODAL ═══ -->
+<div class="nu-modal-bg" id="nuQrModal" onclick="closeQr()"
+     role="dialog" aria-modal="true">
+  <div class="nu-modal-box" onclick="event.stopPropagation()">
+    <h5>March 10 RSVP QR Code</h5>
+    <img src="{{ url_for('static', filename='assets/img/esap_cpda_march10_qr.jpg') }}"
+         alt="QR Code for March 10 RSVP">
+    <div style="margin-bottom:.5rem;">
+      <a class="nu-btn-gold" href="https://forms.office.com/r/xHXBVihBJF" target="_blank"
+         style="display:inline-flex;">Open RSVP Link</a>
     </div>
+    <button class="nu-modal-close" onclick="closeQr()">Close</button>
   </div>
 </div>
 
 <script>
-  (function(){
-    const tabs   = document.querySelectorAll('[data-filter]');
-    const items  = document.querySelectorAll('[data-type]');
-    const search = document.getElementById('nuSearch');
-    const empty  = document.getElementById('nuEmpty');
+(function () {
+  /* ── Filter + Search ── */
+  const tabs   = document.querySelectorAll('.nu-tab');
+  const items  = document.querySelectorAll('[data-type]');
+  const search = document.getElementById('nuSearch');
+  const empty  = document.getElementById('nuEmpty');
+  const lblC   = document.getElementById('lbl-community');
+  const lblD   = document.getElementById('lbl-cpda');
 
-    let activeFilter = 'all';
-    let q = '';
+  let filter = 'all', q = '';
 
-    function matches(item){
-      const type   = item.getAttribute('data-type');
-      const text   = (item.getAttribute('data-search') || '').toLowerCase();
-      const filterOk = (activeFilter === 'all') || (type === activeFilter);
-      const searchOk = !q || text.includes(q);
-      return filterOk && searchOk;
-    }
+  function ok(el) {
+    const t = el.getAttribute('data-type');
+    const s = (el.getAttribute('data-search') || '').toLowerCase();
+    return (filter === 'all' || t === filter) && (!q || s.includes(q));
+  }
 
-    function apply(){
-      let shown = 0;
-      items.forEach(el => {
-        const ok = matches(el);
-        el.classList.toggle('d-none', !ok);
-        if(ok) shown++;
-      });
-      empty.classList.toggle('d-none', shown !== 0);
-    }
-
-    tabs.forEach(btn => {
-      btn.addEventListener('click', () => {
-        tabs.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        activeFilter = btn.getAttribute('data-filter');
-        apply();
-      });
+  function apply() {
+    let shown = 0;
+    items.forEach(el => {
+      const v = ok(el);
+      el.style.display = v ? '' : 'none';
+      if (v) shown++;
     });
+    empty.style.display = shown === 0 ? 'block' : 'none';
 
-    if(search){
-      search.addEventListener('input', e => {
-        q = (e.target.value || '').trim().toLowerCase();
-        apply();
-      });
+    if (lblC) {
+      const any = [...document.querySelectorAll('.nu-event-card')]
+        .some(c => c.style.display !== 'none');
+      lblC.style.display = any ? '' : 'none';
+      if (lblD) lblD.style.display = any ? '' : 'none';
     }
+  }
 
+  tabs.forEach(btn => btn.addEventListener('click', () => {
+    tabs.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    filter = btn.dataset.filter;
     apply();
-  })();
+  }));
+
+  search.addEventListener('input', e => {
+    q = e.target.value.trim().toLowerCase();
+    apply();
+  });
+
+  apply();
+
+  /* ── Scroll reveal ── */
+  const io = new IntersectionObserver(entries => {
+    entries.forEach((e, idx) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), idx * 55);
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.07 });
+
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  /* ── Keyboard: poster zoom ── */
+  document.querySelectorAll('.nu-poster-col').forEach(el => {
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); }
+    });
+  });
+})();
+
+/* ── Lightbox ── */
+function openLightbox(src) {
+  document.getElementById('nuLbImg').src = src;
+  document.getElementById('nuLightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('nuLightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* ── QR Modal ── */
+function openQr() {
+  document.getElementById('nuQrModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeQr() {
+  document.getElementById('nuQrModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* ── ESC key ── */
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeLightbox(); closeQr(); }
+});
 </script>
 
 {% endblock %}
