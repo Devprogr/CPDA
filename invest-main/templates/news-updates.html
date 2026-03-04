@@ -51,8 +51,8 @@ body { background: var(--parchment); color: var(--ink); }
   content: "";
   position: absolute; inset: 0; z-index: 1;
   background:
-    radial-gradient(ellipse 80% 60% at 50% 100%, rgba(10,14,28,.95) 0%, transparent 70%),
-    linear-gradient(to bottom, rgba(10,14,28,.25) 0%, rgba(10,14,28,.0) 40%, rgba(10,14,28,.55) 75%, rgba(10,14,28,.95) 100%);
+    radial-gradient(ellipse 80% 60% at 50% 100%, rgba(10,14,28,.98) 0%, transparent 70%),
+    linear-gradient(to bottom, rgba(10,14,28,.45) 0%, rgba(10,14,28,.35) 35%, rgba(10,14,28,.65) 70%, rgba(10,14,28,.97) 100%);
 }
 
 /* Grain texture overlay */
@@ -75,15 +75,17 @@ body { background: var(--parchment); color: var(--ink); }
   background: var(--gold2);
   margin-bottom: 1.25rem;
   animation: slideRight .9s var(--ease-out) both;
+  filter: drop-shadow(0 0 6px rgba(212,168,90,.8));
 }
 
 .nu-hero-eyebrow {
   font-family: var(--font-body);
   font-size: .72rem; font-weight: 700;
   letter-spacing: .22em; text-transform: uppercase;
-  color: var(--gold2);
+  color: #f5d485;
   margin-bottom: .9rem;
   animation: fadeUp .8s .1s var(--ease-out) both;
+  text-shadow: 0 1px 8px rgba(0,0,0,.7), 0 0 20px rgba(0,0,0,.5);
 }
 
 .nu-hero h1 {
@@ -95,21 +97,24 @@ body { background: var(--parchment); color: var(--ink); }
   letter-spacing: -.02em;
   margin-bottom: 1.4rem;
   animation: fadeUp .8s .18s var(--ease-out) both;
+  text-shadow: 0 2px 16px rgba(0,0,0,.6), 0 4px 32px rgba(0,0,0,.4);
 }
 
 .nu-hero h1 em {
   font-style: italic;
   font-weight: 400;
-  color: var(--gold2);
+  color: #f5d485;
+  text-shadow: 0 2px 16px rgba(0,0,0,.6);
 }
 
 .nu-hero-desc {
   font-family: var(--font-body);
-  font-size: 1rem; font-weight: 300;
-  color: rgba(255,255,255,.75);
+  font-size: 1rem; font-weight: 400;
+  color: rgba(255,255,255,.95);
   max-width: 50ch; line-height: 1.75;
   margin-bottom: 2.5rem;
   animation: fadeUp .8s .26s var(--ease-out) both;
+  text-shadow: 0 1px 10px rgba(0,0,0,.65), 0 2px 20px rgba(0,0,0,.4);
 }
 
 /* Hero stats */
@@ -121,13 +126,15 @@ body { background: var(--parchment); color: var(--ink); }
   font-family: var(--font-display);
   font-size: 2.5rem; font-weight: 700;
   color: #fff; line-height: 1;
+  text-shadow: 0 2px 12px rgba(0,0,0,.6);
 }
 .nu-stat-lbl {
   font-family: var(--font-body);
-  font-size: .7rem; font-weight: 600;
+  font-size: .7rem; font-weight: 700;
   letter-spacing: .14em; text-transform: uppercase;
-  color: rgba(255,255,255,.42);
+  color: rgba(255,255,255,.85);
   margin-top: .25rem;
+  text-shadow: 0 1px 8px rgba(0,0,0,.7);
 }
 
 /* Scroll hint */
