@@ -2,60 +2,567 @@
 {% block title %}Admin Dashboard{% endblock %}
 {% block content %}
 
-<header class="py-5 bg-light border-bottom">
-  <div class="container">
-    <h1 class="h3 mb-1">Admin — Event Approvals</h1>
-    <p class="text-muted mb-0">Review submissions and publish only what’s approved.</p>
-  </div>
-</header>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-<div class="container py-4">
-  <div class="card border-0 shadow-sm rounded-4">
-    <div class="card-body p-3 p-md-4">
+<style>
+  :root {
+    --navy:  #1e2d49;
+    --navy2: #162238;
+    --amber: #c8922a;
+    --cream: #f9f6f0;
+    --muted: #6b7280;
+    --green: #16a34a;
+    --red:   #dc2626;
+    --card-shadow: 0 8px 24px rgba(30,45,73,.10);
+  }
 
-      {% if not pending %}
-        <p class="text-muted mb-0">No pending events.</p>
-      {% else %}
-        <div class="table-responsive">
-          <table class="table align-middle">
-            <thead>
-              <tr>
-                <th>title</th>
-                <th>start</th>
-                <th>location</th>
-                <th>poster</th>
-                <th class="text-end"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for e in pending %}
-              <tr>
-                <td class="fw-semibold">
-                  {{ e.title }}
-                  <div class="text-muted small">{{ e.description or "" }}</div>
-                </td>
-                <td>{{ e.start_at }}</td>
-                <td>{{ e.location or "—" }}</td>
-                <td>
-                  {% if e.poster_url %}
-                    <a href="{{ e.poster_url }}" target="_blank" class="btn btn-sm btn-outline-secondary">View</a>
-                  {% else %}
-                    <span class="text-muted">—</span>
-                  {% endif %}
-                </td>
-                <td class="text-end">
-                  <a class="btn btn-sm btn-success" href="/admin/events/{{ e.id }}/approve">Approve</a>
-                  <a class="btn btn-sm btn-outline-danger" href="/admin/events/{{ e.id }}/decline">Decline</a>
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      {% endif %}
+  body { background: var(--cream); font-family: 'DM Sans', sans-serif; }
 
-    </div>
+  .adm-header {
+    background: var(--navy);
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .adm-header h1 {
+    font-family: 'Playfair Display', serif;
+    color: #fff;
+    font-size: 1.4rem;
+    margin: 0;
+  }
+
+  .adm-header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .adm-logout {
+    font-size: .82rem;
+    color: rgba(255,255,255,.6);
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,.2);
+    padding: .35rem .9rem;
+    border-radius: 999px;
+    transition: all .2s;
+  }
+  .adm-logout:hover { color: #fff; border-color: #fff; }
+
+  .adm-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    padding: 2rem 2rem 0;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .adm-stat {
+    background: #fff;
+    border-radius: 14px;
+    padding: 1.25rem 1.5rem;
+    box-shadow: var(--card-shadow);
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+  }
+
+  .adm-stat-num {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1;
+  }
+
+  .adm-stat-label {
+    font-size: .78rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+  }
+
+  .adm-stat.pending  .adm-stat-num { color: #d97706; }
+  .adm-stat.approved .adm-stat-num { color: var(--green); }
+  .adm-stat.declined .adm-stat-num { color: var(--red); }
+
+  /* Tabs */
+  .adm-tabs-wrap {
+    max-width: 1200px;
+    margin: 2rem auto 0;
+    padding: 0 2rem;
+  }
+
+  .adm-tabs {
+    display: flex;
+    gap: .5rem;
+    border-bottom: 2px solid rgba(30,45,73,.1);
+    margin-bottom: 1.5rem;
+  }
+
+  .adm-tab {
+    padding: .65rem 1.3rem;
+    border: none;
+    background: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .9rem;
+    font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: all .2s;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+
+  .adm-tab:hover { color: var(--navy); background: rgba(30,45,73,.04); }
+  .adm-tab.active { color: var(--navy); border-bottom-color: var(--amber); font-weight: 600; }
+
+  .adm-badge {
+    background: var(--amber);
+    color: #fff;
+    font-size: .7rem;
+    font-weight: 700;
+    padding: .15rem .45rem;
+    border-radius: 999px;
+    min-width: 20px;
+    text-align: center;
+  }
+
+  .adm-panel { display: none; }
+  .adm-panel.active { display: block; }
+
+  /* Section heading */
+  .adm-section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--navy);
+    margin: 0 0 1rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+
+  /* Event cards */
+  .adm-event-card {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: var(--card-shadow);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+    align-items: start;
+    transition: box-shadow .2s;
+  }
+
+  .adm-event-card:hover { box-shadow: 0 12px 32px rgba(30,45,73,.14); }
+
+  .adm-event-card.approved { border-left: 4px solid var(--green); }
+  .adm-event-card.declined { border-left: 4px solid var(--red); opacity: .75; }
+  .adm-event-card.pending  { border-left: 4px solid #d97706; }
+
+  .adm-event-title {
+    font-weight: 600;
+    color: var(--navy);
+    font-size: 1rem;
+    margin-bottom: .3rem;
+  }
+
+  .adm-event-meta {
+    font-size: .82rem;
+    color: var(--muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem 1.25rem;
+    margin-bottom: .5rem;
+  }
+
+  .adm-event-desc {
+    font-size: .85rem;
+    color: #374151;
+    line-height: 1.5;
+  }
+
+  .adm-poster-thumb {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid rgba(30,45,73,.1);
+    cursor: pointer;
+    transition: transform .2s;
+  }
+  .adm-poster-thumb:hover { transform: scale(1.05); }
+
+  .adm-actions {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    align-items: flex-end;
+  }
+
+  .adm-btn {
+    padding: .45rem 1.1rem;
+    border-radius: 999px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .82rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all .18s;
+    white-space: nowrap;
+  }
+
+  .adm-btn-approve {
+    background: var(--green);
+    color: #fff;
+  }
+  .adm-btn-approve:hover { background: #15803d; transform: translateY(-1px); }
+
+  .adm-btn-decline {
+    background: #fff;
+    color: var(--red);
+    border: 1.5px solid var(--red);
+  }
+  .adm-btn-decline:hover { background: var(--red); color: #fff; transform: translateY(-1px); }
+
+  .adm-status-pill {
+    font-size: .75rem;
+    font-weight: 700;
+    padding: .25rem .7rem;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+  }
+  .pill-approved { background: #dcfce7; color: #15803d; }
+  .pill-declined { background: #fee2e2; color: #b91c1c; }
+  .pill-pending  { background: #fef3c7; color: #b45309; }
+
+  /* Contact messages table */
+  .adm-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+  }
+
+  .adm-table th {
+    background: var(--navy);
+    color: rgba(255,255,255,.85);
+    font-size: .78rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: .85rem 1.25rem;
+    text-align: left;
+  }
+
+  .adm-table td {
+    padding: .9rem 1.25rem;
+    font-size: .88rem;
+    color: #374151;
+    border-bottom: 1px solid rgba(30,45,73,.06);
+    vertical-align: top;
+  }
+
+  .adm-table tr:last-child td { border-bottom: none; }
+  .adm-table tr:hover td { background: #fafafa; }
+
+  .adm-empty {
+    text-align: center;
+    padding: 3rem;
+    color: var(--muted);
+    font-size: .95rem;
+  }
+
+  /* Flash messages */
+  .adm-flash { max-width: 1200px; margin: 1rem auto 0; padding: 0 2rem; }
+
+  /* Poster modal */
+  .adm-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.75);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+  }
+  .adm-modal-overlay.open { display: flex; }
+  .adm-modal-img {
+    max-width: 90vw;
+    max-height: 90vh;
+    border-radius: 12px;
+    box-shadow: 0 24px 60px rgba(0,0,0,.4);
+  }
+  .adm-modal-close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+  }
+</style>
+
+<!-- Header -->
+<div class="adm-header">
+  <h1>⚙️ CPDA Admin Dashboard</h1>
+  <div class="adm-header-right">
+    <span style="color:rgba(255,255,255,.5); font-size:.85rem;">Logged in as admin</span>
+    <a href="{{ url_for('admin_logout') }}" class="adm-logout">Logout</a>
   </div>
 </div>
+
+<!-- Flash messages -->
+<div class="adm-flash">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }} alert-dismissible fade show mt-2" role="alert"
+         style="border-radius:12px; font-family:'DM Sans',sans-serif;">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+  {% endif %}
+  {% endwith %}
+</div>
+
+<!-- Stats row -->
+<div class="adm-stats">
+  <div class="adm-stat pending">
+    <div class="adm-stat-num">{{ pending | length }}</div>
+    <div class="adm-stat-label">Pending Review</div>
+  </div>
+  <div class="adm-stat approved">
+    <div class="adm-stat-num">{{ approved | length }}</div>
+    <div class="adm-stat-label">Approved Events</div>
+  </div>
+  <div class="adm-stat declined">
+    <div class="adm-stat-num">{{ declined | length }}</div>
+    <div class="adm-stat-label">Declined</div>
+  </div>
+  <div class="adm-stat">
+    <div class="adm-stat-num">{{ messages | length }}</div>
+    <div class="adm-stat-label">Contact Messages</div>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="adm-tabs-wrap">
+  <div class="adm-tabs" role="tablist">
+    <button class="adm-tab active" data-panel="pending" role="tab">
+      Pending
+      {% if pending %}<span class="adm-badge">{{ pending | length }}</span>{% endif %}
+    </button>
+    <button class="adm-tab" data-panel="approved" role="tab">Approved</button>
+    <button class="adm-tab" data-panel="declined" role="tab">Declined</button>
+    <button class="adm-tab" data-panel="messages" role="tab" id="messages-tab">
+      Messages
+      {% if messages %}<span class="adm-badge">{{ messages | length }}</span>{% endif %}
+    </button>
+  </div>
+
+  <!-- PENDING PANEL -->
+  <div class="adm-panel active" id="panel-pending" role="tabpanel">
+    <h2 class="adm-section-title">🕐 Awaiting Review</h2>
+    {% if pending %}
+      {% for event in pending %}
+      <div class="adm-event-card pending">
+        <div>
+          <div class="adm-event-title">{{ event.title }}</div>
+          <div class="adm-event-meta">
+            <span>📅 {{ event.start_at[:16] | replace('T', ' ') if event.start_at else 'No date' }}</span>
+            {% if event.location %}<span>📍 {{ event.location }}</span>{% endif %}
+            {% if event.owner_email %}<span>👤 {{ event.owner_email }}</span>{% endif %}
+            <span>🕐 Submitted {{ event.created_at[:10] if event.created_at else '' }}</span>
+          </div>
+          {% if event.description %}
+          <div class="adm-event-desc">{{ event.description | truncate(200) }}</div>
+          {% endif %}
+          {% if event.poster_url %}
+          <div class="mt-2">
+            <img src="{{ event.poster_url }}" class="adm-poster-thumb"
+                 alt="Event poster" onclick="openPosterModal('{{ event.poster_url }}')">
+            <div class="small text-muted mt-1">Click poster to enlarge</div>
+          </div>
+          {% endif %}
+        </div>
+        <div class="adm-actions">
+          <form method="POST" action="{{ url_for('admin_approve_event', event_id=event.id) }}">
+            <button type="submit" class="adm-btn adm-btn-approve"
+                    onclick="return confirm('Approve this event and notify the submitter?')">
+              ✅ Approve
+            </button>
+          </form>
+          <form method="POST" action="{{ url_for('admin_decline_event', event_id=event.id) }}">
+            <button type="submit" class="adm-btn adm-btn-decline"
+                    onclick="return confirm('Decline this event and notify the submitter?')">
+              ❌ Decline
+            </button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="adm-empty">🎉 No pending events — all caught up!</div>
+    {% endif %}
+  </div>
+
+  <!-- APPROVED PANEL -->
+  <div class="adm-panel" id="panel-approved" role="tabpanel">
+    <h2 class="adm-section-title">✅ Approved Events</h2>
+    {% if approved %}
+      {% for event in approved %}
+      <div class="adm-event-card approved">
+        <div>
+          <div class="adm-event-title">{{ event.title }}</div>
+          <div class="adm-event-meta">
+            <span>📅 {{ event.start_at[:16] | replace('T', ' ') if event.start_at else 'No date' }}</span>
+            {% if event.location %}<span>📍 {{ event.location }}</span>{% endif %}
+            {% if event.owner_email %}<span>👤 {{ event.owner_email }}</span>{% endif %}
+          </div>
+          {% if event.poster_url %}
+          <img src="{{ event.poster_url }}" class="adm-poster-thumb mt-2"
+               alt="Event poster" onclick="openPosterModal('{{ event.poster_url }}')">
+          {% endif %}
+        </div>
+        <div class="adm-actions">
+          <span class="adm-status-pill pill-approved">Approved</span>
+          <form method="POST" action="{{ url_for('admin_decline_event', event_id=event.id) }}">
+            <button type="submit" class="adm-btn adm-btn-decline"
+                    onclick="return confirm('Move this to declined?')">
+              Decline
+            </button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="adm-empty">No approved events yet.</div>
+    {% endif %}
+  </div>
+
+  <!-- DECLINED PANEL -->
+  <div class="adm-panel" id="panel-declined" role="tabpanel">
+    <h2 class="adm-section-title">❌ Declined Events</h2>
+    {% if declined %}
+      {% for event in declined %}
+      <div class="adm-event-card declined">
+        <div>
+          <div class="adm-event-title">{{ event.title }}</div>
+          <div class="adm-event-meta">
+            <span>📅 {{ event.start_at[:16] | replace('T', ' ') if event.start_at else 'No date' }}</span>
+            {% if event.owner_email %}<span>👤 {{ event.owner_email }}</span>{% endif %}
+          </div>
+        </div>
+        <div class="adm-actions">
+          <span class="adm-status-pill pill-declined">Declined</span>
+          <form method="POST" action="{{ url_for('admin_approve_event', event_id=event.id) }}">
+            <button type="submit" class="adm-btn adm-btn-approve"
+                    onclick="return confirm('Re-approve this event?')">
+              Re-approve
+            </button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="adm-empty">No declined events.</div>
+    {% endif %}
+  </div>
+
+  <!-- MESSAGES PANEL -->
+  <div class="adm-panel" id="panel-messages" role="tabpanel">
+    <h2 class="adm-section-title">✉️ Contact Messages</h2>
+    {% if messages %}
+    <div style="overflow-x:auto;">
+      <table class="adm-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Message</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for msg in messages %}
+          <tr>
+            <td style="color:var(--muted); font-size:.8rem;">{{ msg.id }}</td>
+            <td style="font-weight:600; white-space:nowrap;">{{ msg.name }}</td>
+            <td>
+              <a href="mailto:{{ msg.email }}" style="color:var(--amber);">{{ msg.email }}</a>
+            </td>
+            <td style="max-width:400px; line-height:1.5;">{{ msg.message }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+      <div class="adm-empty">No contact messages yet.</div>
+    {% endif %}
+  </div>
+
+</div><!-- end tabs-wrap -->
+
+<!-- Poster modal -->
+<div class="adm-modal-overlay" id="posterModal" onclick="closePosterModal()">
+  <button class="adm-modal-close" onclick="closePosterModal()" aria-label="Close">✕</button>
+  <img src="" alt="Event poster" class="adm-modal-img" id="posterModalImg"
+       onclick="event.stopPropagation()">
+</div>
+
+<script>
+  // ── Tab switching ──
+  document.querySelectorAll('.adm-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.adm-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.adm-panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('panel-' + tab.dataset.panel).classList.add('active');
+    });
+  });
+
+  // ── Jump to messages tab from URL hash ──
+  if (window.location.hash === '#messages') {
+    document.querySelector('[data-panel="messages"]').click();
+  }
+
+  // ── Poster modal ──
+  function openPosterModal(url) {
+    document.getElementById('posterModalImg').src = url;
+    document.getElementById('posterModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closePosterModal() {
+    document.getElementById('posterModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closePosterModal();
+  });
+</script>
 
 {% endblock %}
