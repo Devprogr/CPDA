@@ -1,97 +1,683 @@
 {% extends "base.html" %}
-
 {% block content %}
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    margin: 0;
+
+  /* ══════════════════════════════════════════
+     PAGE TOKENS
+     ══════════════════════════════════════════ */
+  :root {
+    --st-navy:   #1E2D49;
+    --st-navy2:  #162238;
+    --st-amber:  #C8922A;
+    --st-cream:  #F5F0E8;
+    --st-muted:  #5a6478;
+    --st-border: rgba(30,45,73,0.10);
   }
-  .chart-responsive {
+
+  /* ══════════════════════════════════════════
+     HERO — split layout matching About Us
+     ══════════════════════════════════════════ */
+  .st-hero {
+    min-height: 88vh;
+    background: var(--st-navy);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .st-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='4' height='4' fill='%231E2D49'/%3E%3Ccircle cx='1' cy='1' r='.6' fill='rgba(255,255,255,.025)'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .st-hero__left {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 7rem 4rem 7rem 6rem;
+  }
+
+  .st-hero__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: .65rem;
+    font-family: var(--font-body);
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--st-amber);
+    margin-bottom: 1.75rem;
+    opacity: 0;
+    animation: stSlideUp .7s .1s ease forwards;
+  }
+
+  .st-hero__eyebrow::before {
+    content: "";
+    width: 28px;
+    height: 2px;
+    background: var(--st-amber);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .st-hero__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 5vw, 5.2rem);
+    font-weight: 700;
+    line-height: 1.05;
+    color: #fff;
+    margin-bottom: 1.75rem;
+    opacity: 0;
+    animation: stSlideUp .7s .2s ease forwards;
+  }
+
+  .st-hero__title em {
+    font-style: italic;
+    color: var(--st-amber);
+  }
+
+  .st-hero__body {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.8;
+    color: rgba(255,255,255,.65);
+    max-width: 42ch;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: stSlideUp .7s .3s ease forwards;
+  }
+
+  /* Scroll nav pills */
+  .st-hero__nav {
+    display: flex;
+    gap: .65rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: stSlideUp .7s .4s ease forwards;
+  }
+
+  .st-hero__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    font-family: var(--font-body);
+    font-size: .78rem;
+    font-weight: 600;
+    padding: .5rem 1.1rem;
+    border-radius: 999px;
+    text-decoration: none;
+    letter-spacing: .02em;
+    transition: all .2s ease;
+  }
+
+  .st-hero__pill--solid {
+    background: var(--st-amber);
+    color: #fff;
+    border: 2px solid var(--st-amber);
+  }
+
+  .st-hero__pill--solid:hover {
+    background: transparent;
+    color: var(--st-amber);
+  }
+
+  .st-hero__pill--ghost {
+    background: transparent;
+    color: rgba(255,255,255,.7);
+    border: 2px solid rgba(255,255,255,.2);
+  }
+
+  .st-hero__pill--ghost:hover {
+    border-color: rgba(255,255,255,.55);
+    color: #fff;
+  }
+
+  /* Hero KPI strip */
+  .st-hero__kpis {
+    display: flex;
+    gap: 2.5rem;
+    margin-top: 3.5rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid rgba(255,255,255,.08);
+    opacity: 0;
+    animation: stSlideUp .7s .5s ease forwards;
+  }
+
+  .st-kpi__num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--st-amber);
+    line-height: 1;
+  }
+
+  .st-kpi__label {
+    font-family: var(--font-body);
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.38);
+    margin-top: .25rem;
+  }
+
+  /* Right: image */
+  .st-hero__right {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .st-hero__right img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    opacity: 0;
+    animation: stFade .9s .3s ease forwards;
+  }
+
+  .st-hero__right::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg,
+      rgba(30,45,73,.5) 0%,
+      rgba(200,146,42,.12) 100%);
+    pointer-events: none;
+  }
+
+  .st-hero__deco {
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 9rem;
+    font-weight: 700;
+    color: rgba(255,255,255,.05);
+    line-height: 1;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* ══════════════════════════════════════════
+     SHARED SECTION STYLES
+     ══════════════════════════════════════════ */
+  .st-section {
+    padding: 6rem 0;
+    background: #fff;
+  }
+
+  .st-section--cream {
+    background: var(--st-cream);
+  }
+
+  .st-section--navy {
+    background: var(--st-navy);
+  }
+
+  .st-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: .6rem;
+    font-family: var(--font-body);
+    font-size: .7rem;
+    font-weight: 600;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--st-amber);
+    margin-bottom: 1rem;
+  }
+
+  .st-eyebrow::before {
+    content: "";
+    width: 24px;
+    height: 2px;
+    background: var(--st-amber);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .st-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 700;
+    color: var(--st-navy);
+    line-height: 1.12;
+    margin-bottom: .75rem;
+  }
+
+  .st-heading em {
+    font-style: italic;
+    color: var(--st-amber);
+  }
+
+  .st-heading--white { color: #fff; }
+
+  .st-lead {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--st-muted);
+    line-height: 1.8;
+    max-width: 60ch;
+  }
+
+  .st-lead--white { color: rgba(255,255,255,.62); }
+
+  /* ══════════════════════════════════════════
+     CHART CARDS
+     ══════════════════════════════════════════ */
+  .st-chart-card {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid var(--st-border);
+    box-shadow: 0 4px 24px rgba(30,45,73,.06);
+    overflow: hidden;
+    transition: box-shadow .22s, transform .22s;
+    height: 100%;
+  }
+
+  .st-chart-card:hover {
+    box-shadow: 0 10px 40px rgba(30,45,73,.11);
+    transform: translateY(-3px);
+  }
+
+  .st-chart-card--navy {
+    background: rgba(255,255,255,.04);
+    border-color: rgba(255,255,255,.08);
+  }
+
+  .st-chart-card--navy:hover {
+    background: rgba(255,255,255,.07);
+    border-color: rgba(200,146,42,.3);
+  }
+
+  .st-chart-card__header {
+    padding: 1.5rem 1.75rem 0;
+  }
+
+  .st-chart-card__tag {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    font-family: var(--font-body);
+    font-size: .65rem;
+    font-weight: 700;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    padding: .28rem .75rem;
+    border-radius: 999px;
+    background: rgba(200,146,42,.1);
+    color: var(--st-amber);
+    margin-bottom: .85rem;
+  }
+
+  .st-chart-card__tag--white {
+    background: rgba(200,146,42,.15);
+    color: var(--st-amber);
+  }
+
+  .st-chart-card__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--st-navy);
+    line-height: 1.2;
+    margin-bottom: .35rem;
+  }
+
+  .st-chart-card__title--white { color: #fff; }
+
+  .st-chart-card__subtitle {
+    font-family: var(--font-body);
+    font-size: .82rem;
+    color: var(--st-muted);
+    line-height: 1.55;
+    margin-bottom: 0;
+  }
+
+  .st-chart-card__subtitle--white { color: rgba(255,255,255,.5); }
+
+  .st-chart-card__body {
+    padding: 1.25rem 1.75rem 1.75rem;
+  }
+
+  /* Responsive chart wrapper */
+  .st-chart-wrap {
     width: 100%;
     overflow-x: auto;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 10px 0;
+    padding: .5rem 0 0;
   }
-  .chart-responsive canvas {
+
+  .st-chart-wrap canvas {
     width: 100% !important;
     height: auto !important;
-    max-width: 700px;
-    min-width: 250px;
+    max-width: 680px;
+    min-width: 220px;
     margin: 0 auto;
     display: block;
   }
-  @media (max-width: 768px) {
-    h1, h2, h3, h4, h5 {
-      font-size: 1.1rem;
-    }
-    .card-title {
-      font-size: 1rem;
-    }
-    .container {
-      padding-left: 8px;
-      padding-right: 8px;
-    }
-    .chart-responsive canvas {
-      max-width: 100%;
-      min-width: 180px;
-    }
+
+  /* ══════════════════════════════════════════
+     SECTION DIVIDER LABEL
+     ══════════════════════════════════════════ */
+  .st-section-label {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 3rem;
   }
-  @media (max-width: 480px) {
-    .chart-responsive canvas {
-      max-width: 98%;
-      min-width: 120px;
-    }
-    .container {
-      padding-left: 2px;
-      padding-right: 2px;
-    }
+
+  .st-section-label__line {
+    flex: 1;
+    height: 1px;
+    background: var(--st-border);
   }
+
+  .st-section-label__line--white {
+    background: rgba(255,255,255,.08);
+  }
+
+  .st-section-label__text {
+    font-family: var(--font-body);
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--st-muted);
+    white-space: nowrap;
+  }
+
+  .st-section-label__text--amber { color: var(--st-amber); }
+
+  /* ══════════════════════════════════════════
+     ANIMATIONS
+     ══════════════════════════════════════════ */
+  @keyframes stSlideUp {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes stFade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* ══════════════════════════════════════════
+     RESPONSIVE
+     ══════════════════════════════════════════ */
+  @media (max-width: 900px) {
+    .st-hero { grid-template-columns: 1fr; min-height: auto; }
+    .st-hero__left { padding: 5rem 2rem 3rem; }
+    .st-hero__right { height: 340px; }
+    .st-hero__kpis { gap: 1.5rem; }
+  }
+
+  @media (max-width: 576px) {
+    .st-hero__title  { font-size: 2.8rem; }
+    .st-hero__kpis   { flex-wrap: wrap; gap: 1.25rem; }
+    .st-section      { padding: 4rem 0; }
+    .st-chart-card__header { padding: 1.25rem 1.25rem 0; }
+    .st-chart-card__body   { padding: 1rem 1.25rem 1.25rem; }
+    .st-chart-wrap canvas  { max-width: 100%; min-width: 160px; }
+  }
+
 </style>
 
-<header class="header-2">
-  <div class="page-header min-vh-100 relative"
-    style="background-image: url('{{ url_for('static', filename='assets/img/region.jpg') }}')">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-8 mx-auto text-center">
-          <h1 class="text-white" style="text-shadow: 2px 2px 8px rgba(0,0,0,0.7);">The Region in Depth</h1>
-          <p class="lead text-white opacity-8" style="text-shadow: 2px 2px 8px rgba(0,0,0,0.7);">
-            Explore the demographics and economic flows that shape our region.
-          </p>
-        </div>
+
+<!-- ══════════════════════════════════════════
+     HERO
+     ══════════════════════════════════════════ -->
+<section class="st-hero" aria-label="Statistics hero">
+
+  <div class="st-hero__left">
+    <p class="st-hero__eyebrow">East-Central Saskatchewan</p>
+
+    <h1 class="st-hero__title">
+      The Region<br>
+      <em>in Depth</em>
+    </h1>
+
+    <p class="st-hero__body">
+      Explore the demographics and economic flows that shape our region —
+      the data behind the communities, industries, and people that make
+      East-Central Saskatchewan thrive.
+    </p>
+
+    <div class="st-hero__nav">
+      <a href="#demographics" class="st-hero__pill st-hero__pill--solid">Demographics &nbsp;→</a>
+      <a href="#economic"     class="st-hero__pill st-hero__pill--ghost">Economic Flow &nbsp;→</a>
+    </div>
+
+    <div class="st-hero__kpis">
+      <div>
+        <div class="st-kpi__num">36K</div>
+        <div class="st-kpi__label">Population by 2034</div>
+      </div>
+      <div>
+        <div class="st-kpi__num">4.9%</div>
+        <div class="st-kpi__label">Projected Growth</div>
+      </div>
+      <div>
+        <div class="st-kpi__num">1,344</div>
+        <div class="st-kpi__label">Regional Businesses</div>
       </div>
     </div>
   </div>
-</header>
 
-<div class="container my-4">
-  <!-- Demographics Section -->
-  <div class="mb-5">
-    <h2 class="mb-4 text-primary">Demographics</h2>
-    <div class="row g-4">
-      {% include 'population-chart.html' %}
-      {% include 'age-chart.html' %}
-      {% include 'income-distribution.html' %}
-    </div>
+  <div class="st-hero__right">
+    <img src="{{ url_for('static', filename='assets/img/region.jpg') }}"
+         alt="CPDA region landscape"
+         loading="eager">
+    <span class="st-hero__deco" aria-hidden="true">DATA</span>
   </div>
 
-  <!-- Economic Flow Section -->
-  <div>
-    <h2 class="mb-4 text-success">Economic Flow</h2>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     DEMOGRAPHICS
+     ══════════════════════════════════════════ -->
+<section id="demographics" class="st-section">
+  <div class="container">
+
+    <div class="row align-items-end mb-4">
+      <div class="col-lg-6">
+        <p class="st-eyebrow">People &amp; Population</p>
+        <h2 class="st-heading">Demographics</h2>
+      </div>
+      <div class="col-lg-5 offset-lg-1">
+        <p class="st-lead">A detailed look at who lives, works, and grows within the CPDA region.</p>
+      </div>
+    </div>
+
+    <div class="st-section-label">
+      <div class="st-section-label__line"></div>
+      <span class="st-section-label__text">Regional Data</span>
+      <div class="st-section-label__line"></div>
+    </div>
+
     <div class="row g-4">
-      {% include 'industry-purchasing.html' %}
-      {% include 'total-industry-purchase.html' %}
-      {% include 'regional-exports.html' %}
-      {% include 'industry-regional-requirements.html' %}
-      {% include 'total-consumer-spending-est.html' %}
+
+      <!-- Population chart -->
+      <div class="col-lg-6">
+        <div class="st-chart-card">
+          <div class="st-chart-card__header">
+            <span class="st-chart-card__tag"><i class="fas fa-users" style="font-size:.7rem;"></i> Population</span>
+            <h3 class="st-chart-card__title">Population by Community</h3>
+            <p class="st-chart-card__subtitle">Current resident populations across CPDA member communities.</p>
+          </div>
+          <div class="st-chart-card__body">
+            <div class="st-chart-wrap">
+              {% include 'population-chart.html' %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Age chart -->
+      <div class="col-lg-6">
+        <div class="st-chart-card">
+          <div class="st-chart-card__header">
+            <span class="st-chart-card__tag"><i class="fas fa-chart-pie" style="font-size:.7rem;"></i> Age</span>
+            <h3 class="st-chart-card__title">Age Distribution</h3>
+            <p class="st-chart-card__subtitle">Breakdown of the regional population by age group.</p>
+          </div>
+          <div class="st-chart-card__body">
+            <div class="st-chart-wrap">
+              {% include 'age-chart.html' %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Income distribution — full width -->
+      <div class="col-12">
+        <div class="st-chart-card">
+          <div class="st-chart-card__header">
+            <span class="st-chart-card__tag"><i class="fas fa-dollar-sign" style="font-size:.7rem;"></i> Income</span>
+            <h3 class="st-chart-card__title">Income Distribution</h3>
+            <p class="st-chart-card__subtitle">Household income ranges across the CPDA region.</p>
+          </div>
+          <div class="st-chart-card__body">
+            <div class="st-chart-wrap">
+              {% include 'income-distribution.html' %}
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
-</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     ECONOMIC FLOW  — navy background
+     ══════════════════════════════════════════ -->
+<section id="economic" class="st-section st-section--navy">
+  <div class="container">
+
+    <div class="row align-items-end mb-4">
+      <div class="col-lg-6">
+        <p class="st-eyebrow">Business &amp; Commerce</p>
+        <h2 class="st-heading st-heading--white">Economic <em>Flow</em></h2>
+      </div>
+      <div class="col-lg-5 offset-lg-1">
+        <p class="st-lead st-lead--white">
+          How money moves through our regional economy — from industry purchasing to consumer spending.
+        </p>
+      </div>
+    </div>
+
+    <div class="st-section-label">
+      <div class="st-section-label__line st-section-label__line--white"></div>
+      <span class="st-section-label__text st-section-label__text--amber">Economic Indicators</span>
+      <div class="st-section-label__line st-section-label__line--white"></div>
+    </div>
+
+    <div class="row g-4">
+
+      <!-- Industry Purchasing -->
+      <div class="col-lg-6">
+        <div class="st-chart-card st-chart-card--navy">
+          <div class="st-chart-card__header">
+            <span class="st-chart-card__tag st-chart-card__tag--white"><i class="fas fa-industry" style="font-size:.7rem;"></i> Purchasing</span>
+            <h3 class="st-chart-card__title st-chart-card__title--white">Industry Purchasing</h3>
+            <p class="st-chart-card__subtitle st-chart-card__subtitle--white">Purchasing patterns broken down by industry sector.</p>
+          </div>
+          <div class="st-chart-card__body">
+            <div class="st-chart-wrap">
+              {% include 'industry-purchasing.html' %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Industry Purchase -->
+      <div class="col-lg-6">
+        <div class="st-chart-card st-chart-card--navy">
+          <div class="st-chart-card__header">
+            <span class="st-chart-card__tag st-chart-card__tag--white"><i class="fas fa-chart-bar" style="font-size:.7rem;"></i> Totals</span>
+            <h3 class="st-chart-card__title st-chart-card__title--white">Total Industry Purchase</h3>
+            <p class="st-chart-card__subtitle st-chart-card__subtitle--white">Aggregate industry purchasing volumes across the region.</p>
+          </div>
+          <div class="st-chart-card__body">
+            <div class="st-chart-wrap">
+              {% include 'total-industry-purchase.html' %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Regional Exports — full width -->
+      <div class="col-12">
+        <div class="st-chart-card st-chart-card--navy">
+          <div class="st-chart-card__header">
+            <span class="st-chart-card__tag st-chart-card__tag--white"><i class="fas fa-arrow-up" style="font-size:.7rem;"></i> Exports</span>
+            <h3 class="st-chart-card__title st-chart-card__title--white">Regional Exports</h3>
+            <p class="st-chart-card__subtitle st-chart-card__subtitle--white">Goods and services exported from the CPDA region to broader markets.</p>
+          </div>
+          <div class="st-chart-card__body">
+            <div class="st-chart-wrap">
+              {% include 'regional-exports.html' %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Industry Regional Requirements -->
+      <div class="col-lg-6">
+        <div class="st-chart-card st-chart-card--navy">
+          <div class="st-chart-card__header">
+            <span class="st-chart-card__tag st-chart-card__tag--white"><i class="fas fa-sitemap" style="font-size:.7rem;"></i> Requirements</span>
+            <h3 class="st-chart-card__title st-chart-card__title--white">Industry Regional Requirements</h3>
+            <p class="st-chart-card__subtitle st-chart-card__subtitle--white">What each industry sector needs from within the region to operate.</p>
+          </div>
+          <div class="st-chart-card__body">
+            <div class="st-chart-wrap">
+              {% include 'industry-regional-requirements.html' %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Consumer Spending -->
+      <div class="col-lg-6">
+        <div class="st-chart-card st-chart-card--navy">
+          <div class="st-chart-card__header">
+            <span class="st-chart-card__tag st-chart-card__tag--white"><i class="fas fa-shopping-cart" style="font-size:.7rem;"></i> Consumer</span>
+            <h3 class="st-chart-card__title st-chart-card__title--white">Total Consumer Spending Est.</h3>
+            <p class="st-chart-card__subtitle st-chart-card__subtitle--white">Estimated total consumer spending across CPDA communities.</p>
+          </div>
+          <div class="st-chart-card__body">
+            <div class="st-chart-wrap">
+              {% include 'total-consumer-spending-est.html' %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
 
 {% endblock %}
