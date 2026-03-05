@@ -1,16 +1,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Poppins:wght@600;700&display=swap');
 
+/* =========================
+   Design Tokens
+   ========================= */
 :root {
-  --color-primary: #1E2D49;
-  --color-accent: #FF9900;
+  --color-primary:    #1E2D49;
+  --color-primary-dk: #162238;
+  --color-accent:     #FF9900;
   --color-background: #F9FAFB;
-  --color-text: #2E2E2E;
-  --color-card: #E6ECF2;
+  --color-text:       #2E2E2E;
+  --color-card:       #E6ECF2;
+  --color-muted:      #5a6478;
+  --color-border:     rgba(30,45,73,0.10);
 
   --font-heading: 'Poppins', sans-serif;
-  --font-body: 'Inter', sans-serif;
+  --font-body:    'Inter', sans-serif;
+
+  --radius-sm:  8px;
+  --radius-md:  12px;
+  --radius-lg:  20px;
+  --shadow-sm:  0 2px 12px rgba(30,45,73,0.06);
+  --shadow-md:  0 6px 24px rgba(30,45,73,0.10);
+  --shadow-lg:  0 16px 48px rgba(30,45,73,0.14);
 }
 
+/* =========================
+   Base
+   ========================= */
 body {
   font-family: var(--font-body);
   background-color: var(--color-background);
@@ -29,6 +45,9 @@ nav {
   color: #fff;
 }
 
+/* =========================
+   Buttons
+   ========================= */
 button, .btn-primary {
   background-color: var(--color-primary);
   color: #fff;
@@ -48,13 +67,19 @@ button, .btn-primary {
   color: #fff;
 }
 
+/* =========================
+   Cards (global)
+   ========================= */
 .card {
   background-color: var(--color-card);
   padding: 1.5rem;
   border-radius: 1rem;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  box-shadow: var(--shadow-sm);
 }
 
+/* =========================
+   Navbar layout
+   ========================= */
 .custom-navbar-container {
   max-width: 100vw;
   width: 100%;
@@ -77,6 +102,9 @@ button, .btn-primary {
   border-radius: 0;
 }
 
+/* =========================
+   Carousel arrows
+   ========================= */
 .custom-arrow {
   width: 48px;
   height: 48px;
@@ -91,66 +119,50 @@ button, .btn-primary {
   z-index: 20;
 }
 
-.custom-arrow i {
-  color: #fff;
-}
+.custom-arrow i { color: #fff; }
 
-.carousel-control-prev {
-  left: 16px;
-}
-
-.carousel-control-next {
-  right: 16px;
-}
+.carousel-control-prev { left: 16px; }
+.carousel-control-next { right: 16px; }
 
 @media (max-width: 576px) {
-  .custom-arrow {
-    width: 36px;
-    height: 36px;
-  }
-
-  .carousel-control-prev {
-    left: 8px;
-  }
-
-  .carousel-control-next {
-    right: 8px;
-  }
+  .custom-arrow           { width: 36px; height: 36px; }
+  .carousel-control-prev  { left: 8px; }
+  .carousel-control-next  { right: 8px; }
 }
 
+/* =========================
+   Town buttons
+   ========================= */
 .cpda-town-btn {
   font-size: 1.15rem;
   font-weight: 600;
   color: #ed4c1c;
   border: 2px solid #ed4c1c;
   background: #fff;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   transition: all 0.2s;
   box-shadow: 0 2px 8px rgba(232,76,28,0.07);
   padding: 0.75rem 1.2rem;
 }
-.cpda-town-btn:hover, .cpda-town-btn:focus {
+.cpda-town-btn:hover,
+.cpda-town-btn:focus {
   background: #ed4c1c;
   color: #fff;
   text-decoration: none;
   box-shadow: 0 4px 16px rgba(232,76,28,0.15);
 }
 
-
 /* =========================
-   Navbar dropdown (CPDA)
+   Navbar dropdown
    ========================= */
-
 .navbar .dropdown-menu {
-  border: 1px solid rgba(30, 45, 73, 0.12);
+  border: 1px solid rgba(30,45,73,0.12);
   border-radius: 14px;
   padding: 0.5rem;
   min-width: 240px;
-
-  background: rgba(255, 255, 255, 0.96);
+  background: rgba(255,255,255,0.96);
   backdrop-filter: blur(10px);
-  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.14);
-
+  box-shadow: var(--shadow-lg);
   opacity: 0;
   transform: translateY(10px);
   visibility: hidden;
@@ -173,14 +185,14 @@ button, .btn-primary {
 
 .navbar .dropdown-item:hover,
 .navbar .dropdown-item:focus {
-  background: rgba(255, 153, 0, 0.12);
+  background: rgba(255,153,0,0.12);
   color: var(--color-primary);
 }
 
 .navbar .dropdown-toggle::after {
   margin-left: 0.4rem;
   transform: translateY(1px);
-  border-top-color: rgba(30, 45, 73, 0.7);
+  border-top-color: rgba(30,45,73,0.7);
 }
 
 @media (min-width: 992px) {
@@ -191,16 +203,176 @@ button, .btn-primary {
   }
 }
 
-
 /* =========================
-   Footer (CPDA)
+   About Us page
    ========================= */
 
+/* Section rhythm */
+.cpda-section {
+  padding: 5rem 0;
+  background: var(--color-background);
+}
+
+.cpda-section.alt {
+  background: #eef1f7;
+}
+
+/* Section titles */
+.cpda-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: -0.02em;
+  margin-bottom: 0.75rem;
+}
+
+.cpda-subtitle {
+  max-width: 860px;
+  margin: 0 auto;
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  color: var(--color-muted);
+  line-height: 1.75;
+}
+
+/* Quote / gradient banner — override Bootstrap blue with brand navy */
+.bg-gradient-primary {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dk) 100%) !important;
+}
+
+.bg-gradient-primary p {
+  font-family: var(--font-heading);
+  color: rgba(255,255,255,0.92);
+}
+
+/* ── Timeline ── */
+.cpda-timeline {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding-left: 2.5rem;
+  border-left: 2px solid var(--color-border);
+  margin-top: 2rem;
+}
+
+.cpda-timeline__item {
+  position: relative;
+  padding-bottom: 2.5rem;
+}
+
+.cpda-timeline__item:last-child {
+  padding-bottom: 0;
+}
+
+.cpda-timeline__marker {
+  position: absolute;
+  left: -3.25rem;
+  top: 0.1rem;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  font-family: var(--font-heading);
+  font-size: 0.68rem;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  border: 3px solid #eef1f7;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Timeline markers on white-background sections need white border */
+.cpda-section:not(.alt) .cpda-timeline__marker {
+  border-color: var(--color-background);
+}
+
+.cpda-timeline__body h3 {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 0.45rem;
+}
+
+.cpda-timeline__body p {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--color-muted);
+  line-height: 1.72;
+  margin: 0;
+}
+
+/* ── Why CPDA Matters — icon pill cards ── */
+.cpda-why-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.1rem 1.25rem;
+  border-radius: var(--radius-md);
+  background: #fff;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s, transform 0.2s;
+  height: 100%;
+}
+
+.cpda-why-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.cpda-why-card__icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: var(--color-primary);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.cpda-why-card:hover .cpda-why-card__icon {
+  background: var(--color-accent);
+}
+
+.cpda-why-card__label {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* ── Sticky jump bar ── */
+.cpda-jumpbar {
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+.cpda-jumpbar .btn {
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  font-weight: 600;
+}
+
+/* =========================
+   Footer
+   ========================= */
 .cpda-footer {
-  position: relative; 
+  position: relative;
+  z-index: 2;
   background: #111827;
   color: #e5e7eb;
-  z-index: 2;
   font-family: var(--font-body);
   padding: 3rem 0 0;
 }
@@ -254,7 +426,7 @@ button, .btn-primary {
   margin-bottom: 1.75rem;
 }
 
-/* Uniform logos — all 4 in one row, same size */
+/* Logos — uniform row */
 .cpda-footer__logos {
   display: flex;
   flex-wrap: nowrap;
@@ -269,16 +441,16 @@ button, .btn-primary {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 8px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: var(--radius-sm);
   padding: 6px;
   transition: background 0.2s;
-  overflow: visible
+  overflow: hidden;
 }
 
 .cpda-footer__logo-wrap:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255,255,255,0.15);
 }
 
 .cpda-footer__logo-wrap img {
@@ -289,15 +461,12 @@ button, .btn-primary {
   object-fit: contain;
 }
 
-/* ── Nav links — NO box, NO background, NO border ── */
-/* Reset anything Bootstrap / soft-design-system might inject */
+/* Nav links — no box, no background, no border */
 .cpda-footer__nav {
   flex: 1 1 400px;
   display: flex;
   flex-wrap: wrap;
   gap: 2.5rem;
-
-  /* Explicitly strip any inherited box styles */
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
@@ -308,8 +477,6 @@ button, .btn-primary {
 
 .cpda-footer__col {
   min-width: 120px;
-
-  /* Also strip column-level box styles just in case */
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
@@ -324,7 +491,6 @@ button, .btn-primary {
   color: #6b7280;
   margin: 0 0 1rem;
   padding: 0;
-  /* Override any h2 global styles that may add borders/backgrounds */
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
@@ -340,7 +506,6 @@ button, .btn-primary {
 }
 
 .cpda-footer__list li {
-  /* Ensure li items have no stray styling */
   background: transparent !important;
   border: none !important;
   padding: 0 !important;
@@ -362,14 +527,14 @@ button, .btn-primary {
 .cpda-footer__link:hover,
 .cpda-footer__link:focus {
   color: #ffffff !important;
-  transform: translateX(3px); /* subtle nudge instead of underline */
+  transform: translateX(3px);
   text-decoration: none !important;
 }
 
 /* Divider */
 .cpda-footer__divider {
   border: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(255,255,255,0.08);
   margin: 0;
 }
 
@@ -392,9 +557,7 @@ button, .btn-primary {
   margin: 0;
 }
 
-.cpda-footer__muted {
-  color: #4b5563;
-}
+.cpda-footer__muted { color: #4b5563; }
 
 .cpda-footer__bottom-right {
   display: flex;
@@ -409,15 +572,13 @@ button, .btn-primary {
   transition: color 0.15s;
 }
 
-.cpda-footer__backtotop:hover {
-  color: #d1d5db;
-}
+.cpda-footer__backtotop:hover { color: #d1d5db; }
 
 .cpda-footer__admin {
   font-size: 0.75rem;
   color: #4b5563;
   text-decoration: none;
-  border: 1px solid rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255,255,255,0.10);
   border-radius: 4px;
   padding: 2px 8px;
   transition: color 0.15s, border-color 0.15s;
@@ -425,10 +586,10 @@ button, .btn-primary {
 
 .cpda-footer__admin:hover {
   color: #9ca3af;
-  border-color: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255,255,255,0.25);
 }
 
-/* Responsive */
+/* Footer responsive */
 @media (max-width: 640px) {
   .cpda-footer__top    { flex-direction: column; gap: 2rem; }
   .cpda-footer__brand  { max-width: 100%; }

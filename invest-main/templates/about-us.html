@@ -1,30 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-<style>
-  /* Page rhythm */
-  .cpda-section { padding: 4rem 0; }
-  .cpda-section.alt { background: #f6f7fb; }
-  .cpda-title { font-weight: 800; letter-spacing: .2px; }
-  .cpda-subtitle { max-width: 860px; margin: 0 auto; }
-
-  /* Sticky jump nav */
-  .cpda-jumpbar {
-    position: sticky;
-    top: 0;
-    z-index: 1020;
-    background: rgba(255,255,255,.95);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid rgba(0,0,0,.08);
-  }
-  .cpda-jumpbar .btn {
-    border-radius: 999px;
-    padding: .35rem .9rem;
-    font-weight: 600;
-  }
-</style>
-
-<!-- HERO (only image here, no repeated buttons) -->
+<!-- HERO -->
 <header class="header-2">
   <div class="page-header min-vh-100 relative"
        style="background-image: url('{{ url_for('static', filename='assets/img/about-us-2.jpg') }}')">
@@ -33,11 +10,11 @@
       <div class="row justify-content-center">
         <div class="col-lg-9 text-center mx-auto my-auto">
           <h1 class="text-white" style="text-shadow: 2px 2px 8px rgba(0,0,0,0.7);">Who we are</h1>
-
-          <p class="lead mb-0 text-white opacity-8 about-us-text"
+          <p class="lead mb-0 text-white opacity-8"
              style="text-shadow: 2px 2px 8px rgba(0,0,0,0.7); max-width: 920px; margin: 0 auto;">
-            The Central Prairie Development Alliance (CPDA) was born from a shared understanding: no single community has the capacity
-            to tackle economic and social development alone. We function as a region—and we must grow and thrive as one.
+            The Central Prairie Development Alliance (CPDA) was born from a shared understanding:
+            no single community has the capacity to tackle economic and social development alone.
+            We function as a region — and we must grow and thrive as one.
           </p>
         </div>
       </div>
@@ -45,110 +22,103 @@
   </div>
 </header>
 
-<!-- ABOUT -->
+
+<!-- ═══════════════════════════════════════
+     ABOUT CPDA — Timeline replaces accordion
+     ═══════════════════════════════════════ -->
 <section id="about" class="cpda-section">
   <div class="container">
-    <div class="row justify-content-center text-center mb-4">
+
+    <div class="row justify-content-center text-center mb-5">
       <div class="col-lg-10">
         <h2 class="cpda-title text-gradient text-primary">About CPDA</h2>
-        <p class="lead cpda-subtitle">
-          CPDA brings communities together to collaborate on regional priorities that support growth, services, and quality of life.
+        <p class="cpda-subtitle lead">
+          CPDA brings communities together to collaborate on regional priorities
+          that support growth, services, and quality of life.
         </p>
       </div>
     </div>
 
     <div class="row justify-content-center">
-      <div class="col-lg-10">
+      <div class="col-lg-8">
 
-        <div class="card shadow-sm border-0">
-          <div class="card-body p-4 p-md-5">
+        <div class="cpda-timeline">
 
-            <div class="accordion" id="cpdaAccordion">
-
-              <div class="accordion-item">
-                <h2 class="accordion-header" id="headingOne">
-                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
-                          aria-expanded="true" aria-controls="collapseOne">
-                    How CPDA started
-                  </button>
-                </h2>
-                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#cpdaAccordion">
-                  <div class="accordion-body">
-                    <p class="mb-3">
-                      The initial conversation began with representatives from Suncrest College, the City of Yorkton, the Yorkton and District Chamber of Commerce,
-                      and the Yorkton Tribal Council. Together, they explored how a broader, more inclusive regional approach—one that brings together First Nations,
-                      cities, towns, villages, and rural municipalities—could strengthen economic and social development across the area.
-                    </p>
-                    <p class="mb-0">
-                      While many of the founding organizations were based in Yorkton, it was clear from the outset that this could not be a Yorkton-only initiative.
-                      The group agreed to invite communities within Yorkton’s broader trading area to a regional meeting to formally launch the CPDA.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="accordion-item">
-                <h2 class="accordion-header" id="headingTwo">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
-                          aria-expanded="false" aria-controls="collapseTwo">
-                    What happened next
-                  </button>
-                </h2>
-                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#cpdaAccordion">
-                  <div class="accordion-body">
-                    <p class="mb-0">
-                      That first meeting took place on a frigid December morning in Canora in 2025, with representatives from 11 villages, towns, and organizations in attendance.
-                      Since then, the CPDA has met regularly every two months. In June, the Alliance took a major step forward by forming a series of sub-committees to focus on key priority areas.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="accordion-item">
-                <h2 class="accordion-header" id="headingThree">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree"
-                          aria-expanded="false" aria-controls="collapseThree">
-                    What CPDA focuses on
-                  </button>
-                </h2>
-                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#cpdaAccordion">
-                  <div class="accordion-body">
-                    <div class="row g-3">
-                      <div class="col-md-6">
-                        <div class="p-3 border rounded-3 h-100">
-                          <div class="fw-bold mb-1" style="color:#23254a;">Regional coordination</div>
-                          <div class="text-muted">Working as a region so communities can share solutions and move faster together.</div>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="p-3 border rounded-3 h-100">
-                          <div class="fw-bold mb-1" style="color:#23254a;">Growth capacity</div>
-                          <div class="text-muted">Housing, workforce, services, and planning that supports long-term development.</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
+          <div class="cpda-timeline__item">
+            <div class="cpda-timeline__marker">01</div>
+            <div class="cpda-timeline__body">
+              <h3>How CPDA Started</h3>
+              <p>
+                The initial conversation began with representatives from Suncrest College,
+                the City of Yorkton, the Yorkton and District Chamber of Commerce, and the
+                Yorkton Tribal Council. Together, they explored how a broader, more inclusive
+                regional approach — one that brings together First Nations, cities, towns,
+                villages, and rural municipalities — could strengthen economic and social
+                development across the area.
+              </p>
             </div>
-
           </div>
-        </div>
 
+          <div class="cpda-timeline__item">
+            <div class="cpda-timeline__marker">02</div>
+            <div class="cpda-timeline__body">
+              <h3>What Happened Next</h3>
+              <p>
+                While many of the founding organizations were based in Yorkton, it was clear
+                from the outset that this could not be a Yorkton-only initiative. The group
+                agreed to invite communities within Yorkton's broader trading area to a regional
+                meeting to formally launch the CPDA. That first meeting took place on a frigid
+                December morning in Canora in 2025, with representatives from 11 villages,
+                towns, and organizations in attendance.
+              </p>
+            </div>
+          </div>
+
+          <div class="cpda-timeline__item">
+            <div class="cpda-timeline__marker">03</div>
+            <div class="cpda-timeline__body">
+              <h3>Growing Together</h3>
+              <p>
+                Since that first meeting, the CPDA has met regularly every two months. In June,
+                the Alliance took a major step forward by forming a series of sub-committees to
+                focus on key priority areas — regional coordination, housing, workforce planning,
+                and quality of life.
+              </p>
+            </div>
+          </div>
+
+          <div class="cpda-timeline__item">
+            <div class="cpda-timeline__marker">04</div>
+            <div class="cpda-timeline__body">
+              <h3>What CPDA Focuses On</h3>
+              <p>
+                Working as a region so communities can share solutions and move faster together —
+                from housing and workforce development to services, transportation, and long-term
+                planning that supports sustainable growth across East-Central Saskatchewan.
+              </p>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
+
   </div>
 </section>
 
-<!-- VISION (keep your “good” section style) -->
+
+<!-- ═══════════════════════════════════════
+     OUR VISION
+     ═══════════════════════════════════════ -->
 <section id="vision" class="cpda-section alt">
   <div class="container">
-    <div class="row justify-content-center text-center mb-4">
+
+    <div class="row justify-content-center text-center mb-5">
       <div class="col-lg-10">
         <h2 class="cpda-title text-gradient text-primary">Our Vision</h2>
-        <p class="lead cpda-subtitle">
-          The Region that works together to facilitate enhanced prosperity, economic activity, and wellbeing for people and the environment.
+        <p class="cpda-subtitle lead">
+          The Region that works together to facilitate enhanced prosperity,
+          economic activity, and wellbeing for people and the environment.
         </p>
       </div>
     </div>
@@ -156,70 +126,122 @@
     <div class="row justify-content-center">
       <div class="col-lg-10">
         <div class="row g-4">
+
           <div class="col-lg-6">
-            <div class="card shadow-sm h-100 border-0">
+            <div class="card shadow-sm h-100 border-0" style="background:#fff;">
               <div class="card-body p-4">
-                <h3 class="mb-4" style="color:#1e2d49;">Challenges We're Addressing</h3>
-                <ul class="list-unstyled fs-5 mb-0">
-                  <li class="mb-3">&#9632; How to increase economic activity</li>
-                  <li class="mb-3">&#9632; Housing shortages</li>
-                  <li class="mb-3">&#9632; Limited childcare</li>
-                  <li class="mb-3">&#9632; Transportation gaps</li>
-                  <li class="mb-0">&#9632; Service accessibility</li>
+                <h3 class="mb-4" style="color:#1e2d49; font-size:1.15rem;">Challenges We're Addressing</h3>
+                <ul class="list-unstyled mb-0" style="font-size:0.95rem; color:#5a6478; line-height:2;">
+                  <li>&#9632;&nbsp; How to increase economic activity</li>
+                  <li>&#9632;&nbsp; Housing shortages</li>
+                  <li>&#9632;&nbsp; Limited childcare</li>
+                  <li>&#9632;&nbsp; Transportation gaps</li>
+                  <li>&#9632;&nbsp; Service accessibility</li>
                 </ul>
               </div>
             </div>
           </div>
 
           <div class="col-lg-6">
-            <div class="card shadow-sm h-100 border-0">
+            <div class="card shadow-sm h-100 border-0" style="background:#fff;">
               <div class="card-body p-4">
-                <h3 class="mb-4 text-success">Opportunities for Growth</h3>
-                <ul class="list-unstyled fs-5 mb-0">
-                  <li class="mb-3">&#9632; Talent attraction</li>
-                  <li class="mb-3">&#9632; Economic collaboration</li>
-                  <li class="mb-0">&#9632; Community development</li>
+                <h3 class="mb-4" style="color:#16a34a; font-size:1.15rem;">Opportunities for Growth</h3>
+                <ul class="list-unstyled mb-0" style="font-size:0.95rem; color:#5a6478; line-height:2;">
+                  <li>&#9632;&nbsp; Talent attraction</li>
+                  <li>&#9632;&nbsp; Economic collaboration</li>
+                  <li>&#9632;&nbsp; Community development</li>
                 </ul>
               </div>
             </div>
           </div>
+
         </div>
 
-        <div class="text-center fs-5 mt-5">
-          Want to help define the roadmap?
-          <br><br>
+        <div class="text-center mt-5">
+          <p class="mb-3" style="font-size:1rem; color:#5a6478;">Want to help define the roadmap?</p>
           <a href="/get-involved" class="btn btn-primary btn-lg">Join the Conversation</a>
         </div>
 
       </div>
     </div>
+
   </div>
 </section>
 
-<!-- WHY IT MATTERS (place it AFTER vision, before quote) -->
+
+<!-- ═══════════════════════════════════════
+     WHY CPDA MATTERS — icon pill cards
+     ═══════════════════════════════════════ -->
 <section id="why" class="cpda-section">
   <div class="container">
-    <div class="row justify-content-center text-center mb-4">
+
+    <div class="row justify-content-center text-center mb-5">
       <div class="col-lg-10">
         <h2 class="cpda-title text-gradient text-primary">Why CPDA Matters</h2>
-        <p class="lead cpda-subtitle">
+        <p class="cpda-subtitle lead">
           Our work strengthens regional collaboration and enhances quality of life through:
         </p>
       </div>
     </div>
 
     <div class="row justify-content-center">
-      <div class="col-lg-8">
-        <div class="card shadow-sm border-0">
-          <div class="card-body p-4 p-md-5">
-            <ul class="list-unstyled mb-0" style="font-size:16px;">
-              <li class="mb-3">&#9632; <strong>Unified Regional Advocacy</strong> for economic growth and more</li>
-              <li class="mb-3">&#9632; <strong>Regional Housing & Workforce Planning</strong></li>
-              <li class="mb-3">&#9632; <strong>Access to Services</strong> (Childcare, Health, Legal)</li>
-              <li class="mb-3">&#9632; <strong>Regional Transportation</strong></li>
-              <li class="mb-0">&#9632; <strong>Quality of Life & Recreation</strong></li>
-            </ul>
+      <div class="col-lg-10">
+        <div class="row g-3">
+
+          <div class="col-md-6 col-lg-4">
+            <div class="cpda-why-card">
+              <div class="cpda-why-card__icon">
+                <i class="fas fa-bullhorn"></i>
+              </div>
+              <p class="cpda-why-card__label">Unified Regional Advocacy</p>
+            </div>
           </div>
+
+          <div class="col-md-6 col-lg-4">
+            <div class="cpda-why-card">
+              <div class="cpda-why-card__icon">
+                <i class="fas fa-home"></i>
+              </div>
+              <p class="cpda-why-card__label">Housing &amp; Workforce Planning</p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-4">
+            <div class="cpda-why-card">
+              <div class="cpda-why-card__icon">
+                <i class="fas fa-hands-helping"></i>
+              </div>
+              <p class="cpda-why-card__label">Access to Services</p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-4">
+            <div class="cpda-why-card">
+              <div class="cpda-why-card__icon">
+                <i class="fas fa-bus"></i>
+              </div>
+              <p class="cpda-why-card__label">Regional Transportation</p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-4">
+            <div class="cpda-why-card">
+              <div class="cpda-why-card__icon">
+                <i class="fas fa-leaf"></i>
+              </div>
+              <p class="cpda-why-card__label">Quality of Life &amp; Recreation</p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-4">
+            <div class="cpda-why-card">
+              <div class="cpda-why-card__icon">
+                <i class="fas fa-handshake"></i>
+              </div>
+              <p class="cpda-why-card__label">Economic Collaboration</p>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -227,24 +249,30 @@
   </div>
 </section>
 
-<!-- QUOTE -->
+
+<!-- ═══════════════════════════════════════
+     QUOTE BANNER — brand navy, not Bootstrap blue
+     ═══════════════════════════════════════ -->
 <section class="py-5 bg-gradient-primary position-relative text-white">
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-lg-10 text-center">
-        <p class="mb-1 fs-3 fst-italic">“We are turning shared challenges into shared opportunities — shaping the future of our region, together.”</p>
-        <br />
-        <p class="fs-4"><strong>Sharon Rurak, Suncrest College</strong></p>
+      <div class="col-lg-9 text-center">
+        <p class="mb-3 fs-3 fst-italic">
+          "We are turning shared challenges into shared opportunities —
+          shaping the future of our region, together."
+        </p>
+        <p class="fs-5 mb-0" style="opacity:.8;">
+          <strong>Sharon Rurak, Suncrest College</strong>
+        </p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ========================= -->
-<!-- MAP SECTION (UNCHANGED)   -->
-<!-- keep everything same here -->
-<!-- ========================= -->
 
+<!-- ═══════════════════════════════════════
+     MAP
+     ═══════════════════════════════════════ -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
@@ -256,12 +284,13 @@
   }
 </style>
 
-<section id="map" class="py-5">
+<section id="map" class="cpda-section alt">
   <div class="container">
+
     <div class="row justify-content-center text-center mb-4">
       <div class="col-lg-8">
-        <h2 class="text-gradient text-primary">Who are the communities in CPDA?</h2>
-        <p class="lead">Click on each pin to visit the homepage of a CPDA member community.</p>
+        <h2 class="cpda-title text-gradient text-primary">Who are the communities in CPDA?</h2>
+        <p class="cpda-subtitle lead">Click on each pin to visit the homepage of a CPDA member community.</p>
       </div>
     </div>
 
@@ -270,111 +299,95 @@
         <div id="cpda-map"></div>
       </div>
     </div>
+
   </div>
 </section>
 
 <script>
-  // Map
   var map = L.map('cpda-map').setView([51.5, -102.5], 7);
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
   }).addTo(map);
 
-  // Paid members (pins should be a different colour)
-  var paidMembers = new Set([
-    "Yorkton",
-    "Ituna",
-    "Ituna Bon Accord no. 256"
-  ]);
+  var paidMembers = new Set(["Yorkton", "Ituna", "Ituna Bon Accord no. 256"]);
 
-  // Gold icon for paid, Red icon for unpaid
   var paidIcon = new L.Icon({
     iconUrl: "https://cdn.jsdelivr.net/gh/pointhi/leaflet-color-markers@master/img/marker-icon-2x-gold.png",
     shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
-});
-
-var defaultIcon = new L.Icon({
-    iconUrl: "https://cdn.jsdelivr.net/gh/pointhi/leaflet-color-markers@master/img/marker-icon-2x-red.png",
-    shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
+    iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
   });
 
-  // Town marker data
+  var defaultIcon = new L.Icon({
+    iconUrl: "https://cdn.jsdelivr.net/gh/pointhi/leaflet-color-markers@master/img/marker-icon-2x-red.png",
+    shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
+    iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
+  });
+
   var towns = [
-    {name: 'Langenburg', url: 'https://langenburg.ca', lat: 51.8501, lng: -101.7002},
-    {name: 'Esterhazy', url: 'https://townofesterhazy.ca', lat: 50.6501, lng: -102.0667},
-    {name: 'Stockholm', url: 'https://stockholmsask.com', lat: 50.8833, lng: -102.2833},
-    {name: 'Grayson', url: 'https://villageofgrayson.com/', lat: 50.6333, lng: -102.6833},
-    {name: 'Melville', url: 'https://melville.ca', lat: 50.9333, lng: -102.8000},
-    {name: 'RM of Saltcoats', url: 'https://rmsaltcoats.ca/', lat: 51.6333, lng: -102.3333},
-    {name: 'Yorkton', url: 'https://www.yorkton.ca/en/index.aspx', lat: 51.2139, lng: -102.4628},
-    {name: 'Springside', url: 'https://townofspringside.ca/', lat: 51.4667, lng: -102.5667},
-    {name: 'Sheho', url: './', lat: 51.4833, lng: -103.0167},
-    {name: 'Sturgis', url: 'https://townofsturgis.ca/', lat: 51.9500, lng: -102.5333},
-    {name: 'Hyas', url: 'https://www.villageofhyas.com/', lat: 51.9833, lng: -102.2833},
-    {name: 'Cote 64', url: './', lat: 51.9000, lng: -102.4000},
-    {name: 'Ituna', url: 'https://ituna.ca/', lat: 51.6333, lng: -103.3833},
+    {name: 'Langenburg',           url: 'https://langenburg.ca',               lat: 51.8501, lng: -101.7002},
+    {name: 'Esterhazy',            url: 'https://townofesterhazy.ca',           lat: 50.6501, lng: -102.0667},
+    {name: 'Stockholm',            url: 'https://stockholmsask.com',            lat: 50.8833, lng: -102.2833},
+    {name: 'Grayson',              url: 'https://villageofgrayson.com/',        lat: 50.6333, lng: -102.6833},
+    {name: 'Melville',             url: 'https://melville.ca',                  lat: 50.9333, lng: -102.8000},
+    {name: 'RM of Saltcoats',      url: 'https://rmsaltcoats.ca/',              lat: 51.6333, lng: -102.3333},
+    {name: 'Yorkton',              url: 'https://www.yorkton.ca/en/index.aspx', lat: 51.2139, lng: -102.4628},
+    {name: 'Springside',           url: 'https://townofspringside.ca/',         lat: 51.4667, lng: -102.5667},
+    {name: 'Sheho',                url: './',                                   lat: 51.4833, lng: -103.0167},
+    {name: 'Sturgis',              url: 'https://townofsturgis.ca/',            lat: 51.9500, lng: -102.5333},
+    {name: 'Hyas',                 url: 'https://www.villageofhyas.com/',       lat: 51.9833, lng: -102.2833},
+    {name: 'Cote 64',              url: './',                                   lat: 51.9000, lng: -102.4000},
+    {name: 'Ituna',                url: 'https://ituna.ca/',                    lat: 51.6333, lng: -103.3833},
     {name: 'Ituna Bon Accord no. 256', url: 'https://www.municipality-canada.com/en/rural-municipality-ituna-bon-accord.html', lat: 51.6500, lng: -103.4000},
-    {name: 'Foam Lake', url: 'https://foamlake.com', lat: 51.6500, lng: -103.5333},
-    {name: 'Buchanan', url: 'https://www.saskatchewan.ca/government/municipal-administration/municipal-directory?s=%7Bf74a076b-cd2b-4068-9baa-95dc4a4c0d94%7D', lat: 51.7000, lng: -102.8833}
+    {name: 'Foam Lake',            url: 'https://foamlake.com',                 lat: 51.6500, lng: -103.5333},
+    {name: 'Buchanan',             url: 'https://www.saskatchewan.ca/government/municipal-administration/municipal-directory?s=%7Bf74a076b-cd2b-4068-9baa-95dc4a4c0d94%7D', lat: 51.7000, lng: -102.8833}
   ];
 
   towns.forEach(function(town) {
     if (!town.lat || !town.lng) return;
-
-    var iconToUse = paidMembers.has(town.name) ? paidIcon : defaultIcon;
-
-    var marker = L.marker([town.lat, town.lng], { icon: iconToUse }).addTo(map);
-
+    var icon   = paidMembers.has(town.name) ? paidIcon : defaultIcon;
+    var marker = L.marker([town.lat, town.lng], { icon: icon }).addTo(map);
     marker.bindPopup(
-      `<a href="${town.url}" target="_blank" style="color:#ed4c1c; font-weight:600; text-decoration:none;">
+      `<a href="${town.url}" target="_blank" style="color:#ed4c1c;font-weight:600;text-decoration:none;">
         <i class="fas fa-map-marker-alt"></i> ${town.name}
       </a>`
     );
-
     marker.bindTooltip(town.name, { permanent: false, direction: 'top' });
-
-    marker.on('click', function() {
-      window.open(town.url, '_blank');
-    });
+    marker.on('click', function() { window.open(town.url, '_blank'); });
   });
 </script>
 
-<!-- COMMUNITIES LIST (NOW BELOW MAP) -->
-<section id="communities" class="cpda-section alt">
+
+<!-- ═══════════════════════════════════════
+     COMMUNITIES LIST
+     ═══════════════════════════════════════ -->
+<section id="communities" class="cpda-section">
   <div class="container">
+
     <div class="row justify-content-center text-center mb-4">
       <div class="col-lg-10">
         <h2 class="cpda-title text-gradient text-primary">CPDA Member Communities</h2>
-        <p class="lead cpda-subtitle">Quick links to CPDA member community websites.</p>
+        <p class="cpda-subtitle lead">Quick links to CPDA member community websites.</p>
       </div>
     </div>
 
     {% set towns = [
-      {'name': 'Langenburg', 'url': 'https://langenburg.ca'},
-      {'name': 'Esterhazy', 'url': 'https://townofesterhazy.ca'},
-      {'name': 'Stockholm', 'url': 'https://stockholmsask.com'},
-      {'name': 'Grayson', 'url': 'https://villageofgrayson.com/'},
-      {'name': 'Melville', 'url': 'https://melville.ca'},
-      {'name': 'RM of Saltcoats', 'url': 'https://rmsaltcoats.ca/'},
-      {'name': 'Yorkton', 'url': 'https://www.yorkton.ca/en/index.aspx'},
-      {'name': 'Springside', 'url': 'https://townofspringside.ca/'},
-      {'name': 'Sheho', 'url': './'},
-      {'name': 'Sturgis', 'url': 'https://townofsturgis.ca/'},
-      {'name': 'Hyas', 'url': 'https://www.villageofhyas.com/'},
-      {'name': 'Cote 64', 'url': './'},
-      {'name': 'Ituna', 'url': 'https://ituna.ca/'},
+      {'name': 'Langenburg',           'url': 'https://langenburg.ca'},
+      {'name': 'Esterhazy',            'url': 'https://townofesterhazy.ca'},
+      {'name': 'Stockholm',            'url': 'https://stockholmsask.com'},
+      {'name': 'Grayson',              'url': 'https://villageofgrayson.com/'},
+      {'name': 'Melville',             'url': 'https://melville.ca'},
+      {'name': 'RM of Saltcoats',      'url': 'https://rmsaltcoats.ca/'},
+      {'name': 'Yorkton',              'url': 'https://www.yorkton.ca/en/index.aspx'},
+      {'name': 'Springside',           'url': 'https://townofspringside.ca/'},
+      {'name': 'Sheho',                'url': './'},
+      {'name': 'Sturgis',              'url': 'https://townofsturgis.ca/'},
+      {'name': 'Hyas',                 'url': 'https://www.villageofhyas.com/'},
+      {'name': 'Cote 64',              'url': './'},
+      {'name': 'Ituna',                'url': 'https://ituna.ca/'},
       {'name': 'Ituna Bon Accord no. 256', 'url': 'https://www.municipality-canada.com/en/rural-municipality-ituna-bon-accord.html'},
-      {'name': 'Foam Lake', 'url': 'https://foamlake.com'},
-      {'name': 'Buchanan', 'url': 'https://www.saskatchewan.ca/government/municipal-administration/municipal-directory?s=%7Bf74a076b-cd2b-4068-9baa-95dc4a4c0d94%7D'}
+      {'name': 'Foam Lake',            'url': 'https://foamlake.com'},
+      {'name': 'Buchanan',             'url': 'https://www.saskatchewan.ca/government/municipal-administration/municipal-directory?s=%7Bf74a076b-cd2b-4068-9baa-95dc4a4c0d94%7D'}
     ] %}
 
     <div class="row justify-content-center">
