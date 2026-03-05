@@ -199,6 +199,7 @@ button, .btn-primary {
 .cpda-footer {
   background: #111827;
   color: #e5e7eb;
+  z-index: 2;
   font-family: var(--font-body);
   padding: 3rem 0 0;
 }
