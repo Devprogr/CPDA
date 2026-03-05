@@ -1,39 +1,1085 @@
 {% extends "base.html" %}
-  
 {% block content %}
 
-<header class="header-2">
-  <div class="page-header min-vh-100 relative" style="background-image: url('{{ url_for('static', filename='assets/img/priorities.jpg') }}')">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&display=swap" rel="stylesheet">
+
+<style>
+
+  /* ══════════════════════════════════════════
+     DESIGN TOKENS
+     ══════════════════════════════════════════ */
+  :root {
+    --pr-navy:   #1E2D49;
+    --pr-navy2:  #162238;
+    --pr-amber:  #C8922A;
+    --pr-cream:  #F5F0E8;
+    --pr-muted:  #5a6478;
+    --pr-border: rgba(30,45,73,0.10);
+    --pr-green:  #16a34a;
+  }
+
+  /* ══════════════════════════════════════════
+     HERO — full-bleed image with text overlay
+     Unlike split-panel, this uses the priorities.jpg
+     at full width for maximum visual impact
+     ══════════════════════════════════════════ */
+  .pr-hero {
+    position: relative;
+    min-height: 88vh;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+  }
+
+  .pr-hero__bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('{{ url_for("static", filename="assets/img/priorities.jpg") }}');
+    background-size: cover;
+    background-position: center;
+    transform: scale(1.04);
+    transition: transform 8s ease;
+  }
+
+  .pr-hero.is-visible .pr-hero__bg {
+    transform: scale(1);
+  }
+
+  /* Dark gradient overlay */
+  .pr-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(22,34,56,0.96) 0%,
+      rgba(22,34,56,0.65) 40%,
+      rgba(22,34,56,0.25) 100%
+    );
+  }
+
+  /* Amber accent stripe */
+  .pr-hero__stripe {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(to right, var(--pr-amber), transparent);
+  }
+
+  .pr-hero__content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding: 0 0 5rem;
+  }
+
+  .pr-hero__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: .65rem;
+    font-family: var(--font-body);
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--pr-amber);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: prUp .7s .1s ease forwards;
+  }
+
+  .pr-hero__eyebrow::before {
+    content: "";
+    width: 28px; height: 2px;
+    background: var(--pr-amber);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .pr-hero__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 6vw, 6rem);
+    font-weight: 700;
+    line-height: 1.02;
+    color: #fff;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: prUp .7s .2s ease forwards;
+  }
+
+  .pr-hero__title em {
+    font-style: italic;
+    color: var(--pr-amber);
+  }
+
+  .pr-hero__body {
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: rgba(255,255,255,.7);
+    max-width: 55ch;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: prUp .7s .3s ease forwards;
+  }
+
+  /* Hero pill nav */
+  .pr-hero__pills {
+    display: flex;
+    gap: .65rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: prUp .7s .4s ease forwards;
+  }
+
+  .pr-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    font-family: var(--font-body);
+    font-size: .75rem;
+    font-weight: 600;
+    padding: .45rem 1rem;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: all .18s ease;
+    letter-spacing: .02em;
+    border: 1.5px solid rgba(255,255,255,.22);
+    color: rgba(255,255,255,.75);
+    background: rgba(255,255,255,.05);
+    backdrop-filter: blur(6px);
+  }
+
+  .pr-pill:hover {
+    background: var(--pr-amber);
+    border-color: var(--pr-amber);
+    color: #fff;
+  }
+
+  /* ══════════════════════════════════════════
+     SHARED SECTION STYLES
+     ══════════════════════════════════════════ */
+  .pr-section         { padding: 6rem 0; background: #fff; }
+  .pr-section--cream  { background: var(--pr-cream); }
+  .pr-section--navy   { background: var(--pr-navy); }
+  .pr-section--navy2  { background: var(--pr-navy2); }
+
+  .pr-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: .6rem;
+    font-family: var(--font-body);
+    font-size: .7rem;
+    font-weight: 600;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--pr-amber);
+    margin-bottom: 1rem;
+  }
+
+  .pr-eyebrow::before {
+    content: "";
+    width: 24px; height: 2px;
+    background: var(--pr-amber);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .pr-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 700;
+    color: var(--pr-navy);
+    line-height: 1.1;
+    margin-bottom: .75rem;
+  }
+
+  .pr-heading em        { font-style: italic; color: var(--pr-amber); }
+  .pr-heading--white    { color: #fff; }
+
+  .pr-lead {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--pr-muted);
+    line-height: 1.8;
+  }
+
+  .pr-lead--white { color: rgba(255,255,255,.62); }
+
+  /* Section divider */
+  .pr-divider {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+
+  .pr-divider__line  { flex: 1; height: 1px; background: var(--pr-border); }
+  .pr-divider__line--white { background: rgba(255,255,255,.08); }
+
+  .pr-divider__label {
+    font-family: var(--font-body);
+    font-size: .65rem;
+    font-weight: 700;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--pr-muted);
+    white-space: nowrap;
+  }
+
+  .pr-divider__label--amber { color: var(--pr-amber); }
+
+  /* ══════════════════════════════════════════
+     PRIORITY CARDS — main interactive grid
+     ══════════════════════════════════════════ */
+  .pr-card {
+    position: relative;
+    background: #fff;
+    border-radius: 18px;
+    border: 1px solid var(--pr-border);
+    box-shadow: 0 4px 24px rgba(30,45,73,.06);
+    padding: 2rem;
+    height: 100%;
+    overflow: hidden;
+    transition: box-shadow .25s, transform .25s, border-color .25s;
+    cursor: default;
+  }
+
+  .pr-card:hover {
+    box-shadow: 0 14px 48px rgba(30,45,73,.13);
+    transform: translateY(-4px);
+    border-color: rgba(200,146,42,.3);
+  }
+
+  /* Amber left accent bar */
+  .pr-card::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 1.5rem; bottom: 1.5rem;
+    width: 3px;
+    background: var(--pr-amber);
+    border-radius: 0 3px 3px 0;
+    opacity: 0;
+    transition: opacity .25s;
+  }
+
+  .pr-card:hover::before { opacity: 1; }
+
+  /* Large ghost number */
+  .pr-card__num {
+    position: absolute;
+    bottom: -.5rem;
+    right: 1rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 6rem;
+    font-weight: 700;
+    line-height: 1;
+    color: rgba(30,45,73,.04);
+    pointer-events: none;
+    transition: color .25s;
+  }
+
+  .pr-card:hover .pr-card__num { color: rgba(200,146,42,.07); }
+
+  .pr-card__icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    background: rgba(200,146,42,.1);
+    border: 1px solid rgba(200,146,42,.2);
+    display: grid;
+    place-items: center;
+    font-size: 1.1rem;
+    color: var(--pr-amber);
+    margin-bottom: 1.25rem;
+    flex-shrink: 0;
+    transition: background .25s, color .25s;
+  }
+
+  .pr-card:hover .pr-card__icon {
+    background: var(--pr-amber);
+    color: #fff;
+  }
+
+  .pr-card__tag {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: .62rem;
+    font-weight: 700;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    padding: .22rem .7rem;
+    border-radius: 999px;
+    background: rgba(200,146,42,.08);
+    color: var(--pr-amber);
+    margin-bottom: .75rem;
+  }
+
+  .pr-card__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--pr-navy);
+    line-height: 1.2;
+    margin-bottom: .65rem;
+  }
+
+  .pr-card__text {
+    font-family: var(--font-body);
+    font-size: .9rem;
+    color: var(--pr-muted);
+    line-height: 1.72;
+    margin: 0;
+  }
+
+  /* ══════════════════════════════════════════
+     FEATURED PRIORITY CARD (horizontal, full-width)
+     ══════════════════════════════════════════ */
+  .pr-featured {
+    background: var(--pr-navy);
+    border-radius: 20px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    border: 1px solid rgba(255,255,255,.06);
+    box-shadow: 0 8px 40px rgba(0,0,0,.18);
+    transition: box-shadow .25s, transform .25s;
+  }
+
+  .pr-featured:hover {
+    box-shadow: 0 18px 60px rgba(0,0,0,.28);
+    transform: translateY(-3px);
+  }
+
+  .pr-featured__panel {
+    padding: 2.75rem 3rem;
+    position: relative;
+  }
+
+  .pr-featured__divider {
+    background: rgba(255,255,255,.08);
+    align-self: stretch;
+  }
+
+  .pr-featured__tag {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    font-family: var(--font-body);
+    font-size: .62rem;
+    font-weight: 700;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    padding: .25rem .75rem;
+    border-radius: 999px;
+    background: rgba(200,146,42,.15);
+    color: var(--pr-amber);
+    margin-bottom: 1rem;
+  }
+
+  .pr-featured__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: .75rem;
+  }
+
+  .pr-featured__text {
+    font-family: var(--font-body);
+    font-size: .9rem;
+    color: rgba(255,255,255,.58);
+    line-height: 1.75;
+    margin: 0;
+  }
+
+  /* ══════════════════════════════════════════
+     PROGRESS / STATUS SECTION
+     ══════════════════════════════════════════ */
+  .pr-progress-row {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .pr-progress-item {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem 2rem;
+    background: #fff;
+    border-radius: 14px;
+    border: 1px solid var(--pr-border);
+    box-shadow: 0 2px 12px rgba(30,45,73,.05);
+    transition: box-shadow .2s, transform .2s;
+  }
+
+  .pr-progress-item:hover {
+    box-shadow: 0 8px 30px rgba(30,45,73,.1);
+    transform: translateX(4px);
+  }
+
+  .pr-progress-item__label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--pr-navy);
+    margin-bottom: .2rem;
+  }
+
+  .pr-progress-item__sub {
+    font-family: var(--font-body);
+    font-size: .8rem;
+    color: var(--pr-muted);
+  }
+
+  .pr-progress-item__right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: .5rem;
+  }
+
+  .pr-progress-bar {
+    width: 100%;
+    height: 6px;
+    background: rgba(30,45,73,.08);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .pr-progress-bar__fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(to right, var(--pr-amber), var(--pr-amber2, #e6a832));
+    width: 0;
+    transition: width 1.2s cubic-bezier(.4,0,.2,1);
+  }
+
+  .pr-progress-bar__fill--green {
+    background: linear-gradient(to right, #16a34a, #22c55e);
+  }
+
+  .pr-progress-bar__fill--blue {
+    background: linear-gradient(to right, #1E2D49, #29597d);
+  }
+
+  .pr-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    font-family: var(--font-body);
+    font-size: .65rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: .22rem .65rem;
+    border-radius: 999px;
+  }
+
+  .pr-status-badge--active {
+    background: rgba(22,163,74,.1);
+    color: #16a34a;
+  }
+
+  .pr-status-badge--planning {
+    background: rgba(200,146,42,.1);
+    color: var(--pr-amber);
+  }
+
+  .pr-status-badge--forming {
+    background: rgba(30,45,73,.08);
+    color: var(--pr-navy);
+  }
+
+  /* ══════════════════════════════════════════
+     QUOTE / CALLOUT BANNER
+     ══════════════════════════════════════════ */
+  .pr-quote {
+    padding: 5rem 0;
+    background: linear-gradient(135deg, var(--pr-navy) 0%, var(--pr-navy2) 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pr-quote::before {
+    content: "\201C";
+    position: absolute;
+    top: -2rem; left: 3%;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22rem;
+    color: rgba(200,146,42,.05);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .pr-quote__text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.5rem, 2.5vw, 2.15rem);
+    font-style: italic;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.55;
+    margin-bottom: 1.5rem;
+  }
+
+  .pr-quote__attr {
+    font-family: var(--font-body);
+    font-size: .85rem;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--pr-amber);
+  }
+
+  /* ══════════════════════════════════════════
+     CTA SECTION
+     ══════════════════════════════════════════ */
+  .pr-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .55rem;
+    font-family: var(--font-body);
+    font-size: .9rem;
+    font-weight: 600;
+    padding: .9rem 2rem;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: all .2s ease;
+    letter-spacing: .02em;
+  }
+
+  .pr-cta-btn--amber {
+    background: var(--pr-amber);
+    color: #fff;
+    border: 2px solid var(--pr-amber);
+  }
+
+  .pr-cta-btn--amber:hover {
+    background: transparent;
+    color: var(--pr-amber);
+  }
+
+  .pr-cta-btn--ghost {
+    background: transparent;
+    color: var(--pr-navy);
+    border: 2px solid var(--pr-border);
+  }
+
+  .pr-cta-btn--ghost:hover {
+    border-color: var(--pr-navy);
+    background: var(--pr-navy);
+    color: #fff;
+  }
+
+  /* ══════════════════════════════════════════
+     ANIMATIONS
+     ══════════════════════════════════════════ */
+  @keyframes prUp {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Scroll-triggered fade-up for cards */
+  .pr-reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+
+  .pr-reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Stagger children */
+  .pr-reveal-group > * {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity .55s ease, transform .55s ease;
+  }
+
+  .pr-reveal-group.is-visible > *:nth-child(1) { opacity:1; transform:none; transition-delay: .05s; }
+  .pr-reveal-group.is-visible > *:nth-child(2) { opacity:1; transform:none; transition-delay: .15s; }
+  .pr-reveal-group.is-visible > *:nth-child(3) { opacity:1; transform:none; transition-delay: .25s; }
+  .pr-reveal-group.is-visible > *:nth-child(4) { opacity:1; transform:none; transition-delay: .35s; }
+  .pr-reveal-group.is-visible > *:nth-child(5) { opacity:1; transform:none; transition-delay: .45s; }
+  .pr-reveal-group.is-visible > *:nth-child(6) { opacity:1; transform:none; transition-delay: .55s; }
+
+  /* ══════════════════════════════════════════
+     RESPONSIVE
+     ══════════════════════════════════════════ */
+  @media (max-width: 900px) {
+    .pr-featured { grid-template-columns: 1fr; }
+    .pr-featured__divider { display: none; }
+    .pr-featured__panel { padding: 2rem; }
+    .pr-progress-item { grid-template-columns: 1fr; }
+    .pr-progress-item__right { align-items: flex-start; }
+  }
+
+  @media (max-width: 576px) {
+    .pr-hero__title { font-size: 2.8rem; }
+    .pr-section { padding: 4rem 0; }
+    .pr-card { padding: 1.5rem; }
+    .pr-card__num { font-size: 4rem; }
+  }
+
+</style>
+
+
+<!-- ══════════════════════════════════════════
+     HERO — full-bleed with bottom text
+     ══════════════════════════════════════════ -->
+<section class="pr-hero" id="pr-hero-section">
+  <div class="pr-hero__bg"></div>
+  <div class="pr-hero__overlay"></div>
+  <div class="pr-hero__stripe"></div>
+
+  <div class="pr-hero__content">
     <div class="container">
       <div class="row">
-        <div class="col-lg-7 text-end mx-auto">
-          <h1 class="text-white pt-3 mt-n5 text-dark" style="text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);">
-            Our Priorities
+        <div class="col-lg-8">
+          <p class="pr-hero__eyebrow">CPDA Strategic Plan</p>
+          <h1 class="pr-hero__title">
+            Our<br><em>Priorities</em>
           </h1>
-          <p class="lead text-white mt-3" style="text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);">
-            Building a Stronger, Connected, and Inclusive Region
+          <p class="pr-hero__body">
+            Building a stronger, connected, and inclusive region — together.
+            These eight priorities guide everything CPDA works on: from housing
+            and transportation to economic growth and cultural vitality across
+            East-Central Saskatchewan.
+          </p>
+          <div class="pr-hero__pills">
+            <a href="#priorities"  class="pr-pill">All Priorities</a>
+            <a href="#progress"    class="pr-pill">Progress Tracker</a>
+            <a href="#get-involved" class="pr-pill">Get Involved</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     INTRO — context strip
+     ══════════════════════════════════════════ -->
+<section class="pr-section pr-section--cream">
+  <div class="container">
+    <div class="row align-items-center g-5">
+
+      <div class="col-lg-5 pr-reveal">
+        <p class="pr-eyebrow">Why These Priorities</p>
+        <h2 class="pr-heading">Shaped by<br><em>Our Communities</em></h2>
+      </div>
+
+      <div class="col-lg-6 offset-lg-1 pr-reveal">
+        <p class="pr-lead" style="margin-bottom:1.25rem;">
+          CPDA's eight strategic priorities emerged directly from conversations
+          with member communities, residents, and regional stakeholders. They
+          represent the most pressing challenges and the greatest shared
+          opportunities across East-Central Saskatchewan.
+        </p>
+        <p class="pr-lead">
+          Each priority is supported by a sub-committee of community leaders
+          working collaboratively to develop practical, regionally coordinated
+          solutions — moving faster together than any single community could alone.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     PRIORITY CARDS — 8 priorities
+     ══════════════════════════════════════════ -->
+<section id="priorities" class="pr-section">
+  <div class="container">
+
+    <div class="row align-items-end mb-4 pr-reveal">
+      <div class="col-lg-6">
+        <p class="pr-eyebrow">Strategic Focus Areas</p>
+        <h2 class="pr-heading">Eight <em>Priorities</em></h2>
+      </div>
+      <div class="col-lg-5 offset-lg-1">
+        <p class="pr-lead">Hover over each priority to learn more about our approach and goals in that area.</p>
+      </div>
+    </div>
+
+    <div class="pr-divider pr-reveal">
+      <div class="pr-divider__line"></div>
+      <span class="pr-divider__label">2025 – 2026 Focus</span>
+      <div class="pr-divider__line"></div>
+    </div>
+
+    <!-- Row 1: 3 cards -->
+    <div class="row g-4 mb-4 pr-reveal-group">
+
+      <div class="col-lg-4 col-md-6">
+        <div class="pr-card">
+          <div class="pr-card__num">01</div>
+          <div class="pr-card__icon"><i class="fas fa-home"></i></div>
+          <span class="pr-card__tag">Housing</span>
+          <h3 class="pr-card__title">Affordable Housing Strategy</h3>
+          <p class="pr-card__text">
+            Developing a coordinated regional housing plan to address shortages,
+            attract new residents, and ensure every community in the CPDA area
+            has access to quality, affordable housing options for families,
+            seniors, and workers.
           </p>
         </div>
       </div>
-    </div>    
-  </div>
-</header>
 
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-lg-8">
-      <ul class="list-group list-group-flush mb-4">
-        <li class="list-group-item"><strong>Affordable housing strategy</strong></li>
-        <li class="list-group-item"><strong>Better access to services</strong></li>
-        <li class="list-group-item"><strong>Transport connectivity</strong></li>
-        <li class="list-group-item"><strong>Regional branding</strong></li>
-        <li class="list-group-item"><strong>Investment attraction</strong></li>
-        <li class="list-group-item"><strong>Joint RFPs for Infrastructure</strong></li>
-        <li class="list-group-item"><strong>Cultural and lifestyle investment</strong></li>
-        <li class="list-group-item"><strong>Advocacy and innovation</strong></li>
-      </ul>
+      <div class="col-lg-4 col-md-6">
+        <div class="pr-card">
+          <div class="pr-card__num">02</div>
+          <div class="pr-card__icon"><i class="fas fa-hands-helping"></i></div>
+          <span class="pr-card__tag">Services</span>
+          <h3 class="pr-card__title">Better Access to Services</h3>
+          <p class="pr-card__text">
+            Improving regional access to essential services — including
+            healthcare, childcare, legal, and social support — by coordinating
+            shared resources and advocating for equitable service delivery
+            across all communities regardless of size.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6">
+        <div class="pr-card">
+          <div class="pr-card__num">03</div>
+          <div class="pr-card__icon"><i class="fas fa-bus"></i></div>
+          <span class="pr-card__tag">Transport</span>
+          <h3 class="pr-card__title">Transport Connectivity</h3>
+          <p class="pr-card__text">
+            Building reliable transportation links between CPDA communities
+            so residents can access employment, education, and services.
+            A connected region is a stronger region — reducing isolation
+            and opening economic opportunities for everyone.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Row 2: 3 cards -->
+    <div class="row g-4 mb-4 pr-reveal-group">
+
+      <div class="col-lg-4 col-md-6">
+        <div class="pr-card">
+          <div class="pr-card__num">04</div>
+          <div class="pr-card__icon"><i class="fas fa-star"></i></div>
+          <span class="pr-card__tag">Identity</span>
+          <h3 class="pr-card__title">Regional Branding</h3>
+          <p class="pr-card__text">
+            Creating a unified identity for East-Central Saskatchewan that
+            tells our region's story with pride. A strong regional brand
+            supports tourism, talent attraction, and investment by projecting
+            a clear, compelling image to the rest of Canada and beyond.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6">
+        <div class="pr-card">
+          <div class="pr-card__num">05</div>
+          <div class="pr-card__icon"><i class="fas fa-chart-line"></i></div>
+          <span class="pr-card__tag">Economy</span>
+          <h3 class="pr-card__title">Investment Attraction</h3>
+          <p class="pr-card__text">
+            Positioning the CPDA region as an attractive destination for
+            business investment and economic development. By speaking with
+            one regional voice, we can market our advantages — workforce,
+            land, infrastructure, and quality of life — far more effectively.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6">
+        <div class="pr-card">
+          <div class="pr-card__num">06</div>
+          <div class="pr-card__icon"><i class="fas fa-file-contract"></i></div>
+          <span class="pr-card__tag">Infrastructure</span>
+          <h3 class="pr-card__title">Joint RFPs for Infrastructure</h3>
+          <p class="pr-card__text">
+            Pooling procurement power across member communities to issue
+            joint Requests for Proposals on shared infrastructure needs.
+            Collective purchasing reduces costs, improves outcomes, and
+            makes our communities more competitive in attracting contractors
+            and project funding.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Row 3: 2 cards — featured wide format on navy -->
+    <div class="pr-reveal">
+      <div class="pr-featured mb-0">
+
+        <div class="pr-featured__panel">
+          <span class="pr-featured__tag"><i class="fas fa-palette" style="font-size:.65rem;"></i>&nbsp; Culture &amp; Lifestyle</span>
+          <h3 class="pr-featured__title">Cultural and Lifestyle Investment</h3>
+          <p class="pr-featured__text">
+            Investing in the arts, recreation, cultural programming, and community
+            events that make our region a place people want to live — not just work.
+            A vibrant cultural identity strengthens social cohesion, supports mental
+            health, attracts skilled workers and their families, and builds the pride
+            of place that makes communities resilient over the long term.
+          </p>
+        </div>
+
+        <div class="pr-featured__divider"></div>
+
+        <div class="pr-featured__panel">
+          <span class="pr-featured__tag"><i class="fas fa-bullhorn" style="font-size:.65rem;"></i>&nbsp; Policy &amp; Innovation</span>
+          <h3 class="pr-featured__title">Advocacy and Innovation</h3>
+          <p class="pr-featured__text">
+            Speaking with a unified regional voice to advocate for our communities
+            at the provincial and federal level — on funding, policy, and programs
+            that affect rural and small-city Saskatchewan. Alongside advocacy,
+            CPDA champions new ideas and pilot initiatives that can be tested
+            regionally and scaled to benefit all member communities.
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     PROGRESS TRACKER — sub-committee status
+     ══════════════════════════════════════════ -->
+<section id="progress" class="pr-section pr-section--cream">
+  <div class="container">
+
+    <div class="row align-items-end mb-4 pr-reveal">
+      <div class="col-lg-6">
+        <p class="pr-eyebrow">Sub-Committee Status</p>
+        <h2 class="pr-heading">Progress <em>Tracker</em></h2>
+      </div>
+      <div class="col-lg-5 offset-lg-1">
+        <p class="pr-lead">
+          Each priority area is driven by a dedicated sub-committee.
+          Here's where each workstream currently stands.
+        </p>
+      </div>
+    </div>
+
+    <div class="pr-divider pr-reveal">
+      <div class="pr-divider__line"></div>
+      <span class="pr-divider__label">As of Early 2026</span>
+      <div class="pr-divider__line"></div>
+    </div>
+
+    <div class="pr-progress-row pr-reveal-group">
+
+      <div class="pr-progress-item">
+        <div>
+          <div class="pr-progress-item__label">Affordable Housing Strategy</div>
+          <div class="pr-progress-item__sub">Sub-committee formed · Research phase underway</div>
+        </div>
+        <div class="pr-progress-item__right">
+          <span class="pr-status-badge pr-status-badge--active">
+            <i class="fas fa-circle" style="font-size:.45rem;"></i> Active
+          </span>
+          <div class="pr-progress-bar" style="width:160px;">
+            <div class="pr-progress-bar__fill pr-progress-bar__fill--green" data-width="40%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pr-progress-item">
+        <div>
+          <div class="pr-progress-item__label">Transport Connectivity</div>
+          <div class="pr-progress-item__sub">Regional needs assessment in progress</div>
+        </div>
+        <div class="pr-progress-item__right">
+          <span class="pr-status-badge pr-status-badge--active">
+            <i class="fas fa-circle" style="font-size:.45rem;"></i> Active
+          </span>
+          <div class="pr-progress-bar" style="width:160px;">
+            <div class="pr-progress-bar__fill pr-progress-bar__fill--green" data-width="35%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pr-progress-item">
+        <div>
+          <div class="pr-progress-item__label">Workforce Planning &amp; Services</div>
+          <div class="pr-progress-item__sub">Sub-committee established · Priorities being identified</div>
+        </div>
+        <div class="pr-progress-item__right">
+          <span class="pr-status-badge pr-status-badge--active">
+            <i class="fas fa-circle" style="font-size:.45rem;"></i> Active
+          </span>
+          <div class="pr-progress-bar" style="width:160px;">
+            <div class="pr-progress-bar__fill pr-progress-bar__fill--green" data-width="30%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pr-progress-item">
+        <div>
+          <div class="pr-progress-item__label">Quality of Life &amp; Regional Coordination</div>
+          <div class="pr-progress-item__sub">Framework development stage</div>
+        </div>
+        <div class="pr-progress-item__right">
+          <span class="pr-status-badge pr-status-badge--active">
+            <i class="fas fa-circle" style="font-size:.45rem;"></i> Active
+          </span>
+          <div class="pr-progress-bar" style="width:160px;">
+            <div class="pr-progress-bar__fill" data-width="25%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pr-progress-item">
+        <div>
+          <div class="pr-progress-item__label">Investment Attraction &amp; Regional Branding</div>
+          <div class="pr-progress-item__sub">Scoping phase · Partners being identified</div>
+        </div>
+        <div class="pr-progress-item__right">
+          <span class="pr-status-badge pr-status-badge--planning">
+            <i class="fas fa-circle" style="font-size:.45rem;"></i> Planning
+          </span>
+          <div class="pr-progress-bar" style="width:160px;">
+            <div class="pr-progress-bar__fill pr-progress-bar__fill--blue" data-width="15%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pr-progress-item">
+        <div>
+          <div class="pr-progress-item__label">Joint Infrastructure RFPs</div>
+          <div class="pr-progress-item__sub">Early discussions underway with member communities</div>
+        </div>
+        <div class="pr-progress-item__right">
+          <span class="pr-status-badge pr-status-badge--forming">
+            <i class="fas fa-circle" style="font-size:.45rem;"></i> Forming
+          </span>
+          <div class="pr-progress-bar" style="width:160px;">
+            <div class="pr-progress-bar__fill pr-progress-bar__fill--blue" data-width="10%"></div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
-</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     QUOTE BANNER
+     ══════════════════════════════════════════ -->
+<section class="pr-quote">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center" style="position:relative; z-index:1;">
+        <p class="pr-quote__text">
+          "We are turning shared challenges into shared opportunities —
+          shaping the future of our region, together."
+        </p>
+        <p class="pr-quote__attr">Sharon Rurak &nbsp;·&nbsp; Suncrest College</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     GET INVOLVED CTA
+     ══════════════════════════════════════════ -->
+<section id="get-involved" class="pr-section">
+  <div class="container">
+    <div class="row justify-content-center text-center pr-reveal">
+      <div class="col-lg-7">
+        <p class="pr-eyebrow" style="justify-content:center;">Take Part</p>
+        <h2 class="pr-heading">Help Shape<br><em>These Priorities</em></h2>
+        <p class="pr-lead" style="margin: 1.25rem auto 2.5rem; text-align:center;">
+          CPDA's priorities are shaped by the people who live and work in our region.
+          Whether you're a community leader, business owner, or resident — your voice
+          matters in building a stronger East-Central Saskatchewan.
+        </p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+          <a href="/get-involved" class="pr-cta-btn pr-cta-btn--amber">
+            Get Involved &nbsp;→
+          </a>
+          <a href="/about" class="pr-cta-btn pr-cta-btn--ghost">
+            About CPDA
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     JS — hero parallax, scroll reveals,
+          progress bar animations
+     ══════════════════════════════════════════ -->
+<script>
+(function() {
+
+  /* ── Trigger hero Ken Burns ── */
+  const hero = document.getElementById('pr-hero-section');
+  requestAnimationFrame(() => hero.classList.add('is-visible'));
+
+  /* ── Intersection Observer for reveals ── */
+  const revealEls = document.querySelectorAll('.pr-reveal, .pr-reveal-group');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+
+        /* Animate progress bars when progress section enters */
+        if (entry.target.classList.contains('pr-reveal-group')) {
+          entry.target.querySelectorAll('.pr-progress-bar__fill').forEach(bar => {
+            const target = bar.dataset.width;
+            if (target) {
+              requestAnimationFrame(() => {
+                bar.style.width = target;
+              });
+            }
+          });
+        }
+
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  revealEls.forEach(el => observer.observe(el));
+
+  /* Also observe individual reveal elements for progress bars */
+  document.querySelectorAll('.pr-reveal').forEach(el => {
+    const bars = el.querySelectorAll('.pr-progress-bar__fill');
+    if (bars.length) {
+      const barObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            bars.forEach(bar => {
+              bar.style.width = bar.dataset.width || '0%';
+            });
+            barObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.2 });
+      barObserver.observe(el);
+    }
+  });
+
+})();
+</script>
 
 {% endblock %}
