@@ -6,820 +6,393 @@
 
 <style>
 
-/* ══════════════════════════════════════════
-   DESIGN TOKENS
-   ══════════════════════════════════════════ */
-:root {
-  --in-navy:   #1E2D49;
-  --in-navy2:  #162238;
-  --in-amber:  #C8922A;
-  --in-amber2: #e6a832;
-  --in-cream:  #F5F0E8;
-  --in-muted:  #5a6478;
-  --in-border: rgba(30,45,73,0.10);
-  /* Industry accent colours — one per sector */
-  --in-agri:   #4a7c59;
-  --in-mfg:    #29597d;
-  --in-retail: #7b5ea7;
-  --in-health: #c0392b;
-  --in-edu:    #d97706;
-  --in-admin:  #0e7490;
-}
-
-/* ══════════════════════════════════════════
-   HERO — full-bleed + bottom text
-   (Same Ken-Burns approach as Priorities)
-   ══════════════════════════════════════════ */
-.in-hero {
-  position: relative;
-  min-height: 88vh;
-  display: flex;
-  align-items: flex-end;
-  overflow: hidden;
-}
-
-.in-hero__bg {
-  position: absolute; inset: 0;
-  background-image: url('{{ url_for("static", filename="assets/img/region.jpg") }}');
-  background-size: cover;
-  background-position: center 35%;
-  transform: scale(1.05);
-  transition: transform 9s ease;
-}
-
-.in-hero.is-ready .in-hero__bg { transform: scale(1); }
-
-.in-hero__overlay {
-  position: absolute; inset: 0;
-  background: linear-gradient(
-    to top,
-    rgba(22,34,56,.97) 0%,
-    rgba(22,34,56,.60) 45%,
-    rgba(22,34,56,.18) 100%
-  );
-}
-
-.in-hero__stripe {
-  position: absolute; bottom: 0; left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(to right, var(--in-amber), transparent);
-}
-
-.in-hero__content {
-  position: relative; z-index: 2;
-  width: 100%;
-  padding: 0 0 5rem;
-}
-
-.in-hero__eyebrow {
-  display: inline-flex; align-items: center; gap: .65rem;
-  font-family: var(--font-body);
-  font-size: .72rem; font-weight: 600;
-  letter-spacing: .2em; text-transform: uppercase;
-  color: var(--in-amber);
-  margin-bottom: 1.5rem;
-  opacity: 0; animation: inUp .7s .1s ease forwards;
-}
-
-.in-hero__eyebrow::before {
-  content: ""; width: 28px; height: 2px;
-  background: var(--in-amber); border-radius: 2px; flex-shrink: 0;
-}
-
-.in-hero__title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(3rem, 6vw, 6rem);
-  font-weight: 700; line-height: 1.02; color: #fff;
-  margin-bottom: 1.5rem;
-  opacity: 0; animation: inUp .7s .2s ease forwards;
-}
-
-.in-hero__title em { font-style: italic; color: var(--in-amber); }
-
-.in-hero__body {
-  font-family: var(--font-body);
-  font-size: 1.05rem; line-height: 1.8;
-  color: rgba(255,255,255,.68);
-  max-width: 55ch;
-  margin-bottom: 2.5rem;
-  opacity: 0; animation: inUp .7s .3s ease forwards;
-}
-
-.in-hero__pills {
-  display: flex; gap: .65rem; flex-wrap: wrap;
-  opacity: 0; animation: inUp .7s .4s ease forwards;
-}
-
-.in-pill {
-  display: inline-flex; align-items: center; gap: .4rem;
-  font-family: var(--font-body);
-  font-size: .75rem; font-weight: 600;
-  padding: .45rem 1rem; border-radius: 999px;
-  text-decoration: none;
-  transition: all .18s ease;
-  letter-spacing: .02em;
-  border: 1.5px solid rgba(255,255,255,.22);
-  color: rgba(255,255,255,.75);
-  background: rgba(255,255,255,.05);
-  backdrop-filter: blur(6px);
-}
-
-.in-pill:hover, .in-pill--active {
-  background: var(--in-amber);
-  border-color: var(--in-amber);
-  color: #fff;
-}
-
-/* ══════════════════════════════════════════
-   TICKER — scrolling stat strip
-   ══════════════════════════════════════════ */
-.in-ticker {
-  background: var(--in-amber);
-  padding: .9rem 0;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.in-ticker__track {
-  display: inline-flex;
-  animation: inTicker 30s linear infinite;
-}
-
-.in-ticker__item {
-  display: inline-flex; align-items: center; gap: .5rem;
-  font-family: var(--font-body);
-  font-size: .8rem; font-weight: 700;
-  letter-spacing: .06em; text-transform: uppercase;
-  color: #fff;
-  padding: 0 2.5rem;
-}
-
-.in-ticker__item::before {
-  content: "✦";
-  font-size: .55rem;
-  opacity: .7;
-}
-
-@keyframes inTicker {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-
-/* ══════════════════════════════════════════
-   SHARED SECTION STYLES
-   ══════════════════════════════════════════ */
-.in-section        { padding: 6rem 0; background: #fff; }
-.in-section--cream { background: var(--in-cream); }
-.in-section--navy  { background: var(--in-navy); }
-
-.in-eyebrow {
-  display: inline-flex; align-items: center; gap: .6rem;
-  font-family: var(--font-body);
-  font-size: .7rem; font-weight: 600;
-  letter-spacing: .2em; text-transform: uppercase;
-  color: var(--in-amber); margin-bottom: 1rem;
-}
-
-.in-eyebrow::before {
-  content: ""; width: 24px; height: 2px;
-  background: var(--in-amber); border-radius: 2px; flex-shrink: 0;
-}
-
-.in-heading {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(2rem, 3.5vw, 3rem);
-  font-weight: 700; color: var(--in-navy);
-  line-height: 1.1; margin-bottom: .75rem;
-}
-
-.in-heading em       { font-style: italic; color: var(--in-amber); }
-.in-heading--white   { color: #fff; }
-
-.in-lead {
-  font-family: var(--font-body);
-  font-size: 1rem; color: var(--in-muted); line-height: 1.8;
-}
-
-.in-lead--white { color: rgba(255,255,255,.62); }
-
-.in-divider {
-  display: flex; align-items: center; gap: 1.25rem;
-  margin-bottom: 3rem;
-}
-
-.in-divider__line        { flex: 1; height: 1px; background: var(--in-border); }
-.in-divider__line--white { background: rgba(255,255,255,.08); }
-
-.in-divider__label {
-  font-family: var(--font-body);
-  font-size: .65rem; font-weight: 700;
-  letter-spacing: .22em; text-transform: uppercase;
-  color: var(--in-muted); white-space: nowrap;
-}
-
-.in-divider__label--amber { color: var(--in-amber); }
-
-/* ══════════════════════════════════════════
-   STAT WALL — large numbers on navy
-   ══════════════════════════════════════════ */
-.in-stat-wall {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0;
-}
-
-.in-stat-block {
-  padding: 3rem 2.5rem;
-  border-right: 1px solid rgba(255,255,255,.06);
-  position: relative;
-  overflow: hidden;
-  transition: background .22s;
-}
-
-.in-stat-block:last-child { border-right: none; }
-
-.in-stat-block:hover { background: rgba(255,255,255,.04); }
-
-.in-stat-block__accent {
-  position: absolute; top: 0; left: 0; right: 0;
-  height: 3px;
-  opacity: 0;
-  transition: opacity .22s;
-}
-
-.in-stat-block:hover .in-stat-block__accent { opacity: 1; }
-
-.in-stat-block__num {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(2.8rem, 4vw, 4rem);
-  font-weight: 700; color: var(--in-amber);
-  line-height: 1; margin-bottom: .35rem;
-  counter-reset: none;
-}
-
-.in-stat-block__label {
-  font-family: var(--font-body);
-  font-size: .8rem; font-weight: 600;
-  letter-spacing: .08em; text-transform: uppercase;
-  color: rgba(255,255,255,.45);
-  margin-bottom: .5rem;
-}
-
-.in-stat-block__sub {
-  font-family: var(--font-body);
-  font-size: .82rem; color: rgba(255,255,255,.32);
-  line-height: 1.55;
-}
-
-/* ══════════════════════════════════════════
-   INDUSTRY TABS — interactive sector browser
-   ══════════════════════════════════════════ */
-.in-tabs__nav {
-  display: flex; gap: .5rem; flex-wrap: wrap;
-  margin-bottom: 2.5rem;
-}
-
-.in-tab-btn {
-  display: inline-flex; align-items: center; gap: .55rem;
-  font-family: var(--font-body);
-  font-size: .82rem; font-weight: 600;
-  padding: .55rem 1.25rem; border-radius: 999px;
-  border: 1.5px solid var(--in-border);
-  background: #fff; color: var(--in-muted);
-  cursor: pointer; transition: all .18s ease;
-  letter-spacing: .02em;
-}
-
-.in-tab-btn i { font-size: .8rem; }
-
-.in-tab-btn:hover {
-  border-color: var(--in-amber);
-  color: var(--in-amber);
-  background: rgba(200,146,42,.06);
-}
-
-.in-tab-btn.is-active {
-  background: var(--in-navy);
-  border-color: var(--in-navy);
-  color: #fff;
-}
-
-/* Tab panels */
-.in-tab-panel { display: none; }
-.in-tab-panel.is-active { display: grid; }
-
-.in-tab-panel {
-  grid-template-columns: 1fr 1fr;
-  gap: 3.5rem;
-  align-items: center;
-}
-
-.in-tab-panel__eyebrow {
-  display: inline-flex; align-items: center; gap: .5rem;
-  font-family: var(--font-body);
-  font-size: .68rem; font-weight: 700;
-  letter-spacing: .18em; text-transform: uppercase;
-  padding: .25rem .75rem; border-radius: 999px;
-  margin-bottom: 1rem;
-}
-
-.in-tab-panel__title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(1.6rem, 2.5vw, 2.2rem);
-  font-weight: 700; color: var(--in-navy);
-  line-height: 1.15; margin-bottom: 1rem;
-}
-
-.in-tab-panel__title em { font-style: italic; color: var(--in-amber); }
-
-.in-tab-panel__text {
-  font-family: var(--font-body);
-  font-size: .95rem; color: var(--in-muted);
-  line-height: 1.8; margin-bottom: 1.5rem;
-}
-
-/* Mini stats inside tab */
-.in-tab-stats {
-  display: flex; gap: 2rem; flex-wrap: wrap;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--in-border);
-}
-
-.in-tab-stat__num {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.9rem; font-weight: 700; color: var(--in-amber);
-  line-height: 1;
-}
-
-.in-tab-stat__label {
-  font-family: var(--font-body);
-  font-size: .72rem; font-weight: 600;
-  letter-spacing: .08em; text-transform: uppercase;
-  color: var(--in-muted); margin-top: .2rem;
-}
-
-/* Visual panel — right side of tab */
-.in-tab-panel__visual {
-  position: relative;
-  border-radius: 18px;
-  overflow: hidden;
-  background: var(--in-navy);
-  min-height: 340px;
-  display: flex; flex-direction: column;
-  justify-content: flex-end;
-  padding: 2.25rem;
-}
-
-.in-tab-panel__visual-bg {
-  position: absolute; inset: 0;
-  opacity: .18;
-  background-size: cover;
-  background-position: center;
-  transition: opacity .3s, transform .4s ease;
-}
-
-.in-tab-panel__visual:hover .in-tab-panel__visual-bg {
-  opacity: .28; transform: scale(1.04);
-}
-
-.in-tab-panel__visual-overlay {
-  position: absolute; inset: 0;
-  background: linear-gradient(to top,
-    rgba(22,34,56,.95) 0%,
-    rgba(22,34,56,.4) 60%,
-    transparent 100%
-  );
-}
-
-.in-tab-panel__visual-content { position: relative; z-index: 1; }
-
-.in-tab-panel__visual-tag {
-  display: inline-flex; align-items: center; gap: .4rem;
-  font-family: var(--font-body);
-  font-size: .62rem; font-weight: 700;
-  letter-spacing: .15em; text-transform: uppercase;
-  padding: .25rem .7rem; border-radius: 999px;
-  background: rgba(200,146,42,.2);
-  color: var(--in-amber);
-  margin-bottom: .75rem;
-}
-
-.in-tab-panel__visual-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.4rem; font-weight: 700; color: #fff;
-  line-height: 1.2; margin-bottom: .4rem;
-}
-
-.in-tab-panel__visual-sub {
-  font-family: var(--font-body);
-  font-size: .8rem; color: rgba(255,255,255,.5);
-  line-height: 1.5;
-}
-
-/* ══════════════════════════════════════════
-   INDUSTRY GRID CARDS (overview)
-   ══════════════════════════════════════════ */
-.in-grid-card {
-  position: relative;
-  background: #fff;
-  border-radius: 18px;
-  border: 1px solid var(--in-border);
-  box-shadow: 0 4px 24px rgba(30,45,73,.06);
-  padding: 2rem;
-  height: 100%;
-  overflow: hidden;
-  transition: box-shadow .25s, transform .25s, border-color .25s;
-  cursor: default;
-}
-
-.in-grid-card:hover {
-  box-shadow: 0 14px 48px rgba(30,45,73,.13);
-  transform: translateY(-4px);
-}
-
-.in-grid-card::after {
-  content: "";
-  position: absolute; top: 0; left: 0; right: 0; height: 3px;
-  opacity: 0; transition: opacity .25s;
-}
-
-.in-grid-card:hover::after { opacity: 1; }
-
-/* Colour variants */
-.in-grid-card--agri::after   { background: var(--in-agri); }
-.in-grid-card--mfg::after    { background: var(--in-mfg); }
-.in-grid-card--retail::after { background: var(--in-retail); }
-.in-grid-card--health::after { background: var(--in-health); }
-.in-grid-card--edu::after    { background: var(--in-edu); }
-.in-grid-card--admin::after  { background: var(--in-admin); }
-
-.in-grid-card__icon {
-  width: 48px; height: 48px; border-radius: 12px;
-  display: grid; place-items: center;
-  font-size: 1.1rem; margin-bottom: 1.25rem;
-  transition: transform .25s;
-}
-
-.in-grid-card:hover .in-grid-card__icon { transform: scale(1.1); }
-
-.in-grid-card--agri   .in-grid-card__icon { background: rgba(74,124,89,.12);  color: var(--in-agri); }
-.in-grid-card--mfg    .in-grid-card__icon { background: rgba(41,89,125,.12);  color: var(--in-mfg); }
-.in-grid-card--retail .in-grid-card__icon { background: rgba(123,94,167,.12); color: var(--in-retail); }
-.in-grid-card--health .in-grid-card__icon { background: rgba(192,57,43,.10);  color: var(--in-health); }
-.in-grid-card--edu    .in-grid-card__icon { background: rgba(217,119,6,.10);  color: var(--in-edu); }
-.in-grid-card--admin  .in-grid-card__icon { background: rgba(14,116,144,.10); color: var(--in-admin); }
-
-.in-grid-card__num {
-  position: absolute; bottom: -.5rem; right: 1rem;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 6rem; font-weight: 700; line-height: 1;
-  color: rgba(30,45,73,.04); pointer-events: none;
-  transition: color .25s;
-}
-
-.in-grid-card:hover .in-grid-card__num { color: rgba(200,146,42,.07); }
-
-.in-grid-card__tag {
-  display: inline-block;
-  font-family: var(--font-body);
-  font-size: .6rem; font-weight: 700;
-  letter-spacing: .15em; text-transform: uppercase;
-  padding: .22rem .7rem; border-radius: 999px;
-  margin-bottom: .75rem;
-}
-
-.in-grid-card--agri   .in-grid-card__tag { background: rgba(74,124,89,.1);  color: var(--in-agri); }
-.in-grid-card--mfg    .in-grid-card__tag { background: rgba(41,89,125,.1);  color: var(--in-mfg); }
-.in-grid-card--retail .in-grid-card__tag { background: rgba(123,94,167,.1); color: var(--in-retail); }
-.in-grid-card--health .in-grid-card__tag { background: rgba(192,57,43,.08); color: var(--in-health); }
-.in-grid-card--edu    .in-grid-card__tag { background: rgba(217,119,6,.08); color: var(--in-edu); }
-.in-grid-card--admin  .in-grid-card__tag { background: rgba(14,116,144,.1); color: var(--in-admin); }
-
-.in-grid-card__title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.35rem; font-weight: 700; color: var(--in-navy);
-  line-height: 1.2; margin-bottom: .6rem;
-}
-
-.in-grid-card__text {
-  font-family: var(--font-body);
-  font-size: .88rem; color: var(--in-muted);
-  line-height: 1.72; margin-bottom: 1rem;
-}
-
-.in-grid-card__stat {
-  display: flex; align-items: baseline; gap: .35rem;
-  padding-top: 1rem; border-top: 1px solid var(--in-border);
-}
-
-.in-grid-card__stat-num {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.6rem; font-weight: 700; color: var(--in-amber);
-  line-height: 1;
-}
-
-.in-grid-card__stat-label {
-  font-family: var(--font-body);
-  font-size: .75rem; color: var(--in-muted);
-}
-
-/* ══════════════════════════════════════════
-   HORIZONTAL FEATURE — alternating rows
-   (Like a mini case-study layout)
-   ══════════════════════════════════════════ */
-.in-feature {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 4rem; align-items: center;
-  padding: 3.5rem 0;
-  border-bottom: 1px solid var(--in-border);
-}
-
-.in-feature:last-child { border-bottom: none; }
-
-.in-feature--reverse .in-feature__text { order: 2; }
-.in-feature--reverse .in-feature__visual { order: 1; }
-
-.in-feature__tag {
-  display: inline-flex; align-items: center; gap: .4rem;
-  font-family: var(--font-body);
-  font-size: .62rem; font-weight: 700;
-  letter-spacing: .15em; text-transform: uppercase;
-  padding: .25rem .75rem; border-radius: 999px;
-  background: rgba(200,146,42,.1); color: var(--in-amber);
-  margin-bottom: 1rem;
-}
-
-.in-feature__title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(1.6rem, 2.2vw, 2.1rem);
-  font-weight: 700; color: var(--in-navy);
-  line-height: 1.15; margin-bottom: 1rem;
-}
-
-.in-feature__title em { font-style: italic; color: var(--in-amber); }
-
-.in-feature__text {
-  font-family: var(--font-body);
-  font-size: .95rem; color: var(--in-muted);
-  line-height: 1.8; margin-bottom: 1.5rem;
-}
-
-.in-feature__list {
-  list-style: none; padding: 0; margin: 0;
-  display: flex; flex-direction: column; gap: .6rem;
-}
-
-.in-feature__list li {
-  display: flex; align-items: flex-start; gap: .65rem;
-  font-family: var(--font-body);
-  font-size: .9rem; color: var(--in-muted); line-height: 1.55;
-}
-
-.in-feature__list li::before {
-  content: "";
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--in-amber); flex-shrink: 0; margin-top: .45rem;
-}
-
-/* Feature visual box */
-.in-feature__visual {
-  border-radius: 18px;
-  background: var(--in-navy);
-  min-height: 320px;
-  display: flex; flex-direction: column;
-  justify-content: space-between;
-  padding: 2.25rem;
-  position: relative; overflow: hidden;
-}
-
-.in-feature__visual-deco {
-  position: absolute; top: -1rem; right: -1rem;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 11rem; font-weight: 700;
-  color: rgba(255,255,255,.04); line-height: 1;
-  pointer-events: none;
-}
-
-.in-feature__visual-tag {
-  display: inline-flex; align-items: center; gap: .4rem;
-  font-family: var(--font-body);
-  font-size: .62rem; font-weight: 700;
-  letter-spacing: .12em; text-transform: uppercase;
-  padding: .25rem .7rem; border-radius: 999px;
-  background: rgba(200,146,42,.18); color: var(--in-amber);
-  margin-bottom: auto; align-self: flex-start;
-}
-
-.in-feature__visual-num {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(3rem, 4vw, 4.5rem);
-  font-weight: 700; color: var(--in-amber);
-  line-height: 1; margin-bottom: .4rem;
-}
-
-.in-feature__visual-label {
-  font-family: var(--font-body);
-  font-size: .8rem; color: rgba(255,255,255,.5);
-  text-transform: uppercase; letter-spacing: .1em;
-}
-
-/* ══════════════════════════════════════════
-   FAQ ACCORDION
-   ══════════════════════════════════════════ */
-.in-accordion { display: flex; flex-direction: column; gap: .75rem; }
-
-.in-acc-item {
-  background: #fff;
-  border: 1px solid var(--in-border);
-  border-radius: 14px;
-  overflow: hidden;
-  transition: box-shadow .2s;
-}
-
-.in-acc-item.is-open {
-  box-shadow: 0 8px 32px rgba(30,45,73,.1);
-  border-color: rgba(200,146,42,.25);
-}
-
-.in-acc-trigger {
-  width: 100%; display: flex;
-  align-items: center; justify-content: space-between;
-  gap: 1rem;
-  padding: 1.4rem 1.75rem;
-  background: none; border: none; cursor: pointer;
-  text-align: left;
-  transition: background .15s;
-}
-
-.in-acc-trigger:hover { background: rgba(200,146,42,.03); }
-
-.in-acc-trigger__label {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.15rem; font-weight: 700; color: var(--in-navy);
-  line-height: 1.3;
-}
-
-.in-acc-trigger__icon {
-  width: 28px; height: 28px; flex-shrink: 0;
-  border-radius: 50%;
-  background: rgba(200,146,42,.1);
-  border: 1px solid rgba(200,146,42,.2);
-  display: grid; place-items: center;
-  color: var(--in-amber); font-size: .7rem;
-  transition: background .2s, transform .3s;
-}
-
-.in-acc-item.is-open .in-acc-trigger__icon {
-  background: var(--in-amber); color: #fff;
-  transform: rotate(45deg);
-}
-
-.in-acc-body {
-  max-height: 0; overflow: hidden;
-  transition: max-height .4s cubic-bezier(.4,0,.2,1);
-}
-
-.in-acc-body__inner {
-  padding: 0 1.75rem 1.5rem;
-  font-family: var(--font-body);
-  font-size: .93rem; color: var(--in-muted);
-  line-height: 1.8;
-}
-
-/* ══════════════════════════════════════════
-   QUOTE BANNER
-   ══════════════════════════════════════════ */
-.in-quote {
-  padding: 5rem 0;
-  background: linear-gradient(135deg, var(--in-navy) 0%, var(--in-navy2) 100%);
-  position: relative; overflow: hidden;
-}
-
-.in-quote::before {
-  content: "\201C";
-  position: absolute; top: -2rem; left: 3%;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 22rem; color: rgba(200,146,42,.05);
-  line-height: 1; pointer-events: none;
-}
-
-.in-quote__text {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(1.5rem, 2.5vw, 2.2rem);
-  font-style: italic; font-weight: 600; color: #fff;
-  line-height: 1.55; margin-bottom: 1.5rem;
-}
-
-.in-quote__attr {
-  font-family: var(--font-body);
-  font-size: .85rem; font-weight: 600;
-  letter-spacing: .1em; text-transform: uppercase;
-  color: var(--in-amber);
-}
-
-/* CTA buttons */
-.in-btn {
-  display: inline-flex; align-items: center; gap: .55rem;
-  font-family: var(--font-body);
-  font-size: .9rem; font-weight: 600;
-  padding: .85rem 1.75rem; border-radius: 999px;
-  text-decoration: none; transition: all .2s ease;
-  letter-spacing: .02em;
-}
-
-.in-btn--amber {
-  background: var(--in-amber) !important;
-  color: #fff !important;
-  border: 2px solid var(--in-amber);
-}
-
-.in-btn--amber:hover {
-  background: transparent !important;
-  color: var(--in-amber) !important;
-}
-
-.in-btn--ghost-white {
-  background: transparent;
-  color: rgba(255,255,255,.75);
-  border: 2px solid rgba(255,255,255,.25);
-}
-
-.in-btn--ghost-white:hover {
-  border-color: rgba(255,255,255,.6); color: #fff;
-}
-
-/* ══════════════════════════════════════════
-   SCROLL REVEALS
-   ══════════════════════════════════════════ */
-@keyframes inUp {
-  from { opacity: 0; transform: translateY(22px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.in-reveal {
-  opacity: 0; transform: translateY(28px);
-  transition: opacity .6s ease, transform .6s ease;
-}
-
-.in-reveal.is-visible { opacity: 1; transform: none; }
-
-.in-reveal-group > * {
-  opacity: 0; transform: translateY(24px);
-  transition: opacity .55s ease, transform .55s ease;
-}
-
-.in-reveal-group.is-visible > *:nth-child(1) { opacity:1; transform:none; transition-delay:.04s; }
-.in-reveal-group.is-visible > *:nth-child(2) { opacity:1; transform:none; transition-delay:.13s; }
-.in-reveal-group.is-visible > *:nth-child(3) { opacity:1; transform:none; transition-delay:.22s; }
-.in-reveal-group.is-visible > *:nth-child(4) { opacity:1; transform:none; transition-delay:.31s; }
-.in-reveal-group.is-visible > *:nth-child(5) { opacity:1; transform:none; transition-delay:.40s; }
-.in-reveal-group.is-visible > *:nth-child(6) { opacity:1; transform:none; transition-delay:.49s; }
-
-/* ══════════════════════════════════════════
-   RESPONSIVE
-   ══════════════════════════════════════════ */
-@media (max-width: 992px) {
-  .in-stat-wall { grid-template-columns: repeat(2, 1fr); }
-  .in-stat-block { border-bottom: 1px solid rgba(255,255,255,.06); }
-  .in-tab-panel { grid-template-columns: 1fr; }
-  .in-feature, .in-feature--reverse .in-feature__text,
-  .in-feature--reverse .in-feature__visual { order: unset; grid-template-columns: 1fr; }
-}
-
-@media (max-width: 576px) {
-  .in-stat-wall { grid-template-columns: 1fr 1fr; }
-  .in-hero__title { font-size: 2.8rem; }
-  .in-section { padding: 4rem 0; }
-}
+  :root {
+    --in-navy:   #1E2D49;
+    --in-navy2:  #162238;
+    --in-amber:  #C8922A;
+    --in-cream:  #F5F0E8;
+    --in-muted:  #5a6478;
+    --in-border: rgba(30,45,73,0.10);
+  }
+
+  /* ══════════════════════════════════════
+     HERO
+     ══════════════════════════════════════ */
+  .in-hero {
+    position: relative;
+    min-height: 88vh;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+  }
+
+  .in-hero__bg {
+    position: absolute; inset: 0;
+    background-image: url('{{ url_for("static", filename="assets/img/industries.jpg") }}');
+    background-size: cover;
+    background-position: center;
+    transform: scale(1.06);
+    transition: transform 10s cubic-bezier(.25,.46,.45,.94);
+  }
+
+  .in-hero.is-visible .in-hero__bg { transform: scale(1); }
+
+  .in-hero__overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(22,34,56,.97) 0%,
+      rgba(22,34,56,.52) 50%,
+      rgba(22,34,56,.15) 100%
+    );
+  }
+
+  /* Animated grain texture */
+  .in-hero__grain {
+    position: absolute; inset: 0; z-index: 1;
+    pointer-events: none; opacity: .035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 200px;
+    animation: inGrain 8s steps(10) infinite;
+  }
+
+  @keyframes inGrain {
+    0%,100% { transform:translate(0,0); }
+    10%  { transform:translate(-2%,-3%); }
+    20%  { transform:translate(3%,1%); }
+    30%  { transform:translate(-1%,4%); }
+    40%  { transform:translate(4%,-2%); }
+    50%  { transform:translate(-3%,3%); }
+    60%  { transform:translate(2%,-4%); }
+    70%  { transform:translate(-4%,2%); }
+    80%  { transform:translate(1%,-1%); }
+    90%  { transform:translate(3%,4%); }
+  }
+
+  .in-hero__stripe {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 3px; z-index: 3;
+    background: linear-gradient(to right, var(--in-amber), rgba(200,146,42,.1));
+  }
+
+  .in-hero__content {
+    position: relative; z-index: 2;
+    width: 100%; padding: 0 0 5.5rem;
+  }
+
+  .in-hero__eyebrow {
+    display: inline-flex; align-items: center; gap: .65rem;
+    font-family: var(--font-body);
+    font-size: .72rem; font-weight: 600;
+    letter-spacing: .2em; text-transform: uppercase;
+    color: var(--in-amber); margin-bottom: 1.5rem;
+    opacity: 0; animation: inUp .7s .1s ease forwards;
+  }
+
+  .in-hero__eyebrow::before {
+    content: ""; width: 28px; height: 2px;
+    background: var(--in-amber); border-radius: 2px; flex-shrink: 0;
+  }
+
+  .in-hero__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 6vw, 5.8rem);
+    font-weight: 700; line-height: 1.02; color: #fff;
+    margin-bottom: 1.25rem;
+    opacity: 0; animation: inUp .7s .2s ease forwards;
+  }
+
+  .in-hero__title em { font-style: italic; color: var(--in-amber); }
+
+  .in-hero__body {
+    font-family: var(--font-body);
+    font-size: 1rem; line-height: 1.8;
+    color: rgba(255,255,255,.65); max-width: 52ch;
+    opacity: 0; animation: inUp .7s .3s ease forwards;
+  }
+
+  .in-hero__stats {
+    display: flex; gap: 2.5rem; flex-wrap: wrap;
+    margin-top: 3rem; padding-top: 2.5rem;
+    border-top: 1px solid rgba(255,255,255,.08);
+    opacity: 0; animation: inUp .7s .45s ease forwards;
+  }
+
+  .in-stat__num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.4rem; font-weight: 700;
+    color: var(--in-amber); line-height: 1;
+  }
+
+  .in-stat__label {
+    font-family: var(--font-body);
+    font-size: .68rem; font-weight: 600;
+    letter-spacing: .1em; text-transform: uppercase;
+    color: rgba(255,255,255,.38); margin-top: .25rem;
+  }
+
+  /* ══════════════════════════════════════
+     SCROLLING TICKER
+     ══════════════════════════════════════ */
+  .in-ticker {
+    background: var(--in-amber);
+    padding: .85rem 0;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative; z-index: 2;
+  }
+
+  .in-ticker__track {
+    display: inline-flex;
+    animation: inTicker 28s linear infinite;
+  }
+
+  .in-ticker:hover .in-ticker__track { animation-play-state: paused; }
+
+  .in-ticker__item {
+    display: inline-flex; align-items: center; gap: .5rem;
+    font-family: var(--font-body);
+    font-size: .78rem; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase;
+    color: #fff; padding: 0 2.5rem;
+  }
+
+  .in-ticker__item::before { content: "✦"; font-size: .5rem; opacity: .65; }
+
+  @keyframes inTicker {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* ══════════════════════════════════════
+     INDUSTRY CARDS
+     ══════════════════════════════════════ */
+  .in-section { padding: 6rem 0; background: #fff; }
+
+  .in-card-wrap {
+    height: 100%;
+    perspective: 900px;
+  }
+
+  .in-card {
+    background: #fff;
+    border-radius: 20px;
+    border: 1px solid var(--in-border);
+    box-shadow: 0 4px 24px rgba(30,45,73,.06);
+    padding: 2.25rem 2rem 2rem;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    transition: box-shadow .3s, border-color .3s;
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+
+  /* Shine sweep */
+  .in-card::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(
+      105deg,
+      transparent 40%,
+      rgba(255,255,255,.13) 50%,
+      transparent 60%
+    );
+    background-size: 200% 100%;
+    background-position: 200% 0;
+    transition: background-position .55s ease;
+    pointer-events: none;
+  }
+
+  .in-card:hover::after { background-position: -200% 0; }
+
+  .in-card:hover {
+    box-shadow: 0 22px 56px rgba(30,45,73,.16);
+    border-color: rgba(200,146,42,.35);
+  }
+
+  /* Accent bar slides in from left */
+  .in-card::before {
+    content: "";
+    position: absolute; top: 0; left: -100%; right: 100%; height: 3px;
+    background: linear-gradient(to right, var(--in-amber), rgba(200,146,42,.3));
+    transition: left .35s ease, right .35s ease;
+  }
+
+  .in-card:hover::before { left: 0; right: 0; }
+
+  /* Ghost watermark floats up */
+  .in-card__num {
+    position: absolute; bottom: -.75rem; right: 1rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 7rem; font-weight: 700; line-height: 1;
+    color: rgba(30,45,73,.035); pointer-events: none;
+    transition: color .3s, transform .35s;
+  }
+
+  .in-card:hover .in-card__num {
+    color: rgba(200,146,42,.07);
+    transform: translateY(-8px);
+  }
+
+  /* Icon — spins and fills amber */
+  .in-card__icon {
+    width: 56px; height: 56px;
+    border-radius: 15px;
+    display: grid; place-items: center;
+    font-size: 1.3rem;
+    margin-bottom: 1.4rem; flex-shrink: 0;
+    transition: background .28s, color .28s, border-color .28s, transform .35s;
+  }
+
+  .in-card--agri      .in-card__icon { background: rgba(34,197,94,.1);  border:1px solid rgba(34,197,94,.2);   color:#16a34a; }
+  .in-card--agrifood  .in-card__icon { background: rgba(34,197,94,.1);  border:1px solid rgba(34,197,94,.2);   color:#16a34a; }
+  .in-card--mining    .in-card__icon { background: rgba(234,179,8,.1);  border:1px solid rgba(234,179,8,.2);   color:#ca8a04; }
+  .in-card--tourism   .in-card__icon { background: rgba(14,165,233,.1); border:1px solid rgba(14,165,233,.2);  color:#0284c7; }
+  .in-card--transport .in-card__icon { background: rgba(99,102,241,.1); border:1px solid rgba(99,102,241,.2);  color:#4f46e5; }
+  .in-card--health    .in-card__icon { background: rgba(239,68,68,.1);  border:1px solid rgba(239,68,68,.2);   color:#dc2626; }
+
+  .in-card:hover .in-card__icon {
+    background: var(--in-amber) !important;
+    color: #fff !important;
+    border-color: var(--in-amber) !important;
+    transform: scale(1.1) rotate(-5deg);
+  }
+
+  .in-card__tag {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: .62rem; font-weight: 700;
+    letter-spacing: .15em; text-transform: uppercase;
+    padding: .22rem .7rem; border-radius: 999px;
+    background: rgba(200,146,42,.08); color: var(--in-amber);
+    margin-bottom: .75rem;
+  }
+
+  .in-card__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--in-navy); line-height: 1.2;
+    margin-bottom: 0; flex: 1;
+    transition: color .22s;
+  }
+
+  .in-card:hover .in-card__title { color: var(--in-amber); }
+
+  /* ── "View Business" button ── */
+  .in-card__btn {
+    display: inline-flex; align-items: center;
+    font-family: var(--font-body);
+    font-size: .82rem; font-weight: 700;
+    border-radius: 999px;
+    text-decoration: none !important;
+    background: var(--in-navy); color: #fff !important;
+    border: 2px solid var(--in-navy);
+    margin-top: 1.5rem; align-self: flex-start;
+    position: relative; z-index: 1;
+    overflow: hidden;
+    transition: border-color .22s;
+  }
+
+  .in-card__btn-label {
+    display: inline-flex; align-items: center;
+    padding: .6rem 1.35rem;
+    transition: transform .22s ease, padding .22s ease;
+  }
+
+  .in-card__btn-arrow {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 0; overflow: hidden;
+    font-size: .8rem;
+    background: var(--in-amber);
+    align-self: stretch;
+    transition: width .25s ease;
+  }
+
+  /* Amber fill sweeps in from behind */
+  .in-card__btn::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: var(--in-amber);
+    transform: translateX(-101%);
+    transition: transform .28s ease;
+    z-index: 0;
+  }
+
+  .in-card:hover .in-card__btn { border-color: var(--in-amber); }
+  .in-card:hover .in-card__btn::before { transform: translateX(0); }
+  .in-card:hover .in-card__btn-arrow { width: 38px; }
+  .in-card:hover .in-card__btn-label { transform: translateX(-5px); }
+
+  /* Ripple */
+  .in-ripple {
+    position: absolute; border-radius: 50%;
+    background: rgba(200,146,42,.22);
+    transform: scale(0);
+    animation: inRipple .6s ease-out forwards;
+    pointer-events: none;
+  }
+
+  @keyframes inRipple {
+    to { transform: scale(4.5); opacity: 0; }
+  }
+
+  /* ══════════════════════════════════════
+     REVEAL ANIMATIONS
+     ══════════════════════════════════════ */
+  @keyframes inUp {
+    from { opacity:0; transform:translateY(22px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+
+  .in-reveal-group > * {
+    opacity: 0; transform: translateY(28px);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+
+  .in-reveal-group.is-visible > *:nth-child(1) { opacity:1; transform:none; transition-delay:.06s; }
+  .in-reveal-group.is-visible > *:nth-child(2) { opacity:1; transform:none; transition-delay:.14s; }
+  .in-reveal-group.is-visible > *:nth-child(3) { opacity:1; transform:none; transition-delay:.22s; }
+  .in-reveal-group.is-visible > *:nth-child(4) { opacity:1; transform:none; transition-delay:.30s; }
+  .in-reveal-group.is-visible > *:nth-child(5) { opacity:1; transform:none; transition-delay:.38s; }
+  .in-reveal-group.is-visible > *:nth-child(6) { opacity:1; transform:none; transition-delay:.46s; }
+
+  @media (max-width: 576px) {
+    .in-hero__title { font-size: 2.8rem; }
+    .in-hero__stats { gap: 1.5rem; }
+    .in-section     { padding: 4rem 0; }
+  }
 
 </style>
 
 
-<!-- ══════════════════════════════════════════
-     HERO
-     ══════════════════════════════════════════ -->
-<section class="in-hero" id="inHero">
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="in-hero" id="in-hero">
   <div class="in-hero__bg"></div>
   <div class="in-hero__overlay"></div>
+  <div class="in-hero__grain"></div>
   <div class="in-hero__stripe"></div>
+
   <div class="in-hero__content">
     <div class="container">
-      <div class="row">
-        <div class="col-lg-9">
-          <p class="in-hero__eyebrow">CPDA Region · East-Central Saskatchewan</p>
-          <h1 class="in-hero__title">
-            Our Regional<br><em>Industries</em>
-          </h1>
-          <p class="in-hero__body">
-            CPDA's 1,344 businesses span agriculture, manufacturing, retail,
-            health, education, and beyond — forming one of Saskatchewan's
-            most diverse regional economies.
-          </p>
-          <div class="in-hero__pills">
-            <a href="#overview"    class="in-pill">Industry Overview</a>
-            <a href="#sectors"     class="in-pill">Sector Deep Dives</a>
-            <a href="#opportunity" class="in-pill">Investment Opportunity</a>
-            <a href="#faq"         class="in-pill">FAQ</a>
+      <div class="col-lg-8">
+        <p class="in-hero__eyebrow">East-Central Saskatchewan</p>
+        <h1 class="in-hero__title">Our <em>Industries</em></h1>
+        <p class="in-hero__body">
+          Explore the key industries that drive our region's growth and prosperity.
+        </p>
+        <div class="in-hero__stats">
+          <div>
+            <div class="in-stat__num" data-target="1344" data-display="1,344">1,344</div>
+            <div class="in-stat__label">Regional Businesses</div>
+          </div>
+          <div>
+            <div class="in-stat__num" data-target="6" data-display="6">6</div>
+            <div class="in-stat__label">Key Sectors</div>
+          </div>
+          <div>
+            <div class="in-stat__num" data-target="28" data-display="28K+">28K+</div>
+            <div class="in-stat__label">Regional Workers</div>
           </div>
         </div>
       </div>
@@ -828,556 +401,126 @@
 </section>
 
 
-<!-- ══════════════════════════════════════════
-     TICKER
-     ══════════════════════════════════════════ -->
+<!-- ═══════════════ TICKER ═══════════════ -->
 <div class="in-ticker" aria-hidden="true">
   <div class="in-ticker__track">
-    <!-- Items duplicated for seamless loop -->
     <span class="in-ticker__item">1,344 Regional Businesses</span>
-    <span class="in-ticker__item">8.1% Agriculture</span>
-    <span class="in-ticker__item">6.8% Manufacturing</span>
-    <span class="in-ticker__item">36,020 Population by 2034</span>
-    <span class="in-ticker__item">28,300 Regional Workers</span>
-    <span class="in-ticker__item">4.9% Projected Growth</span>
+    <span class="in-ticker__item">6 Key Sectors</span>
+    <span class="in-ticker__item">Agriculture &middot; 8.1% Industry Share</span>
+    <span class="in-ticker__item">Mining &middot; $1.14B Exports</span>
+    <span class="in-ticker__item">28,300+ Regional Workers</span>
+    <span class="in-ticker__item">4.9% Projected Growth to 2034</span>
     <span class="in-ticker__item">16 Member Communities</span>
-    <span class="in-ticker__item">$1.1B+ Regional Exports</span>
+    <span class="in-ticker__item">Agrifood Processing &middot; $431M</span>
     <span class="in-ticker__item">1,344 Regional Businesses</span>
-    <span class="in-ticker__item">8.1% Agriculture</span>
-    <span class="in-ticker__item">6.8% Manufacturing</span>
-    <span class="in-ticker__item">36,020 Population by 2034</span>
-    <span class="in-ticker__item">28,300 Regional Workers</span>
-    <span class="in-ticker__item">4.9% Projected Growth</span>
+    <span class="in-ticker__item">6 Key Sectors</span>
+    <span class="in-ticker__item">Agriculture &middot; 8.1% Industry Share</span>
+    <span class="in-ticker__item">Mining &middot; $1.14B Exports</span>
+    <span class="in-ticker__item">28,300+ Regional Workers</span>
+    <span class="in-ticker__item">4.9% Projected Growth to 2034</span>
     <span class="in-ticker__item">16 Member Communities</span>
-    <span class="in-ticker__item">$1.1B+ Regional Exports</span>
+    <span class="in-ticker__item">Agrifood Processing &middot; $431M</span>
   </div>
 </div>
 
 
-<!-- ══════════════════════════════════════════
-     STAT WALL
-     ══════════════════════════════════════════ -->
-<div class="in-stat-wall in-reveal" style="background:var(--in-navy);">
-
-  <div class="in-stat-block">
-    <div class="in-stat-block__accent" style="background:var(--in-amber);"></div>
-    <div class="in-stat-block__num">1,344</div>
-    <div class="in-stat-block__label">Businesses</div>
-    <div class="in-stat-block__sub">Across all sectors in the CPDA region</div>
-  </div>
-
-  <div class="in-stat-block">
-    <div class="in-stat-block__accent" style="background:var(--in-agri);"></div>
-    <div class="in-stat-block__num">8.1%</div>
-    <div class="in-stat-block__label">Agriculture Share</div>
-    <div class="in-stat-block__sub">Farms are the region's largest export sector</div>
-  </div>
-
-  <div class="in-stat-block">
-    <div class="in-stat-block__accent" style="background:var(--in-mfg);"></div>
-    <div class="in-stat-block__num">6.8%</div>
-    <div class="in-stat-block__label">Manufacturing Share</div>
-    <div class="in-stat-block__sub">Food processing and mineral products lead</div>
-  </div>
-
-  <div class="in-stat-block">
-    <div class="in-stat-block__accent" style="background:var(--in-health);"></div>
-    <div class="in-stat-block__num">$1.1B+</div>
-    <div class="in-stat-block__label">Total Exports</div>
-    <div class="in-stat-block__sub">Non-metallic mineral mining leads at 31.1%</div>
-  </div>
-
-</div>
-
-
-<!-- ══════════════════════════════════════════
-     INDUSTRY OVERVIEW — 6 sector cards
-     ══════════════════════════════════════════ -->
-<section id="overview" class="in-section">
+<!-- ═══════════════ CARDS ═══════════════ -->
+<section class="in-section">
   <div class="container">
-
-    <div class="row align-items-end mb-4 in-reveal">
-      <div class="col-lg-6">
-        <p class="in-eyebrow">Regional Economy</p>
-        <h2 class="in-heading">Industry <em>Overview</em></h2>
-      </div>
-      <div class="col-lg-5 offset-lg-1">
-        <p class="in-lead">
-          CPDA's diverse industrial base creates resilience across the region —
-          no single sector dominates, which means economic shocks are absorbed
-          more evenly than in mono-industry regions.
-        </p>
-      </div>
-    </div>
-
-    <div class="in-divider in-reveal">
-      <div class="in-divider__line"></div>
-      <span class="in-divider__label">2022 Data · CPDA Region</span>
-      <div class="in-divider__line"></div>
-    </div>
-
-    <div class="row g-4 in-reveal-group">
-
-      <div class="col-lg-4 col-md-6">
-        <div class="in-grid-card in-grid-card--agri">
-          <div class="in-grid-card__num">01</div>
-          <div class="in-grid-card__icon"><i class="fas fa-seedling"></i></div>
-          <span class="in-grid-card__tag">Agriculture</span>
-          <h3 class="in-grid-card__title">Farms &amp; Agri-Business</h3>
-          <p class="in-grid-card__text">
-            The backbone of the regional economy. Grain, oilseed, and livestock
-            operations drive significant export value and support downstream
-            food processing across the CPDA footprint.
-          </p>
-          <div class="in-grid-card__stat">
-            <span class="in-grid-card__stat-num">8.1%</span>
-            <span class="in-grid-card__stat-label">of regional industry share</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-lg-4 col-md-6">
-        <div class="in-grid-card in-grid-card--mfg">
-          <div class="in-grid-card__num">02</div>
-          <div class="in-grid-card__icon"><i class="fas fa-industry"></i></div>
-          <span class="in-grid-card__tag">Manufacturing</span>
-          <h3 class="in-grid-card__title">Food &amp; Mineral Manufacturing</h3>
-          <p class="in-grid-card__text">
-            Food processing, grain milling, and non-metallic mineral products
-            anchor the manufacturing sector. The region's top export — non-metallic
-            mineral mining — represents 31.1% of all regional exports.
-          </p>
-          <div class="in-grid-card__stat">
-            <span class="in-grid-card__stat-num">6.8%</span>
-            <span class="in-grid-card__stat-label">of regional industry share</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-lg-4 col-md-6">
-        <div class="in-grid-card in-grid-card--retail">
-          <div class="in-grid-card__num">03</div>
-          <div class="in-grid-card__icon"><i class="fas fa-store"></i></div>
-          <span class="in-grid-card__tag">Retail Trade</span>
-          <h3 class="in-grid-card__title">Retail &amp; Consumer Services</h3>
-          <p class="in-grid-card__text">
-            Yorkton anchors regional retail as a trade hub for the surrounding
-            area. Consumer spending across the CPDA region is estimated at
-            significant annual totals, supporting local employment and services.
-          </p>
-          <div class="in-grid-card__stat">
-            <span class="in-grid-card__stat-num">14.2%</span>
-            <span class="in-grid-card__stat-label">of consumer spend on food</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-lg-4 col-md-6">
-        <div class="in-grid-card in-grid-card--health">
-          <div class="in-grid-card__num">04</div>
-          <div class="in-grid-card__icon"><i class="fas fa-heartbeat"></i></div>
-          <span class="in-grid-card__tag">Healthcare</span>
-          <h3 class="in-grid-card__title">Health &amp; Medical Services</h3>
-          <p class="in-grid-card__text">
-            General medical and surgical hospitals are a significant export
-            service, drawing patients from across the broader region into
-            Yorkton's healthcare facilities and supporting professional employment.
-          </p>
-          <div class="in-grid-card__stat">
-            <span class="in-grid-card__stat-num">$56.7M</span>
-            <span class="in-grid-card__stat-label">in health service exports</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-lg-4 col-md-6">
-        <div class="in-grid-card in-grid-card--edu">
-          <div class="in-grid-card__num">05</div>
-          <div class="in-grid-card__icon"><i class="fas fa-graduation-cap"></i></div>
-          <span class="in-grid-card__tag">Education</span>
-          <h3 class="in-grid-card__title">Education &amp; Training</h3>
-          <p class="in-grid-card__text">
-            Elementary, secondary, and post-secondary education — including
-            Suncrest College — form a vital employment and service sector,
-            and are a measurable contributor to regional export revenues.
-          </p>
-          <div class="in-grid-card__stat">
-            <span class="in-grid-card__stat-num">$86.5M</span>
-            <span class="in-grid-card__stat-label">in education service exports</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-lg-4 col-md-6">
-        <div class="in-grid-card in-grid-card--admin">
-          <div class="in-grid-card__num">06</div>
-          <div class="in-grid-card__icon"><i class="fas fa-landmark"></i></div>
-          <span class="in-grid-card__tag">Public Administration</span>
-          <h3 class="in-grid-card__title">Government &amp; Public Services</h3>
-          <p class="in-grid-card__text">
-            Local, provincial, and federal public administration provides stable
-            employment across communities. Combined government service exports
-            exceed $192M annually across the CPDA region.
-          </p>
-          <div class="in-grid-card__stat">
-            <span class="in-grid-card__stat-num">$192M+</span>
-            <span class="in-grid-card__stat-label">in government service exports</span>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════
-     SECTOR DEEP DIVES — interactive tabs
-     ══════════════════════════════════════════ -->
-<section id="sectors" class="in-section in-section--cream">
-  <div class="container">
-
-    <div class="row align-items-end mb-4 in-reveal">
-      <div class="col-lg-6">
-        <p class="in-eyebrow">Sector Deep Dives</p>
-        <h2 class="in-heading">Explore by <em>Sector</em></h2>
-      </div>
-      <div class="col-lg-5 offset-lg-1">
-        <p class="in-lead">Select a sector to explore its economic role, key data, and opportunities within the CPDA region.</p>
-      </div>
-    </div>
-
-    <!-- Tab nav -->
-    <div class="in-tabs__nav in-reveal" role="tablist">
-      <button class="in-tab-btn is-active" data-tab="agri" role="tab">
-        <i class="fas fa-seedling"></i> Agriculture
-      </button>
-      <button class="in-tab-btn" data-tab="mfg" role="tab">
-        <i class="fas fa-industry"></i> Manufacturing
-      </button>
-      <button class="in-tab-btn" data-tab="health" role="tab">
-        <i class="fas fa-heartbeat"></i> Healthcare
-      </button>
-      <button class="in-tab-btn" data-tab="edu" role="tab">
-        <i class="fas fa-graduation-cap"></i> Education
-      </button>
-      <button class="in-tab-btn" data-tab="admin" role="tab">
-        <i class="fas fa-landmark"></i> Public Services
-      </button>
-    </div>
-
-    <!-- Tab panels -->
-    <div class="in-reveal">
+    <div class="row g-4 justify-content-center in-reveal-group">
 
       <!-- Agriculture -->
-      <div class="in-tab-panel is-active" id="tab-agri">
-        <div>
-          <span class="in-tab-panel__eyebrow"
-                style="background:rgba(74,124,89,.1); color:var(--in-agri);">
-            <i class="fas fa-seedling" style="font-size:.65rem;"></i> Agriculture
-          </span>
-          <h3 class="in-tab-panel__title">
-            Farms: The Region's <em>Largest Export</em> Sector
-          </h3>
-          <p class="in-tab-panel__text">
-            Agriculture is the foundation of East-Central Saskatchewan's economy.
-            The CPDA region produces grain, oilseed, and livestock at scale,
-            supporting downstream food processing and anchoring rural community
-            identity and employment across the entire footprint.
-          </p>
-          <div class="in-tab-stats">
-            <div>
-              <div class="in-tab-stat__num">8.1%</div>
-              <div class="in-tab-stat__label">Industry Share</div>
-            </div>
-            <div>
-              <div class="in-tab-stat__num">$111M</div>
-              <div class="in-tab-stat__label">Farm Exports</div>
-            </div>
-            <div>
-              <div class="in-tab-stat__num">#1</div>
-              <div class="in-tab-stat__label">Employer in Rural Areas</div>
-            </div>
-          </div>
-        </div>
-        <div class="in-tab-panel__visual">
-          <div class="in-tab-panel__visual-bg"
-               style="background: linear-gradient(135deg, #4a7c59, #1E2D49);"></div>
-          <div class="in-tab-panel__visual-overlay"></div>
-          <div class="in-tab-panel__visual-content">
-            <p class="in-tab-panel__visual-tag">
-              <i class="fas fa-seedling" style="font-size:.6rem;"></i> Key Export
-            </p>
-            <h4 class="in-tab-panel__visual-title">
-              Grain &amp; Oilseed Milling
-            </h4>
-            <p class="in-tab-panel__visual-sub">
-              $431.5M in exports — the region's second-largest export industry
-            </p>
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="in-card-wrap">
+          <div class="in-card in-card--agri">
+            <div class="in-card__num">01</div>
+            <div class="in-card__icon"><i class="fas fa-tractor"></i></div>
+            <span class="in-card__tag">Primary Industry</span>
+            <h4 class="in-card__title">Agriculture</h4>
+            <a href="{{ url_for('agriculture') }}" class="in-card__btn">
+              <span class="in-card__btn-label">View Business</span>
+              <span class="in-card__btn-arrow"><i class="fas fa-arrow-right"></i></span>
+            </a>
           </div>
         </div>
       </div>
 
-      <!-- Manufacturing -->
-      <div class="in-tab-panel" id="tab-mfg">
-        <div>
-          <span class="in-tab-panel__eyebrow"
-                style="background:rgba(41,89,125,.1); color:var(--in-mfg);">
-            <i class="fas fa-industry" style="font-size:.65rem;"></i> Manufacturing
-          </span>
-          <h3 class="in-tab-panel__title">
-            Mineral &amp; Food Manufacturing <em>Drive Exports</em>
-          </h3>
-          <p class="in-tab-panel__text">
-            Non-metallic mineral mining and quarrying is CPDA's single largest
-            export category at $1.14B — representing 31.1% of all regional exports.
-            Paired with food manufacturing and meat processing, the manufacturing
-            sector forms a powerful economic engine for the entire region.
-          </p>
-          <div class="in-tab-stats">
-            <div>
-              <div class="in-tab-stat__num">$1.14B</div>
-              <div class="in-tab-stat__label">Mineral Exports</div>
-            </div>
-            <div>
-              <div class="in-tab-stat__num">31.1%</div>
-              <div class="in-tab-stat__label">Of Total Exports</div>
-            </div>
-            <div>
-              <div class="in-tab-stat__num">6.8%</div>
-              <div class="in-tab-stat__label">Industry Share</div>
-            </div>
-          </div>
-        </div>
-        <div class="in-tab-panel__visual">
-          <div class="in-tab-panel__visual-bg"
-               style="background: linear-gradient(135deg, #29597d, #1E2D49);"></div>
-          <div class="in-tab-panel__visual-overlay"></div>
-          <div class="in-tab-panel__visual-content">
-            <p class="in-tab-panel__visual-tag">
-              <i class="fas fa-gem" style="font-size:.6rem;"></i> Largest Export
-            </p>
-            <h4 class="in-tab-panel__visual-title">
-              Non-Metallic Mineral Mining
-            </h4>
-            <p class="in-tab-panel__visual-sub">
-              $1.14B — 31.1% of all CPDA regional exports
-            </p>
+      <!-- Agrifood Processing -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="in-card-wrap">
+          <div class="in-card in-card--agrifood">
+            <div class="in-card__num">02</div>
+            <div class="in-card__icon"><i class="fas fa-industry"></i></div>
+            <span class="in-card__tag">Processing</span>
+            <h4 class="in-card__title">Agrifood Processing</h4>
+            <a href="{{ url_for('agri_process') }}" class="in-card__btn">
+              <span class="in-card__btn-label">View Business</span>
+              <span class="in-card__btn-arrow"><i class="fas fa-arrow-right"></i></span>
+            </a>
           </div>
         </div>
       </div>
 
-      <!-- Healthcare -->
-      <div class="in-tab-panel" id="tab-health">
-        <div>
-          <span class="in-tab-panel__eyebrow"
-                style="background:rgba(192,57,43,.08); color:var(--in-health);">
-            <i class="fas fa-heartbeat" style="font-size:.65rem;"></i> Healthcare
-          </span>
-          <h3 class="in-tab-panel__title">
-            A Regional Health Hub <em>Drawing Patients</em> from Across Saskatchewan
-          </h3>
-          <p class="in-tab-panel__text">
-            Yorkton's hospital and health facilities serve a catchment area far
-            beyond CPDA's boundaries, generating measurable export revenue as
-            patients travel to access specialist services. Healthcare is also
-            among the region's most stable employment sectors.
-          </p>
-          <div class="in-tab-stats">
-            <div>
-              <div class="in-tab-stat__num">$56.7M</div>
-              <div class="in-tab-stat__label">Health Exports</div>
-            </div>
-            <div>
-              <div class="in-tab-stat__num">Stable</div>
-              <div class="in-tab-stat__label">Employment Sector</div>
-            </div>
-          </div>
-        </div>
-        <div class="in-tab-panel__visual">
-          <div class="in-tab-panel__visual-bg"
-               style="background: linear-gradient(135deg, #c0392b, #1E2D49);"></div>
-          <div class="in-tab-panel__visual-overlay"></div>
-          <div class="in-tab-panel__visual-content">
-            <p class="in-tab-panel__visual-tag">
-              <i class="fas fa-hospital" style="font-size:.6rem;"></i> Regional Hub
-            </p>
-            <h4 class="in-tab-panel__visual-title">
-              General Medical &amp; Surgical Hospitals
-            </h4>
-            <p class="in-tab-panel__visual-sub">
-              Serving a patient catchment far beyond CPDA's member communities
-            </p>
+      <!-- Mining -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="in-card-wrap">
+          <div class="in-card in-card--mining">
+            <div class="in-card__num">03</div>
+            <div class="in-card__icon"><i class="fas fa-hard-hat"></i></div>
+            <span class="in-card__tag">Extractive</span>
+            <h4 class="in-card__title">Mining</h4>
+            <a href="{{ url_for('mining') }}" class="in-card__btn">
+              <span class="in-card__btn-label">View Business</span>
+              <span class="in-card__btn-arrow"><i class="fas fa-arrow-right"></i></span>
+            </a>
           </div>
         </div>
       </div>
 
-      <!-- Education -->
-      <div class="in-tab-panel" id="tab-edu">
-        <div>
-          <span class="in-tab-panel__eyebrow"
-                style="background:rgba(217,119,6,.08); color:var(--in-edu);">
-            <i class="fas fa-graduation-cap" style="font-size:.65rem;"></i> Education
-          </span>
-          <h3 class="in-tab-panel__title">
-            Education: An <em>Economic Engine</em> and Talent Pipeline
-          </h3>
-          <p class="in-tab-panel__text">
-            From K-12 to post-secondary, the education sector — anchored by
-            Suncrest College — generates significant export activity and provides
-            the talent pipeline that underpins every other industry in the region.
-            Education is both a service export and a long-term economic investment.
-          </p>
-          <div class="in-tab-stats">
-            <div>
-              <div class="in-tab-stat__num">$86.5M</div>
-              <div class="in-tab-stat__label">Education Exports</div>
-            </div>
-            <div>
-              <div class="in-tab-stat__num">K–PSE</div>
-              <div class="in-tab-stat__label">Full Spectrum</div>
-            </div>
-          </div>
-        </div>
-        <div class="in-tab-panel__visual">
-          <div class="in-tab-panel__visual-bg"
-               style="background: linear-gradient(135deg, #d97706, #1E2D49);"></div>
-          <div class="in-tab-panel__visual-overlay"></div>
-          <div class="in-tab-panel__visual-content">
-            <p class="in-tab-panel__visual-tag">
-              <i class="fas fa-university" style="font-size:.6rem;"></i> CPDA Founding Member
-            </p>
-            <h4 class="in-tab-panel__visual-title">Suncrest College</h4>
-            <p class="in-tab-panel__visual-sub">
-              Post-secondary education, workforce training, and community development
-            </p>
+      <!-- Tourism -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="in-card-wrap">
+          <div class="in-card in-card--tourism">
+            <div class="in-card__num">04</div>
+            <div class="in-card__icon"><i class="fas fa-map-marked-alt"></i></div>
+            <span class="in-card__tag">Visitor Economy</span>
+            <h4 class="in-card__title">Tourism</h4>
+            <a href="{{ url_for('tourism') }}" class="in-card__btn">
+              <span class="in-card__btn-label">View Business</span>
+              <span class="in-card__btn-arrow"><i class="fas fa-arrow-right"></i></span>
+            </a>
           </div>
         </div>
       </div>
 
-      <!-- Public Admin -->
-      <div class="in-tab-panel" id="tab-admin">
-        <div>
-          <span class="in-tab-panel__eyebrow"
-                style="background:rgba(14,116,144,.1); color:var(--in-admin);">
-            <i class="fas fa-landmark" style="font-size:.65rem;"></i> Public Services
-          </span>
-          <h3 class="in-tab-panel__title">
-            Public Administration: <em>Stable Foundation</em> of the Regional Economy
-          </h3>
-          <p class="in-tab-panel__text">
-            Local, municipal, provincial, and federal public administration
-            collectively employs a significant share of the CPDA workforce and
-            generates over $192M in combined export-equivalent service value —
-            providing economic stability that private sectors can build upon.
-          </p>
-          <div class="in-tab-stats">
-            <div>
-              <div class="in-tab-stat__num">$192M+</div>
-              <div class="in-tab-stat__label">Combined Exports</div>
-            </div>
-            <div>
-              <div class="in-tab-stat__num">3</div>
-              <div class="in-tab-stat__label">Government Levels</div>
-            </div>
-          </div>
-        </div>
-        <div class="in-tab-panel__visual">
-          <div class="in-tab-panel__visual-bg"
-               style="background: linear-gradient(135deg, #0e7490, #1E2D49);"></div>
-          <div class="in-tab-panel__visual-overlay"></div>
-          <div class="in-tab-panel__visual-content">
-            <p class="in-tab-panel__visual-tag">
-              <i class="fas fa-balance-scale" style="font-size:.6rem;"></i> Stability Anchor
-            </p>
-            <h4 class="in-tab-panel__visual-title">
-              Local &amp; Provincial Administration
-            </h4>
-            <p class="in-tab-panel__visual-sub">
-              $75.5M local + $117M provincial public administration exports
-            </p>
+      <!-- Transportation -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="in-card-wrap">
+          <div class="in-card in-card--transport">
+            <div class="in-card__num">05</div>
+            <div class="in-card__icon"><i class="fas fa-truck"></i></div>
+            <span class="in-card__tag">Logistics</span>
+            <h4 class="in-card__title">Transportation</h4>
+            <a href="{{ url_for('transportation') }}" class="in-card__btn">
+              <span class="in-card__btn-label">View Business</span>
+              <span class="in-card__btn-arrow"><i class="fas fa-arrow-right"></i></span>
+            </a>
           </div>
         </div>
       </div>
 
-    </div><!-- /tab panels -->
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════
-     INVESTMENT OPPORTUNITY — alternating features
-     ══════════════════════════════════════════ -->
-<section id="opportunity" class="in-section">
-  <div class="container">
-
-    <div class="row align-items-end mb-5 in-reveal">
-      <div class="col-lg-6">
-        <p class="in-eyebrow">Why Invest Here</p>
-        <h2 class="in-heading">Investment <em>Opportunity</em></h2>
-      </div>
-      <div class="col-lg-5 offset-lg-1">
-        <p class="in-lead">
-          East-Central Saskatchewan offers a rare combination of industrial
-          diversity, workforce availability, and regional momentum.
-        </p>
-      </div>
-    </div>
-
-    <div class="in-reveal">
-
-      <div class="in-feature">
-        <div class="in-feature__text">
-          <span class="in-feature__tag"><i class="fas fa-chart-line" style="font-size:.6rem;"></i> Growth</span>
-          <h3 class="in-feature__title">A Region <em>on the Rise</em></h3>
-          <p class="in-feature__text">
-            CPDA's regional population is projected to grow 4.9% to 36,020
-            by 2034, bringing 28,300+ workers into an expanding labour market.
-            This growth trajectory makes the region an increasingly attractive
-            location for businesses requiring stable workforce pipelines.
-          </p>
-          <ul class="in-feature__list">
-            <li>4.9% projected population growth to 2034</li>
-            <li>28,300+ workers enabling expanding opportunity</li>
-            <li>Diverse industrial base reduces single-sector risk</li>
-          </ul>
-        </div>
-        <div class="in-feature__visual">
-          <span class="in-feature__visual-deco" aria-hidden="true">4.9</span>
-          <span class="in-feature__visual-tag">
-            <i class="fas fa-arrow-trend-up" style="font-size:.6rem;"></i> Projected Growth
-          </span>
-          <div>
-            <div class="in-feature__visual-num">36,020</div>
-            <div class="in-feature__visual-label">Population by 2034</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="in-feature in-feature--reverse">
-        <div class="in-feature__text">
-          <span class="in-feature__tag"><i class="fas fa-handshake" style="font-size:.6rem;"></i> Collaboration</span>
-          <h3 class="in-feature__title">One Region, <em>One Voice</em></h3>
-          <p class="in-feature__text">
-            CPDA's 16 member communities speak with a unified regional voice
-            on economic development, investment attraction, and infrastructure.
-            Investors and businesses gain a single point of regional contact
-            rather than navigating 16 separate municipal processes.
-          </p>
-          <ul class="in-feature__list">
-            <li>Joint RFPs reduce procurement complexity</li>
-            <li>Coordinated site selection support across communities</li>
-            <li>Regional advocacy to provincial and federal funders</li>
-          </ul>
-        </div>
-        <div class="in-feature__visual">
-          <span class="in-feature__visual-deco" aria-hidden="true">16</span>
-          <span class="in-feature__visual-tag">
-            <i class="fas fa-map-marker-alt" style="font-size:.6rem;"></i> Member Communities
-          </span>
-          <div>
-            <div class="in-feature__visual-num">16</div>
-            <div class="in-feature__visual-label">Communities. One Alliance.</div>
+      <!-- Healthcare & Education -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="in-card-wrap">
+          <div class="in-card in-card--health">
+            <div class="in-card__num">06</div>
+            <div class="in-card__icon"><i class="fas fa-heartbeat"></i></div>
+            <span class="in-card__tag">Social Services</span>
+            <h4 class="in-card__title">Healthcare &amp; Education</h4>
+            <a href="{{ url_for('health_education') }}" class="in-card__btn">
+              <span class="in-card__btn-label">View Business</span>
+              <span class="in-card__btn-arrow"><i class="fas fa-arrow-right"></i></span>
+            </a>
           </div>
         </div>
       </div>
@@ -1387,218 +530,91 @@
 </section>
 
 
-<!-- ══════════════════════════════════════════
-     QUOTE BANNER
-     ══════════════════════════════════════════ -->
-<section class="in-quote">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-8 text-center" style="position:relative; z-index:1;">
-        <p class="in-quote__text">
-          "CPDA's 1,344 businesses thrive across agriculture, manufacturing,
-          and retail trade — a diverse industrial base that creates resilience
-          and cross-sector opportunity."
-        </p>
-        <p class="in-quote__attr">CPDA Regional Business Insights · 2022</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════
-     FAQ ACCORDION
-     ══════════════════════════════════════════ -->
-<section id="faq" class="in-section in-section--cream">
-  <div class="container">
-
-    <div class="row align-items-end mb-5 in-reveal">
-      <div class="col-lg-6">
-        <p class="in-eyebrow">Common Questions</p>
-        <h2 class="in-heading">Industry <em>FAQ</em></h2>
-      </div>
-      <div class="col-lg-5 offset-lg-1">
-        <p class="in-lead">Answers to the questions we hear most from investors, businesses, and prospective residents.</p>
-      </div>
-    </div>
-
-    <div class="row justify-content-center in-reveal">
-      <div class="col-lg-9">
-        <div class="in-accordion">
-
-          <div class="in-acc-item is-open">
-            <button class="in-acc-trigger" aria-expanded="true">
-              <span class="in-acc-trigger__label">What are the dominant industries in the CPDA region?</span>
-              <span class="in-acc-trigger__icon"><i class="fas fa-plus"></i></span>
-            </button>
-            <div class="in-acc-body" style="max-height: 500px;">
-              <div class="in-acc-body__inner">
-                Agriculture (8.1%) and manufacturing (6.8%) lead the regional
-                economy by business share, but the region is deliberately diverse.
-                Non-metallic mineral mining is the single largest export at 31.1%
-                of regional exports. Healthcare, education, and public administration
-                also contribute significantly to stable employment and export revenues.
-              </div>
-            </div>
-          </div>
-
-          <div class="in-acc-item">
-            <button class="in-acc-trigger" aria-expanded="false">
-              <span class="in-acc-trigger__label">How does CPDA support businesses looking to invest in the region?</span>
-              <span class="in-acc-trigger__icon"><i class="fas fa-plus"></i></span>
-            </button>
-            <div class="in-acc-body">
-              <div class="in-acc-body__inner">
-                CPDA provides a unified regional entry point for businesses and
-                investors — coordinating across 16 member communities to assist
-                with site selection, workforce connections, and introductions to
-                local business networks. Our investment attraction sub-committee
-                is developing a formal concierge service for prospective businesses.
-              </div>
-            </div>
-          </div>
-
-          <div class="in-acc-item">
-            <button class="in-acc-trigger" aria-expanded="false">
-              <span class="in-acc-trigger__label">Is the regional workforce growing?</span>
-              <span class="in-acc-trigger__icon"><i class="fas fa-plus"></i></span>
-            </button>
-            <div class="in-acc-body">
-              <div class="in-acc-body__inner">
-                Yes. The CPDA region is projected to grow 4.9% to 36,020 residents
-                by 2034, with 28,300+ workers enabling expanding economic opportunity.
-                Workforce planning is one of CPDA's four active sub-committee focus
-                areas, ensuring regional labour needs are proactively addressed.
-              </div>
-            </div>
-          </div>
-
-          <div class="in-acc-item">
-            <button class="in-acc-trigger" aria-expanded="false">
-              <span class="in-acc-trigger__label">What makes this region different from other rural Saskatchewan areas?</span>
-              <span class="in-acc-trigger__icon"><i class="fas fa-plus"></i></span>
-            </button>
-            <div class="in-acc-body">
-              <div class="in-acc-body__inner">
-                CPDA's industrial diversity is a key differentiator. Most rural
-                Saskatchewan regions rely heavily on one or two sectors. CPDA's
-                spread across agriculture, manufacturing, health, education, retail,
-                and public administration creates economic resilience. The presence
-                of Yorkton as a regional service hub — combined with an active
-                regional alliance — makes coordinated development uniquely achievable.
-              </div>
-            </div>
-          </div>
-
-          <div class="in-acc-item">
-            <button class="in-acc-trigger" aria-expanded="false">
-              <span class="in-acc-trigger__label">How can my business get involved with CPDA?</span>
-              <span class="in-acc-trigger__icon"><i class="fas fa-plus"></i></span>
-            </button>
-            <div class="in-acc-body">
-              <div class="in-acc-body__inner">
-                Businesses can engage with CPDA through our Get Involved page.
-                Whether you want to participate in sub-committee work, stay informed
-                on regional developments, or explore formal membership, we welcome
-                all businesses who share a stake in a stronger East-Central Saskatchewan.
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════
-     BOTTOM CTA
-     ══════════════════════════════════════════ -->
-<section class="in-section in-section--navy">
-  <div class="container">
-    <div class="row justify-content-center text-center in-reveal">
-      <div class="col-lg-7">
-        <p class="in-eyebrow" style="justify-content:center;">Next Steps</p>
-        <h2 class="in-heading in-heading--white">
-          Explore the <em>Statistics</em><br>Behind the Region
-        </h2>
-        <p class="in-lead in-lead--white" style="margin: 1.25rem auto 2.5rem; text-align:center;">
-          Dive deeper into CPDA's economic data — population, income distribution,
-          purchasing flows, and export breakdowns — on our Statistics page.
-        </p>
-        <div class="d-flex gap-3 justify-content-center flex-wrap">
-          <a href="/region" class="in-btn in-btn--amber">View Statistics &nbsp;→</a>
-          <a href="/get-involved" class="in-btn in-btn--ghost-white">Get Involved</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════
-     JAVASCRIPT
-     ══════════════════════════════════════════ -->
 <script>
 (function () {
 
-  /* ── Ken Burns hero ── */
-  requestAnimationFrame(() => {
-    document.getElementById('inHero').classList.add('is-ready');
+  /* ── Ken Burns on hero ── */
+  requestAnimationFrame(function() {
+    document.getElementById('in-hero').classList.add('is-visible');
   });
 
-  /* ── Scroll reveals ── */
-  const revealEls = document.querySelectorAll('.in-reveal, .in-reveal-group');
-  const revealObs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('is-visible');
-        revealObs.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.1 });
-  revealEls.forEach(el => revealObs.observe(el));
-
-  /* ── Tab switcher ── */
-  document.querySelectorAll('.in-tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const target = btn.dataset.tab;
-
-      /* Deactivate all */
-      document.querySelectorAll('.in-tab-btn').forEach(b => b.classList.remove('is-active'));
-      document.querySelectorAll('.in-tab-panel').forEach(p => p.classList.remove('is-active'));
-
-      /* Activate selected */
-      btn.classList.add('is-active');
-      const panel = document.getElementById('tab-' + target);
-      if (panel) panel.classList.add('is-active');
-    });
-  });
-
-  /* ── Accordion ── */
-  document.querySelectorAll('.in-acc-trigger').forEach(trigger => {
-    trigger.addEventListener('click', () => {
-      const item   = trigger.closest('.in-acc-item');
-      const body   = item.querySelector('.in-acc-body');
-      const isOpen = item.classList.contains('is-open');
-
-      /* Close all */
-      document.querySelectorAll('.in-acc-item').forEach(i => {
-        i.classList.remove('is-open');
-        i.querySelector('.in-acc-body').style.maxHeight = '0';
-        i.querySelector('.in-acc-trigger').setAttribute('aria-expanded', 'false');
+  /* ── Staggered card reveal ── */
+  var group = document.querySelector('.in-reveal-group');
+  if (group) {
+    new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) e.target.classList.add('is-visible');
       });
+    }, { threshold: 0.08 }).observe(group);
+  }
 
-      /* Open clicked if it was closed */
-      if (!isOpen) {
-        item.classList.add('is-open');
-        body.style.maxHeight = body.scrollHeight + 'px';
-        trigger.setAttribute('aria-expanded', 'true');
-      }
+  /* ── 3-D tilt + ripple on cards ── */
+  document.querySelectorAll('.in-card').forEach(function(card) {
+
+    /* Tilt */
+    card.addEventListener('mousemove', function(e) {
+      var r   = card.getBoundingClientRect();
+      var x   = e.clientX - r.left;
+      var y   = e.clientY - r.top;
+      var cx  = r.width  / 2;
+      var cy  = r.height / 2;
+      var rX  = ((y - cy) / cy) * -7;
+      var rY  = ((x - cx) / cx) *  7;
+      card.style.transform = 'rotateX(' + rX + 'deg) rotateY(' + rY + 'deg) translateZ(10px)';
+    });
+
+    card.addEventListener('mouseleave', function() {
+      card.style.transform = 'rotateX(0) rotateY(0) translateZ(0)';
+    });
+
+    /* Ripple on click */
+    card.addEventListener('click', function(e) {
+      /* Only ripple if not clicking the button link directly */
+      var r   = card.getBoundingClientRect();
+      var rip = document.createElement('span');
+      var sz  = Math.max(r.width, r.height) * 1.8;
+      rip.className = 'in-ripple';
+      rip.style.cssText = 'width:' + sz + 'px;height:' + sz + 'px;left:' + (e.clientX - r.left - sz/2) + 'px;top:' + (e.clientY - r.top - sz/2) + 'px;';
+      card.appendChild(rip);
+      rip.addEventListener('animationend', function() { rip.remove(); });
     });
   });
+
+  /* ── Animated counters ── */
+  var counters = document.querySelectorAll('[data-target]');
+  if (counters.length) {
+    var countObs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (!entry.isIntersecting) return;
+        var el  = entry.target;
+        var end = parseInt(el.getAttribute('data-target'));
+        var fmt = el.getAttribute('data-display');
+        var suffix = fmt.replace(/[\d,]/g, ''); /* e.g. "K+" */
+        var startTime = null;
+        var dur = 1600;
+
+        function step(ts) {
+          if (!startTime) startTime = ts;
+          var prog = Math.min((ts - startTime) / dur, 1);
+          var ease = 1 - Math.pow(1 - prog, 3);
+          var cur  = Math.round(ease * end);
+          /* Format with commas if needed */
+          if (end >= 1000) {
+            el.textContent = cur.toLocaleString() + suffix;
+          } else {
+            el.textContent = cur + suffix;
+          }
+          if (prog < 1) requestAnimationFrame(step);
+          else el.textContent = fmt;
+        }
+
+        requestAnimationFrame(step);
+        countObs.unobserve(el);
+      });
+    }, { threshold: 0.6 });
+
+    counters.forEach(function(n) { countObs.observe(n); });
+  }
 
 })();
 </script>
