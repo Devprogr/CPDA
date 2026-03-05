@@ -4,24 +4,26 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
 
 <style>
 
   /* ══════════════════════════════════════════
-     PAGE TOKENS
+     DESIGN TOKENS
      ══════════════════════════════════════════ */
   :root {
     --st-navy:   #1E2D49;
     --st-navy2:  #162238;
     --st-amber:  #C8922A;
+    --st-amber2: #e6a832;
     --st-cream:  #F5F0E8;
     --st-muted:  #5a6478;
     --st-border: rgba(30,45,73,0.10);
+    --st-chart-bg: #f8f9fc;
   }
 
   /* ══════════════════════════════════════════
-     HERO — split layout matching About Us
+     HERO
      ══════════════════════════════════════════ */
   .st-hero {
     min-height: 88vh;
@@ -67,8 +69,7 @@
 
   .st-hero__eyebrow::before {
     content: "";
-    width: 28px;
-    height: 2px;
+    width: 28px; height: 2px;
     background: var(--st-amber);
     border-radius: 2px;
     flex-shrink: 0;
@@ -85,10 +86,7 @@
     animation: stSlideUp .7s .2s ease forwards;
   }
 
-  .st-hero__title em {
-    font-style: italic;
-    color: var(--st-amber);
-  }
+  .st-hero__title em { font-style: italic; color: var(--st-amber); }
 
   .st-hero__body {
     font-family: var(--font-body);
@@ -101,7 +99,6 @@
     animation: stSlideUp .7s .3s ease forwards;
   }
 
-  /* Scroll nav pills */
   .st-hero__nav {
     display: flex;
     gap: .65rem;
@@ -110,7 +107,7 @@
     animation: stSlideUp .7s .4s ease forwards;
   }
 
-  .st-hero__pill {
+  .st-pill {
     display: inline-flex;
     align-items: center;
     gap: .45rem;
@@ -124,29 +121,22 @@
     transition: all .2s ease;
   }
 
-  .st-hero__pill--solid {
+  .st-pill--solid {
     background: var(--st-amber);
     color: #fff;
     border: 2px solid var(--st-amber);
   }
 
-  .st-hero__pill--solid:hover {
-    background: transparent;
-    color: var(--st-amber);
-  }
+  .st-pill--solid:hover { background: transparent; color: var(--st-amber); }
 
-  .st-hero__pill--ghost {
+  .st-pill--ghost {
     background: transparent;
     color: rgba(255,255,255,.7);
     border: 2px solid rgba(255,255,255,.2);
   }
 
-  .st-hero__pill--ghost:hover {
-    border-color: rgba(255,255,255,.55);
-    color: #fff;
-  }
+  .st-pill--ghost:hover { border-color: rgba(255,255,255,.55); color: #fff; }
 
-  /* Hero KPI strip */
   .st-hero__kpis {
     display: flex;
     gap: 2.5rem;
@@ -175,7 +165,6 @@
     margin-top: .25rem;
   }
 
-  /* Right: image */
   .st-hero__right {
     position: relative;
     z-index: 1;
@@ -183,8 +172,7 @@
   }
 
   .st-hero__right img {
-    width: 100%;
-    height: 100%;
+    width: 100%; height: 100%;
     object-fit: cover;
     object-position: center;
     display: block;
@@ -196,16 +184,13 @@
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg,
-      rgba(30,45,73,.5) 0%,
-      rgba(200,146,42,.12) 100%);
+    background: linear-gradient(135deg, rgba(30,45,73,.5) 0%, rgba(200,146,42,.12) 100%);
     pointer-events: none;
   }
 
   .st-hero__deco {
     position: absolute;
-    bottom: 2rem;
-    right: 2rem;
+    bottom: 2rem; right: 2rem;
     font-family: 'Cormorant Garamond', serif;
     font-size: 9rem;
     font-weight: 700;
@@ -216,20 +201,11 @@
   }
 
   /* ══════════════════════════════════════════
-     SHARED SECTION STYLES
+     SECTIONS
      ══════════════════════════════════════════ */
-  .st-section {
-    padding: 6rem 0;
-    background: #fff;
-  }
-
-  .st-section--cream {
-    background: var(--st-cream);
-  }
-
-  .st-section--navy {
-    background: var(--st-navy);
-  }
+  .st-section { padding: 6rem 0; background: #fff; }
+  .st-section--cream { background: var(--st-cream); }
+  .st-section--navy  { background: var(--st-navy); }
 
   .st-eyebrow {
     display: inline-flex;
@@ -246,8 +222,7 @@
 
   .st-eyebrow::before {
     content: "";
-    width: 24px;
-    height: 2px;
+    width: 24px; height: 2px;
     background: var(--st-amber);
     border-radius: 2px;
     flex-shrink: 0;
@@ -262,11 +237,7 @@
     margin-bottom: .75rem;
   }
 
-  .st-heading em {
-    font-style: italic;
-    color: var(--st-amber);
-  }
-
+  .st-heading em { font-style: italic; color: var(--st-amber); }
   .st-heading--white { color: #fff; }
 
   .st-lead {
@@ -279,134 +250,123 @@
 
   .st-lead--white { color: rgba(255,255,255,.62); }
 
-  /* ══════════════════════════════════════════
-     CHART CARDS
-     ══════════════════════════════════════════ */
-  .st-chart-card {
-    background: #fff;
-    border-radius: 16px;
-    border: 1px solid var(--st-border);
-    box-shadow: 0 4px 24px rgba(30,45,73,.06);
-    overflow: hidden;
-    transition: box-shadow .22s, transform .22s;
-    height: 100%;
-  }
-
-  .st-chart-card:hover {
-    box-shadow: 0 10px 40px rgba(30,45,73,.11);
-    transform: translateY(-3px);
-  }
-
-  .st-chart-card--navy {
-    background: rgba(255,255,255,.04);
-    border-color: rgba(255,255,255,.08);
-  }
-
-  .st-chart-card--navy:hover {
-    background: rgba(255,255,255,.07);
-    border-color: rgba(200,146,42,.3);
-  }
-
-  .st-chart-card__header {
-    padding: 1.5rem 1.75rem 0;
-  }
-
-  .st-chart-card__tag {
-    display: inline-flex;
-    align-items: center;
-    gap: .4rem;
-    font-family: var(--font-body);
-    font-size: .65rem;
-    font-weight: 700;
-    letter-spacing: .15em;
-    text-transform: uppercase;
-    padding: .28rem .75rem;
-    border-radius: 999px;
-    background: rgba(200,146,42,.1);
-    color: var(--st-amber);
-    margin-bottom: .85rem;
-  }
-
-  .st-chart-card__tag--white {
-    background: rgba(200,146,42,.15);
-    color: var(--st-amber);
-  }
-
-  .st-chart-card__title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.35rem;
-    font-weight: 700;
-    color: var(--st-navy);
-    line-height: 1.2;
-    margin-bottom: .35rem;
-  }
-
-  .st-chart-card__title--white { color: #fff; }
-
-  .st-chart-card__subtitle {
-    font-family: var(--font-body);
-    font-size: .82rem;
-    color: var(--st-muted);
-    line-height: 1.55;
-    margin-bottom: 0;
-  }
-
-  .st-chart-card__subtitle--white { color: rgba(255,255,255,.5); }
-
-  .st-chart-card__body {
-    padding: 1.25rem 1.75rem 1.75rem;
-  }
-
-  /* Responsive chart wrapper */
-  .st-chart-wrap {
-    width: 100%;
-    overflow-x: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: .5rem 0 0;
-  }
-
-  .st-chart-wrap canvas {
-    width: 100% !important;
-    height: auto !important;
-    max-width: 680px;
-    min-width: 220px;
-    margin: 0 auto;
-    display: block;
-  }
-
-  /* ══════════════════════════════════════════
-     SECTION DIVIDER LABEL
-     ══════════════════════════════════════════ */
-  .st-section-label {
+  .st-divider {
     display: flex;
     align-items: center;
     gap: 1.25rem;
     margin-bottom: 3rem;
   }
 
-  .st-section-label__line {
-    flex: 1;
-    height: 1px;
+  .st-divider__line {
+    flex: 1; height: 1px;
     background: var(--st-border);
   }
 
-  .st-section-label__line--white {
-    background: rgba(255,255,255,.08);
-  }
+  .st-divider__line--white { background: rgba(255,255,255,.08); }
 
-  .st-section-label__text {
+  .st-divider__label {
     font-family: var(--font-body);
-    font-size: .68rem;
+    font-size: .65rem;
     font-weight: 700;
-    letter-spacing: .2em;
+    letter-spacing: .22em;
     text-transform: uppercase;
     color: var(--st-muted);
     white-space: nowrap;
   }
 
-  .st-section-label__text--amber { color: var(--st-amber); }
+  .st-divider__label--amber { color: var(--st-amber); }
+
+  /* ══════════════════════════════════════════
+     CHART CARDS
+     ══════════════════════════════════════════ */
+  .st-card {
+    background: #fff;
+    border-radius: 18px;
+    border: 1px solid var(--st-border);
+    box-shadow: 0 4px 28px rgba(30,45,73,.06);
+    overflow: hidden;
+    height: 100%;
+    transition: box-shadow .22s, transform .22s;
+  }
+
+  .st-card:hover {
+    box-shadow: 0 12px 44px rgba(30,45,73,.12);
+    transform: translateY(-3px);
+  }
+
+  .st-card--dark {
+    background: rgba(255,255,255,.04);
+    border-color: rgba(255,255,255,.08);
+  }
+
+  .st-card--dark:hover {
+    background: rgba(255,255,255,.07);
+    border-color: rgba(200,146,42,.3);
+  }
+
+  .st-card__header {
+    padding: 1.75rem 2rem 0;
+  }
+
+  .st-card__tag {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    font-family: var(--font-body);
+    font-size: .62rem;
+    font-weight: 700;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    padding: .28rem .8rem;
+    border-radius: 999px;
+    background: rgba(200,146,42,.1);
+    color: var(--st-amber);
+    margin-bottom: .9rem;
+  }
+
+  .st-card__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--st-navy);
+    line-height: 1.2;
+    margin-bottom: .3rem;
+  }
+
+  .st-card__title--white { color: #fff; }
+
+  .st-card__sub {
+    font-family: var(--font-body);
+    font-size: .82rem;
+    color: var(--st-muted);
+    line-height: 1.5;
+    margin-bottom: 0;
+  }
+
+  .st-card__sub--white { color: rgba(255,255,255,.48); }
+
+  .st-card__body {
+    padding: 1.5rem 2rem 2rem;
+  }
+
+  /* Chart canvas wrapper */
+  .st-canvas-wrap {
+    position: relative;
+    width: 100%;
+    background: var(--st-chart-bg);
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-top: .5rem;
+  }
+
+  .st-canvas-wrap--dark {
+    background: rgba(255,255,255,.04);
+  }
+
+  .st-canvas-wrap canvas {
+    width: 100% !important;
+    display: block;
+  }
 
   /* ══════════════════════════════════════════
      ANIMATIONS
@@ -432,12 +392,11 @@
   }
 
   @media (max-width: 576px) {
-    .st-hero__title  { font-size: 2.8rem; }
-    .st-hero__kpis   { flex-wrap: wrap; gap: 1.25rem; }
-    .st-section      { padding: 4rem 0; }
-    .st-chart-card__header { padding: 1.25rem 1.25rem 0; }
-    .st-chart-card__body   { padding: 1rem 1.25rem 1.25rem; }
-    .st-chart-wrap canvas  { max-width: 100%; min-width: 160px; }
+    .st-hero__title { font-size: 2.8rem; }
+    .st-hero__kpis  { flex-wrap: wrap; gap: 1.25rem; }
+    .st-section     { padding: 4rem 0; }
+    .st-card__header { padding: 1.25rem 1.25rem 0; }
+    .st-card__body   { padding: 1rem 1.25rem 1.25rem; }
   }
 
 </style>
@@ -447,26 +406,18 @@
      HERO
      ══════════════════════════════════════════ -->
 <section class="st-hero" aria-label="Statistics hero">
-
   <div class="st-hero__left">
     <p class="st-hero__eyebrow">East-Central Saskatchewan</p>
-
-    <h1 class="st-hero__title">
-      The Region<br>
-      <em>in Depth</em>
-    </h1>
-
+    <h1 class="st-hero__title">The Region<br><em>in Depth</em></h1>
     <p class="st-hero__body">
       Explore the demographics and economic flows that shape our region —
       the data behind the communities, industries, and people that make
       East-Central Saskatchewan thrive.
     </p>
-
     <div class="st-hero__nav">
-      <a href="#demographics" class="st-hero__pill st-hero__pill--solid">Demographics &nbsp;→</a>
-      <a href="#economic"     class="st-hero__pill st-hero__pill--ghost">Economic Flow &nbsp;→</a>
+      <a href="#demographics" class="st-pill st-pill--solid">Demographics &nbsp;→</a>
+      <a href="#economic"     class="st-pill st-pill--ghost">Economic Flow &nbsp;→</a>
     </div>
-
     <div class="st-hero__kpis">
       <div>
         <div class="st-kpi__num">36K</div>
@@ -482,14 +433,11 @@
       </div>
     </div>
   </div>
-
   <div class="st-hero__right">
     <img src="{{ url_for('static', filename='assets/img/region.jpg') }}"
-         alt="CPDA region landscape"
-         loading="eager">
+         alt="CPDA region landscape" loading="eager">
     <span class="st-hero__deco" aria-hidden="true">DATA</span>
   </div>
-
 </section>
 
 
@@ -509,57 +457,57 @@
       </div>
     </div>
 
-    <div class="st-section-label">
-      <div class="st-section-label__line"></div>
-      <span class="st-section-label__text">Regional Data</span>
-      <div class="st-section-label__line"></div>
+    <div class="st-divider">
+      <div class="st-divider__line"></div>
+      <span class="st-divider__label">Regional Data</span>
+      <div class="st-divider__line"></div>
     </div>
 
     <div class="row g-4">
 
-      <!-- Population chart -->
+      <!-- ── Population Chart ── -->
       <div class="col-lg-6">
-        <div class="st-chart-card">
-          <div class="st-chart-card__header">
-            <span class="st-chart-card__tag"><i class="fas fa-users" style="font-size:.7rem;"></i> Population</span>
-            <h3 class="st-chart-card__title">Population by Community</h3>
-            <p class="st-chart-card__subtitle">Current resident populations across CPDA member communities.</p>
+        <div class="st-card">
+          <div class="st-card__header">
+            <span class="st-card__tag"><i class="fas fa-users" style="font-size:.65rem;"></i>&nbsp; Population</span>
+            <h3 class="st-card__title">Population by Year</h3>
+            <p class="st-card__sub">Total regional population 2021–2024.</p>
           </div>
-          <div class="st-chart-card__body">
-            <div class="st-chart-wrap">
-              {% include 'population-chart.html' %}
+          <div class="st-card__body">
+            <div class="st-canvas-wrap">
+              <canvas id="populationChart" height="220"></canvas>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Age chart -->
+      <!-- ── Age Pyramid ── -->
       <div class="col-lg-6">
-        <div class="st-chart-card">
-          <div class="st-chart-card__header">
-            <span class="st-chart-card__tag"><i class="fas fa-chart-pie" style="font-size:.7rem;"></i> Age</span>
-            <h3 class="st-chart-card__title">Age Distribution</h3>
-            <p class="st-chart-card__subtitle">Breakdown of the regional population by age group.</p>
+        <div class="st-card">
+          <div class="st-card__header">
+            <span class="st-card__tag"><i class="fas fa-chart-bar" style="font-size:.65rem;"></i>&nbsp; Age</span>
+            <h3 class="st-card__title">Age Distribution</h3>
+            <p class="st-card__sub">Regional population breakdown by age group and gender.</p>
           </div>
-          <div class="st-chart-card__body">
-            <div class="st-chart-wrap">
-              {% include 'age-chart.html' %}
+          <div class="st-card__body">
+            <div class="st-canvas-wrap">
+              <canvas id="ageGroupChart" height="320"></canvas>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Income distribution — full width -->
+      <!-- ── Income Distribution ── -->
       <div class="col-12">
-        <div class="st-chart-card">
-          <div class="st-chart-card__header">
-            <span class="st-chart-card__tag"><i class="fas fa-dollar-sign" style="font-size:.7rem;"></i> Income</span>
-            <h3 class="st-chart-card__title">Income Distribution</h3>
-            <p class="st-chart-card__subtitle">Household income ranges across the CPDA region.</p>
+        <div class="st-card">
+          <div class="st-card__header">
+            <span class="st-card__tag"><i class="fas fa-dollar-sign" style="font-size:.65rem;"></i>&nbsp; Income</span>
+            <h3 class="st-card__title">Income Distribution</h3>
+            <p class="st-card__sub">Household income ranges across the CPDA region.</p>
           </div>
-          <div class="st-chart-card__body">
-            <div class="st-chart-wrap">
-              {% include 'income-distribution.html' %}
+          <div class="st-card__body">
+            <div class="st-canvas-wrap">
+              <canvas id="incomeChart" height="300"></canvas>
             </div>
           </div>
         </div>
@@ -571,7 +519,7 @@
 
 
 <!-- ══════════════════════════════════════════
-     ECONOMIC FLOW  — navy background
+     ECONOMIC FLOW
      ══════════════════════════════════════════ -->
 <section id="economic" class="st-section st-section--navy">
   <div class="container">
@@ -588,89 +536,89 @@
       </div>
     </div>
 
-    <div class="st-section-label">
-      <div class="st-section-label__line st-section-label__line--white"></div>
-      <span class="st-section-label__text st-section-label__text--amber">Economic Indicators</span>
-      <div class="st-section-label__line st-section-label__line--white"></div>
+    <div class="st-divider">
+      <div class="st-divider__line st-divider__line--white"></div>
+      <span class="st-divider__label st-divider__label--amber">Economic Indicators</span>
+      <div class="st-divider__line st-divider__line--white"></div>
     </div>
 
     <div class="row g-4">
 
-      <!-- Industry Purchasing -->
+      <!-- ── Industry Purchasing ── -->
       <div class="col-lg-6">
-        <div class="st-chart-card st-chart-card--navy">
-          <div class="st-chart-card__header">
-            <span class="st-chart-card__tag st-chart-card__tag--white"><i class="fas fa-industry" style="font-size:.7rem;"></i> Purchasing</span>
-            <h3 class="st-chart-card__title st-chart-card__title--white">Industry Purchasing</h3>
-            <p class="st-chart-card__subtitle st-chart-card__subtitle--white">Purchasing patterns broken down by industry sector.</p>
+        <div class="st-card st-card--dark">
+          <div class="st-card__header">
+            <span class="st-card__tag"><i class="fas fa-industry" style="font-size:.65rem;"></i>&nbsp; Purchasing</span>
+            <h3 class="st-card__title st-card__title--white">Industry Purchasing</h3>
+            <p class="st-card__sub st-card__sub--white">In-region vs imported purchasing patterns.</p>
           </div>
-          <div class="st-chart-card__body">
-            <div class="st-chart-wrap">
-              {% include 'industry-purchasing.html' %}
+          <div class="st-card__body">
+            <div class="st-canvas-wrap st-canvas-wrap--dark">
+              <canvas id="industryPurchasingChart" height="280"></canvas>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Total Industry Purchase -->
+      <!-- ── Total Industry Purchase ── -->
       <div class="col-lg-6">
-        <div class="st-chart-card st-chart-card--navy">
-          <div class="st-chart-card__header">
-            <span class="st-chart-card__tag st-chart-card__tag--white"><i class="fas fa-chart-bar" style="font-size:.7rem;"></i> Totals</span>
-            <h3 class="st-chart-card__title st-chart-card__title--white">Total Industry Purchase</h3>
-            <p class="st-chart-card__subtitle st-chart-card__subtitle--white">Aggregate industry purchasing volumes across the region.</p>
+        <div class="st-card st-card--dark">
+          <div class="st-card__header">
+            <span class="st-card__tag"><i class="fas fa-chart-pie" style="font-size:.65rem;"></i>&nbsp; Totals</span>
+            <h3 class="st-card__title st-card__title--white">Total Industry Purchases (2022)</h3>
+            <p class="st-card__sub st-card__sub--white">Aggregate purchasing volumes by sector.</p>
           </div>
-          <div class="st-chart-card__body">
-            <div class="st-chart-wrap">
-              {% include 'total-industry-purchase.html' %}
+          <div class="st-card__body">
+            <div class="st-canvas-wrap st-canvas-wrap--dark">
+              <canvas id="totalIndustryChart" height="280"></canvas>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Regional Exports — full width -->
+      <!-- ── Regional Exports — full width ── -->
       <div class="col-12">
-        <div class="st-chart-card st-chart-card--navy">
-          <div class="st-chart-card__header">
-            <span class="st-chart-card__tag st-chart-card__tag--white"><i class="fas fa-arrow-up" style="font-size:.7rem;"></i> Exports</span>
-            <h3 class="st-chart-card__title st-chart-card__title--white">Regional Exports</h3>
-            <p class="st-chart-card__subtitle st-chart-card__subtitle--white">Goods and services exported from the CPDA region to broader markets.</p>
+        <div class="st-card st-card--dark">
+          <div class="st-card__header">
+            <span class="st-card__tag"><i class="fas fa-arrow-up" style="font-size:.65rem;"></i>&nbsp; Exports</span>
+            <h3 class="st-card__title st-card__title--white">Regional Exports</h3>
+            <p class="st-card__sub st-card__sub--white">Goods and services exported from the CPDA region to broader markets (2022).</p>
           </div>
-          <div class="st-chart-card__body">
-            <div class="st-chart-wrap">
-              {% include 'regional-exports.html' %}
+          <div class="st-card__body">
+            <div class="st-canvas-wrap st-canvas-wrap--dark" style="max-width:600px; margin:0 auto;">
+              <canvas id="regionalExportsChart" height="380"></canvas>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Industry Regional Requirements -->
+      <!-- ── Industry Regional Requirements ── -->
       <div class="col-lg-6">
-        <div class="st-chart-card st-chart-card--navy">
-          <div class="st-chart-card__header">
-            <span class="st-chart-card__tag st-chart-card__tag--white"><i class="fas fa-sitemap" style="font-size:.7rem;"></i> Requirements</span>
-            <h3 class="st-chart-card__title st-chart-card__title--white">Industry Regional Requirements</h3>
-            <p class="st-chart-card__subtitle st-chart-card__subtitle--white">What each industry sector needs from within the region to operate.</p>
+        <div class="st-card st-card--dark">
+          <div class="st-card__header">
+            <span class="st-card__tag"><i class="fas fa-sitemap" style="font-size:.65rem;"></i>&nbsp; Requirements</span>
+            <h3 class="st-card__title st-card__title--white">Industry Regional Requirements</h3>
+            <p class="st-card__sub st-card__sub--white">Demand met in-region vs by imports.</p>
           </div>
-          <div class="st-chart-card__body">
-            <div class="st-chart-wrap">
-              {% include 'industry-regional-requirements.html' %}
+          <div class="st-card__body">
+            <div class="st-canvas-wrap st-canvas-wrap--dark">
+              <canvas id="industryRequirementsChart" height="280"></canvas>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Total Consumer Spending -->
+      <!-- ── Total Consumer Spending ── -->
       <div class="col-lg-6">
-        <div class="st-chart-card st-chart-card--navy">
-          <div class="st-chart-card__header">
-            <span class="st-chart-card__tag st-chart-card__tag--white"><i class="fas fa-shopping-cart" style="font-size:.7rem;"></i> Consumer</span>
-            <h3 class="st-chart-card__title st-chart-card__title--white">Total Consumer Spending Est.</h3>
-            <p class="st-chart-card__subtitle st-chart-card__subtitle--white">Estimated total consumer spending across CPDA communities.</p>
+        <div class="st-card st-card--dark">
+          <div class="st-card__header">
+            <span class="st-card__tag"><i class="fas fa-shopping-cart" style="font-size:.65rem;"></i>&nbsp; Consumer</span>
+            <h3 class="st-card__title st-card__title--white">Total Consumer Spending Est.</h3>
+            <p class="st-card__sub st-card__sub--white">Estimated total consumer spending across CPDA communities.</p>
           </div>
-          <div class="st-chart-card__body">
-            <div class="st-chart-wrap">
-              {% include 'total-consumer-spending-est.html' %}
+          <div class="st-card__body">
+            <div class="st-canvas-wrap st-canvas-wrap--dark">
+              <canvas id="consumerSpendingChart" height="280"></canvas>
             </div>
           </div>
         </div>
@@ -679,5 +627,432 @@
     </div>
   </div>
 </section>
+
+
+<!-- ══════════════════════════════════════════
+     CHART SCRIPTS
+     ══════════════════════════════════════════ */
+<script>
+
+/* ─── Shared palette ─────────────────────── */
+const NAVY   = '#1E2D49';
+const AMBER  = '#C8922A';
+const AMBER2 = '#e6a832';
+const MUTED  = '#5a6478';
+const WHITE  = '#ffffff';
+
+/* Light section chart defaults */
+const lightDefaults = {
+  color: MUTED,
+  font: { family: "'Inter', sans-serif", size: 12 }
+};
+
+/* Dark section chart defaults */
+const darkDefaults = {
+  color: 'rgba(255,255,255,0.55)',
+  font: { family: "'Inter', sans-serif", size: 12 }
+};
+
+Chart.defaults.font.family = "'Inter', sans-serif";
+
+/* ─── Donut helper ─────────────────────────
+   Returns a clean, interactive doughnut config
+   with a center-label plugin built in.
+─────────────────────────────────────────── */
+function donutConfig({ labels, data, colors, centerLabel, dark }) {
+  const textColor = dark ? 'rgba(255,255,255,0.55)' : MUTED;
+  const legendColor = dark ? 'rgba(255,255,255,0.7)' : NAVY;
+  return {
+    type: 'doughnut',
+    data: {
+      labels,
+      datasets: [{
+        data,
+        backgroundColor: colors,
+        borderWidth: 0,
+        hoverOffset: 10
+      }]
+    },
+    options: {
+      cutout: '68%',
+      responsive: true,
+      animation: { animateRotate: true, duration: 900 },
+      plugins: {
+        legend: {
+          display: true,
+          position: 'bottom',
+          labels: {
+            color: legendColor,
+            font: { size: 11, family: "'Inter', sans-serif" },
+            padding: 14,
+            boxWidth: 12,
+            boxHeight: 12,
+            borderRadius: 3
+          }
+        },
+        tooltip: {
+          backgroundColor: dark ? 'rgba(22,34,56,0.95)' : 'rgba(30,45,73,0.92)',
+          titleColor: AMBER,
+          bodyColor: '#fff',
+          padding: 12,
+          cornerRadius: 8,
+          callbacks: {
+            label: function(ctx) {
+              const total = ctx.dataset.data.reduce((a,b)=>a+b,0);
+              const pct = ((ctx.parsed / total)*100).toFixed(1);
+              return ` ${ctx.label}: ${pct}%`;
+            }
+          }
+        },
+        datalabels: {
+          color: '#fff',
+          font: { weight: 'bold', size: 12, family: "'Inter', sans-serif" },
+          formatter: (value, ctx) => {
+            const total = ctx.dataset.data.reduce((a,b)=>a+b,0);
+            const pct = ((value/total)*100).toFixed(1);
+            return pct > 4 ? pct+'%' : '';
+          }
+        }
+      }
+    },
+    plugins: [
+      ChartDataLabels,
+      {
+        id: 'centerLabel',
+        afterDraw(chart) {
+          const { ctx, chartArea: { left, right, top, bottom } } = chart;
+          const cx = (left + right) / 2;
+          const cy = (top + bottom) / 2;
+          ctx.save();
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.font = `700 1.1rem 'Cormorant Garamond', serif`;
+          ctx.fillStyle = dark ? 'rgba(255,255,255,0.85)' : NAVY;
+          ctx.fillText(centerLabel || '', cx, cy);
+          ctx.restore();
+        }
+      }
+    ]
+  };
+}
+
+/* ─────────────────────────────────────────────
+   1. POPULATION CHART
+   Horizontal bar — amber gradient bars
+─────────────────────────────────────────────── */
+new Chart(document.getElementById('populationChart').getContext('2d'), {
+  type: 'bar',
+  data: {
+    labels: {{ years | tojson }},
+    datasets: [{
+      label: 'Population',
+      data: {{ populations | tojson }},
+      backgroundColor: [
+        'rgba(200,146,42,0.9)',
+        'rgba(200,146,42,0.75)',
+        'rgba(200,146,42,0.6)',
+        'rgba(200,146,42,0.45)'
+      ],
+      borderRadius: 6,
+      borderWidth: 0
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    animation: { duration: 900 },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: 'rgba(30,45,73,0.92)',
+        titleColor: AMBER,
+        bodyColor: '#fff',
+        padding: 12,
+        cornerRadius: 8,
+        callbacks: {
+          label: ctx => ' ' + ctx.parsed.x.toLocaleString()
+        }
+      },
+      datalabels: {
+        anchor: 'end',
+        align: 'right',
+        color: NAVY,
+        font: { weight: '700', size: 13, family: "'Inter', sans-serif" },
+        formatter: v => v.toLocaleString()
+      }
+    },
+    scales: {
+      x: {
+        min: 1000, max: 100000,
+        grid: { color: 'rgba(30,45,73,0.06)' },
+        ticks: {
+          color: MUTED,
+          font: { size: 11 },
+          callback: v => (v/1000)+'K'
+        },
+        border: { display: false }
+      },
+      y: {
+        grid: { display: false },
+        ticks: { color: NAVY, font: { weight: '600', size: 12 } },
+        border: { display: false }
+      }
+    }
+  },
+  plugins: [ChartDataLabels]
+});
+
+/* ─────────────────────────────────────────────
+   2. AGE PYRAMID
+   Horizontal mirrored bar
+─────────────────────────────────────────────── */
+new Chart(document.getElementById('ageGroupChart').getContext('2d'), {
+  type: 'bar',
+  data: {
+    labels: {{ age_groups | tojson }},
+    datasets: [
+      {
+        label: 'Men+',
+        data: {{ men | tojson }},
+        backgroundColor: 'rgba(30,45,73,0.80)',
+        borderRadius: { topLeft: 0, topRight: 4, bottomLeft: 0, bottomRight: 4 },
+        borderWidth: 0
+      },
+      {
+        label: 'Women+',
+        data: {{ women | tojson }},
+        backgroundColor: 'rgba(200,146,42,0.80)',
+        borderRadius: { topLeft: 4, topRight: 0, bottomLeft: 4, bottomRight: 0 },
+        borderWidth: 0
+      }
+    ]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    animation: { duration: 900 },
+    plugins: {
+      legend: {
+        display: true,
+        position: 'top',
+        labels: {
+          color: NAVY,
+          font: { size: 12, family: "'Inter', sans-serif" },
+          padding: 16,
+          boxWidth: 12, boxHeight: 12
+        }
+      },
+      tooltip: {
+        backgroundColor: 'rgba(30,45,73,0.92)',
+        titleColor: AMBER,
+        bodyColor: '#fff',
+        padding: 12,
+        cornerRadius: 8,
+        callbacks: {
+          label: ctx => ` ${ctx.dataset.label}: ${Math.abs(ctx.parsed.x).toLocaleString()}`
+        }
+      },
+      datalabels: { display: false }
+    },
+    scales: {
+      x: {
+        stacked: true,
+        grid: { color: 'rgba(30,45,73,0.06)' },
+        ticks: {
+          color: MUTED,
+          font: { size: 11 },
+          callback: v => Math.abs(v).toLocaleString()
+        },
+        border: { display: false }
+      },
+      y: {
+        stacked: true,
+        grid: { display: false },
+        ticks: { color: NAVY, font: { size: 11 } },
+        border: { display: false }
+      }
+    }
+  },
+  plugins: [ChartDataLabels]
+});
+
+/* ─────────────────────────────────────────────
+   3. INCOME DISTRIBUTION
+   Horizontal bar — two-tone navy/amber
+─────────────────────────────────────────────── */
+(function() {
+  const incomeData = {{ households_2024 | tojson }};
+  const maxVal = Math.max(...incomeData);
+  const colors = incomeData.map(v =>
+    v === maxVal ? AMBER : 'rgba(30,45,73,0.70)'
+  );
+  new Chart(document.getElementById('incomeChart').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: {{ income_labels | tojson }},
+      datasets: [{
+        label: 'Number of Households',
+        data: incomeData,
+        backgroundColor: colors,
+        borderRadius: 5,
+        borderWidth: 0
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      animation: { duration: 900 },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(30,45,73,0.92)',
+          titleColor: AMBER,
+          bodyColor: '#fff',
+          padding: 12,
+          cornerRadius: 8,
+          callbacks: {
+            label: ctx => ' ' + ctx.parsed.x.toLocaleString() + ' households'
+          }
+        },
+        datalabels: {
+          anchor: 'end',
+          align: 'right',
+          color: MUTED,
+          font: { size: 11, weight: '600', family: "'Inter', sans-serif" },
+          formatter: v => v.toLocaleString()
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(30,45,73,0.06)' },
+          ticks: {
+            color: MUTED, font: { size: 11 },
+            callback: v => v.toLocaleString()
+          },
+          border: { display: false }
+        },
+        y: {
+          grid: { display: false },
+          ticks: { color: NAVY, font: { size: 11 } },
+          border: { display: false }
+        }
+      }
+    },
+    plugins: [ChartDataLabels]
+  });
+})();
+
+/* ─────────────────────────────────────────────
+   4. INDUSTRY PURCHASING  — donut
+─────────────────────────────────────────────── */
+new Chart(
+  document.getElementById('industryPurchasingChart').getContext('2d'),
+  donutConfig({
+    labels: ['In-region Purchases', 'Imported Purchases'],
+    data:   [88.3, 11.7],
+    colors: [AMBER, 'rgba(255,255,255,0.15)'],
+    centerLabel: '88.3%\nIn-region',
+    dark: true
+  })
+);
+
+/* ─────────────────────────────────────────────
+   5. TOTAL INDUSTRY PURCHASES — donut
+─────────────────────────────────────────────── */
+new Chart(
+  document.getElementById('totalIndustryChart').getContext('2d'),
+  donutConfig({
+    labels: [
+      'Farms',
+      'Professional, scientific & technical services',
+      'Petroleum & coal product manufacturing',
+      'Food manufacturing',
+      'Administrative & support services'
+    ],
+    data: [47.5, 17.2, 14.1, 11.8, 9.4],
+    colors: [AMBER, '#29597d', '#4a8fa8', '#7ab8c8', 'rgba(255,255,255,0.2)'],
+    centerLabel: '2022',
+    dark: true
+  })
+);
+
+/* ─────────────────────────────────────────────
+   6. REGIONAL EXPORTS — donut (full width)
+─────────────────────────────────────────────── */
+new Chart(
+  document.getElementById('regionalExportsChart').getContext('2d'),
+  donutConfig({
+    labels: [
+      'Non-metallic mineral mining & quarrying',
+      'Other',
+      'Grain & oilseed milling',
+      'Rail transportation',
+      'Meat product manufacturing',
+      'Provincial & territorial public administration',
+      'Farms',
+      'Elementary & secondary schools',
+      'Local, municipal & regional public administration',
+      'General medical & surgical hospitals',
+      'Depository credit intermediation'
+    ],
+    data: [
+      1139509289, 1183826102, 431500411, 241737500,
+      168089592, 116983821, 111175195, 86502440,
+      75458320, 56712951, 50701304
+    ],
+    colors: [
+      AMBER, '#29597d', '#f47c4c', '#22c55e', '#818cf8',
+      '#f43f5e', AMBER2, '#a21caf', '#64748b', '#eab308', '#7c3aed'
+    ],
+    centerLabel: '2022\nExports',
+    dark: true
+  })
+);
+
+/* ─────────────────────────────────────────────
+   7. INDUSTRY REGIONAL REQUIREMENTS — donut
+─────────────────────────────────────────────── */
+new Chart(
+  document.getElementById('industryRequirementsChart').getContext('2d'),
+  donutConfig({
+    labels: ['Demand met In-region', 'Demand met by Imports'],
+    data:   [78.6, 21.4],
+    colors: [AMBER, 'rgba(255,255,255,0.15)'],
+    centerLabel: '78.6%\nIn-region',
+    dark: true
+  })
+);
+
+/* ─────────────────────────────────────────────
+   8. TOTAL CONSUMER SPENDING — donut
+─────────────────────────────────────────────── */
+new Chart(
+  document.getElementById('consumerSpendingChart').getContext('2d'),
+  donutConfig({
+    labels: [
+      'Shelter', 'Food expenditures', 'Transportation',
+      'Recreation', 'Health care', 'Clothing & accessories',
+      'Education', 'Personal care', 'Household operations',
+      'Household furnishings & equipment', 'Personal insurance & pension',
+      'Gifts of money & charitable contributions',
+      'Reading materials & printed matter',
+      'Tobacco products & alcoholic beverages',
+      'Miscellaneous expenditures', 'Income taxes', 'Games of chance'
+    ],
+    data: [
+      23.6, 14.2, 8.2, 5.1, 4.8, 6.4, 4.6, 3.2,
+      2.8, 2.4, 5.2, 3.1, 1.8, 2.0, 3.8, 6.4, 2.4
+    ],
+    colors: [
+      AMBER, '#29597d', '#f47c4c', '#22c55e', '#818cf8', '#f43f5e',
+      AMBER2, '#a21caf', '#64748b', '#eab308', '#7c3aed', '#8b5cf6',
+      '#06b6d4', '#84cc16', '#f97316', '#6366f1', '#ec4899'
+    ],
+    centerLabel: 'Consumer\nSpending',
+    dark: true
+  })
+);
+
+</script>
 
 {% endblock %}
