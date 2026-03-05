@@ -253,12 +253,18 @@
     font-family: var(--font-body);
     font-size: .85rem; font-weight: 700;
     padding: .65rem 1.5rem; border-radius: 999px;
-    background: var(--ac-amber); color: #fff;
-    text-decoration: none; border: 2px solid var(--ac-amber);
-    transition: all .18s ease;
+    background: var(--ac-amber) !important;
+    color: #fff !important;
+    text-decoration: none !important;
+    border: 2px solid var(--ac-amber);
+    transition: background .18s ease, color .18s ease;
   }
 
-  .ac-feedback__btn:hover { background: transparent; color: var(--ac-amber); }
+  .ac-feedback__btn:hover {
+    background: #fff !important;
+    color: var(--ac-amber) !important;
+    border-color: #fff;
+  }
 
   @keyframes acUp {
     from { opacity: 0; transform: translateY(18px); }

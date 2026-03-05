@@ -193,13 +193,17 @@
     font-family: var(--font-body);
     font-size: .85rem; font-weight: 700;
     padding: .65rem 1.5rem; border-radius: 999px;
-    background: var(--pv-amber); color: #fff;
-    text-decoration: none; border: 2px solid var(--pv-amber);
-    transition: all .18s ease;
+    background: var(--pv-amber) !important;
+    color: #fff !important;
+    text-decoration: none !important;
+    border: 2px solid var(--pv-amber);
+    transition: background .18s ease, color .18s ease;
   }
 
   .pv-contact-card__btn:hover {
-    background: transparent; color: var(--pv-amber);
+    background: #fff !important;
+    color: var(--pv-amber) !important;
+    border-color: #fff;
   }
 
   @keyframes pvUp {
