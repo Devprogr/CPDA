@@ -215,6 +215,7 @@ button, .btn-primary {
   flex-wrap: wrap;
   gap: 3rem;
   padding-bottom: 2.5rem;
+  align-items: flex-start;
 }
 
 /* Brand column */
@@ -251,13 +252,10 @@ button, .btn-primary {
   margin-bottom: 1.75rem;
 }
 
-/* FIX 1 — Uniform logos
-   Each logo sits in a fixed 80×48 px container.
-   object-fit: contain scales every image down to fit
-   without cropping, so all four look the same size. */
+/* Uniform logos — all 4 in one row, same size */
 .cpda-footer__logos {
   display: flex;
-  flex-wrap: nowrap;       /* keep all 4 on one row */
+  flex-wrap: nowrap;
   align-items: center;
   gap: 0.75rem;
 }
@@ -265,7 +263,7 @@ button, .btn-primary {
 .cpda-footer__logo-wrap {
   width: 70px;
   height: 44px;
-  flex-shrink: 0;          /* prevent boxes from collapsing */
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -287,29 +285,47 @@ button, .btn-primary {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  /* NO filter — show logos in their original colours */
 }
 
-/* FIX 2 — Visible nav links
-   Explicitly light colour so links never blend into the dark background. */
+/* ── Nav links — NO box, NO background, NO border ── */
+/* Reset anything Bootstrap / soft-design-system might inject */
 .cpda-footer__nav {
   flex: 1 1 400px;
   display: flex;
   flex-wrap: wrap;
-  gap: 2rem;
+  gap: 2.5rem;
+
+  /* Explicitly strip any inherited box styles */
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
 }
 
 .cpda-footer__col {
   min-width: 120px;
+
+  /* Also strip column-level box styles just in case */
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
 }
 
 .cpda-footer__heading {
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   color: #6b7280;
-  margin: 0 0 0.85rem;
+  margin: 0 0 1rem;
+  padding: 0;
+  /* Override any h2 global styles that may add borders/backgrounds */
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 .cpda-footer__list {
@@ -318,25 +334,39 @@ button, .btn-primary {
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.6rem;
+}
+
+.cpda-footer__list li {
+  /* Ensure li items have no stray styling */
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
 .cpda-footer__link {
-  font-size: 0.9rem;
-  color: #d1d5db !important;   /* light grey — clearly visible on dark bg */
-  text-decoration: none;
-  transition: color 0.15s;
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: #d1d5db !important;
+  text-decoration: none !important;
+  display: inline-block;
+  transition: color 0.15s ease, transform 0.15s ease;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
 }
 
 .cpda-footer__link:hover,
 .cpda-footer__link:focus {
   color: #ffffff !important;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  transform: translateX(3px); /* subtle nudge instead of underline */
+  text-decoration: none !important;
 }
 
 /* Divider */
 .cpda-footer__divider {
+  border: none;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   margin: 0;
 }
