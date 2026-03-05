@@ -1,0 +1,376 @@
+{% extends "base.html" %}
+{% block content %}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&display=swap" rel="stylesheet">
+
+<style>
+
+  :root {
+    --pv-navy:   #1E2D49;
+    --pv-navy2:  #162238;
+    --pv-amber:  #C8922A;
+    --pv-cream:  #F5F0E8;
+    --pv-muted:  #5a6478;
+    --pv-border: rgba(30,45,73,0.10);
+  }
+
+  /* ── HERO ── */
+  .pv-hero {
+    min-height: 52vh;
+    background: var(--pv-navy);
+    display: flex;
+    align-items: flex-end;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pv-hero::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='4' height='4' fill='%231E2D49'/%3E%3Ccircle cx='1' cy='1' r='.6' fill='rgba(255,255,255,.025)'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+
+  .pv-hero__stripe {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(to right, var(--pv-amber), transparent);
+  }
+
+  .pv-hero__content {
+    position: relative; z-index: 1;
+    width: 100%;
+    padding: 0 0 4rem;
+  }
+
+  .pv-hero__eyebrow {
+    display: inline-flex; align-items: center; gap: .65rem;
+    font-family: var(--font-body);
+    font-size: .72rem; font-weight: 600;
+    letter-spacing: .2em; text-transform: uppercase;
+    color: var(--pv-amber);
+    margin-bottom: 1.25rem;
+    opacity: 0; animation: pvUp .7s .1s ease forwards;
+  }
+
+  .pv-hero__eyebrow::before {
+    content: ""; width: 28px; height: 2px;
+    background: var(--pv-amber); border-radius: 2px; flex-shrink: 0;
+  }
+
+  .pv-hero__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.8rem, 5vw, 4.5rem);
+    font-weight: 700; line-height: 1.05; color: #fff;
+    margin-bottom: 1rem;
+    opacity: 0; animation: pvUp .7s .2s ease forwards;
+  }
+
+  .pv-hero__title em { font-style: italic; color: var(--pv-amber); }
+
+  .pv-hero__meta {
+    font-family: var(--font-body);
+    font-size: .85rem; color: rgba(255,255,255,.4);
+    opacity: 0; animation: pvUp .7s .3s ease forwards;
+  }
+
+  /* ── CONTENT AREA ── */
+  .pv-body { padding: 5rem 0 6rem; background: #fff; }
+
+  .pv-prose {
+    font-family: var(--font-body);
+    font-size: .97rem;
+    color: var(--pv-muted);
+    line-height: 1.85;
+    max-width: 72ch;
+  }
+
+  .pv-prose p { margin-bottom: 1.25rem; }
+  .pv-prose p:last-child { margin-bottom: 0; }
+
+  .pv-prose a {
+    color: var(--pv-amber);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .pv-prose a:hover { color: var(--pv-navy); }
+
+  /* Section heading inside prose */
+  .pv-section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--pv-navy);
+    margin: 2.5rem 0 .75rem;
+    padding-bottom: .5rem;
+    border-bottom: 1px solid var(--pv-border);
+  }
+
+  .pv-section-title:first-child { margin-top: 0; }
+
+  /* Sidebar TOC */
+  .pv-toc {
+    position: sticky; top: 6rem;
+    background: var(--pv-cream);
+    border-radius: 16px;
+    padding: 1.75rem;
+    border: 1px solid var(--pv-border);
+  }
+
+  .pv-toc__heading {
+    font-family: var(--font-body);
+    font-size: .68rem; font-weight: 700;
+    letter-spacing: .18em; text-transform: uppercase;
+    color: var(--pv-amber);
+    margin-bottom: 1rem;
+    display: flex; align-items: center; gap: .5rem;
+  }
+
+  .pv-toc__heading::before {
+    content: ""; width: 20px; height: 2px;
+    background: var(--pv-amber); border-radius: 2px;
+  }
+
+  .pv-toc__list {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-direction: column; gap: .35rem;
+  }
+
+  .pv-toc__list a {
+    font-family: var(--font-body);
+    font-size: .85rem; color: var(--pv-muted);
+    text-decoration: none;
+    display: flex; align-items: center; gap: .55rem;
+    padding: .35rem .5rem;
+    border-radius: 6px;
+    transition: background .15s, color .15s;
+  }
+
+  .pv-toc__list a::before {
+    content: ""; width: 5px; height: 5px;
+    border-radius: 50%; background: var(--pv-border);
+    flex-shrink: 0; transition: background .15s;
+  }
+
+  .pv-toc__list a:hover {
+    background: rgba(200,146,42,.08);
+    color: var(--pv-navy);
+  }
+
+  .pv-toc__list a:hover::before { background: var(--pv-amber); }
+
+  .pv-toc__updated {
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--pv-border);
+    font-family: var(--font-body);
+    font-size: .78rem; color: var(--pv-muted);
+  }
+
+  /* Contact card */
+  .pv-contact-card {
+    background: var(--pv-navy);
+    border-radius: 16px;
+    padding: 2rem 2.25rem;
+    margin-top: 2.5rem;
+  }
+
+  .pv-contact-card__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; font-weight: 700; color: #fff;
+    margin-bottom: .5rem;
+  }
+
+  .pv-contact-card__text {
+    font-family: var(--font-body);
+    font-size: .875rem; color: rgba(255,255,255,.58);
+    line-height: 1.65; margin-bottom: 1.25rem;
+  }
+
+  .pv-contact-card__btn {
+    display: inline-flex; align-items: center; gap: .5rem;
+    font-family: var(--font-body);
+    font-size: .85rem; font-weight: 700;
+    padding: .65rem 1.5rem; border-radius: 999px;
+    background: var(--pv-amber); color: #fff;
+    text-decoration: none; border: 2px solid var(--pv-amber);
+    transition: all .18s ease;
+  }
+
+  .pv-contact-card__btn:hover {
+    background: transparent; color: var(--pv-amber);
+  }
+
+  @keyframes pvUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 768px) {
+    .pv-toc { position: static; margin-bottom: 2.5rem; }
+  }
+
+</style>
+
+
+<!-- HERO -->
+<section class="pv-hero">
+  <div class="pv-hero__stripe"></div>
+  <div class="pv-hero__content">
+    <div class="container">
+      <p class="pv-hero__eyebrow">Legal</p>
+      <h1 class="pv-hero__title">Privacy <em>Policy</em></h1>
+      <p class="pv-hero__meta">Last updated: January 1, 2026</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- CONTENT -->
+<section class="pv-body">
+  <div class="container">
+    <div class="row g-5">
+
+      <!-- Sidebar TOC -->
+      <div class="col-lg-3 order-lg-2">
+        <div class="pv-toc">
+          <p class="pv-toc__heading">On this page</p>
+          <ul class="pv-toc__list">
+            <li><a href="#intro">Introduction</a></li>
+            <li><a href="#collect">Information We Collect</a></li>
+            <li><a href="#use">How We Use Your Information</a></li>
+            <li><a href="#share">Sharing Your Information</a></li>
+            <li><a href="#retention">Data Retention</a></li>
+            <li><a href="#rights">Your Rights</a></li>
+            <li><a href="#cookies">Cookies</a></li>
+            <li><a href="#contact">Contact Us</a></li>
+          </ul>
+          <div class="pv-toc__updated">
+            <strong style="color:var(--pv-navy);">Effective:</strong><br>
+            January 1, 2026
+          </div>
+        </div>
+      </div>
+
+      <!-- Main content -->
+      <div class="col-lg-9 order-lg-1">
+        <div class="pv-prose">
+
+          <h2 class="pv-section-title" id="intro">Introduction</h2>
+          <p>
+            The Central Prairie Development Alliance (<strong>"CPDA," "we," "us," or "our"</strong>) 
+            is committed to protecting your privacy. This Privacy Policy explains how we collect, 
+            use, disclose, and safeguard your personal information when you visit our website or 
+            engage with our organization.
+          </p>
+          <p>
+            This policy is governed by Canada's <em>Personal Information Protection and Electronic 
+            Documents Act</em> (PIPEDA) and Saskatchewan's <em>Freedom of Information and Protection 
+            of Privacy Act</em> (FOIP). By using this website, you consent to the practices described 
+            in this policy.
+          </p>
+
+          <h2 class="pv-section-title" id="collect">Information We Collect</h2>
+          <p>
+            We may collect the following types of personal information:
+          </p>
+          <p>
+            <strong>Information you provide directly:</strong> When you fill out a contact form, 
+            subscribe to updates, or register for an event, we may collect your name, email address, 
+            phone number, organization name, and the content of your message.
+          </p>
+          <p>
+            <strong>Information collected automatically:</strong> When you visit our website, we may 
+            collect technical information such as your IP address, browser type, pages visited, and 
+            time spent on each page. This information is collected through cookies and similar 
+            tracking technologies.
+          </p>
+
+          <h2 class="pv-section-title" id="use">How We Use Your Information</h2>
+          <p>We use the information we collect to:</p>
+          <p>
+            Respond to your inquiries and provide requested services; send newsletters, event 
+            announcements, and updates (only with your consent); improve the functionality and 
+            content of our website; understand how our region and programs are being received by 
+            the public; and fulfill legal and regulatory obligations.
+          </p>
+          <p>
+            We will not use your personal information for purposes other than those listed above 
+            without your explicit consent.
+          </p>
+
+          <h2 class="pv-section-title" id="share">Sharing Your Information</h2>
+          <p>
+            CPDA does not sell, rent, or trade personal information to third parties. We may share 
+            information only in the following limited circumstances:
+          </p>
+          <p>
+            <strong>Service providers:</strong> We may share information with trusted third-party 
+            service providers (such as email platforms or website hosting services) who assist in 
+            operating our website, provided they agree to keep information confidential.
+          </p>
+          <p>
+            <strong>Legal requirements:</strong> We may disclose information when required by law, 
+            court order, or governmental authority.
+          </p>
+          <p>
+            <strong>Consent:</strong> We may share information in any other circumstances with 
+            your explicit consent.
+          </p>
+
+          <h2 class="pv-section-title" id="retention">Data Retention</h2>
+          <p>
+            We retain personal information only as long as necessary to fulfill the purposes for 
+            which it was collected, or as required by law. When personal information is no longer 
+            needed, it is securely deleted or anonymized.
+          </p>
+
+          <h2 class="pv-section-title" id="rights">Your Rights</h2>
+          <p>
+            Under Canadian privacy law, you have the right to: access the personal information 
+            we hold about you; request corrections to inaccurate or incomplete information; 
+            withdraw consent for the use of your personal information (subject to legal or 
+            contractual restrictions); and lodge a complaint with the Office of the Privacy 
+            Commissioner of Canada.
+          </p>
+          <p>
+            To exercise any of these rights, please contact us using the information below.
+          </p>
+
+          <h2 class="pv-section-title" id="cookies">Cookies</h2>
+          <p>
+            Our website may use cookies — small text files stored on your device — to improve 
+            your browsing experience and analyze website traffic. You can configure your browser 
+            to refuse cookies, though some website features may not function correctly as a result.
+          </p>
+          <p>
+            We do not use cookies to track you across third-party websites or for advertising purposes.
+          </p>
+
+          <h2 class="pv-section-title" id="contact">Contact Us</h2>
+          <p>
+            If you have questions about this Privacy Policy or wish to exercise your privacy rights, 
+            please contact us:
+          </p>
+
+          <div class="pv-contact-card">
+            <h3 class="pv-contact-card__title">Central Prairie Development Alliance</h3>
+            <p class="pv-contact-card__text">
+              Yorkton, Saskatchewan, Canada<br>
+              For privacy-related inquiries, use our contact form and indicate
+              "Privacy Inquiry" in your message.
+            </p>
+            <a href="/contact-us" class="pv-contact-card__btn">
+              Contact Us &nbsp;→
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}

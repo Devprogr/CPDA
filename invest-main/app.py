@@ -187,6 +187,14 @@ def create_app():
     def homeBkk():
         return render_template("index_bkk.html")
 
+    @app.route('/privacy')
+    def privacy():
+        return render_template('privacy.html')
+
+    @app.route('/accessibility')
+    def accessibility():
+        return render_template('accessibility.html')
+
     @app.route("/map")
     def map():
         return render_template("map.html")

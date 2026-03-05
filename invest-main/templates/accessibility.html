@@ -1,0 +1,471 @@
+{% extends "base.html" %}
+{% block content %}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&display=swap" rel="stylesheet">
+
+<style>
+
+  :root {
+    --ac-navy:   #1E2D49;
+    --ac-navy2:  #162238;
+    --ac-amber:  #C8922A;
+    --ac-cream:  #F5F0E8;
+    --ac-muted:  #5a6478;
+    --ac-border: rgba(30,45,73,0.10);
+    --ac-green:  #16a34a;
+  }
+
+  /* ── HERO ── */
+  .ac-hero {
+    min-height: 52vh;
+    background: var(--ac-navy);
+    display: flex;
+    align-items: flex-end;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ac-hero::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='4' height='4' fill='%231E2D49'/%3E%3Ccircle cx='1' cy='1' r='.6' fill='rgba(255,255,255,.025)'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+
+  .ac-hero__stripe {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(to right, var(--ac-amber), transparent);
+  }
+
+  .ac-hero__content {
+    position: relative; z-index: 1;
+    width: 100%;
+    padding: 0 0 4rem;
+  }
+
+  .ac-hero__eyebrow {
+    display: inline-flex; align-items: center; gap: .65rem;
+    font-family: var(--font-body);
+    font-size: .72rem; font-weight: 600;
+    letter-spacing: .2em; text-transform: uppercase;
+    color: var(--ac-amber);
+    margin-bottom: 1.25rem;
+    opacity: 0; animation: acUp .7s .1s ease forwards;
+  }
+
+  .ac-hero__eyebrow::before {
+    content: ""; width: 28px; height: 2px;
+    background: var(--ac-amber); border-radius: 2px; flex-shrink: 0;
+  }
+
+  .ac-hero__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.8rem, 5vw, 4.5rem);
+    font-weight: 700; line-height: 1.05; color: #fff;
+    margin-bottom: 1rem;
+    opacity: 0; animation: acUp .7s .2s ease forwards;
+  }
+
+  .ac-hero__title em { font-style: italic; color: var(--ac-amber); }
+
+  .ac-hero__meta {
+    font-family: var(--font-body);
+    font-size: .85rem; color: rgba(255,255,255,.4);
+    opacity: 0; animation: acUp .7s .3s ease forwards;
+  }
+
+  /* ── COMMITMENT STRIP (cream) ── */
+  .ac-commit { padding: 4rem 0; background: var(--ac-cream); }
+
+  .ac-commit__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .ac-commit__item {
+    display: flex; align-items: flex-start; gap: 1rem;
+    padding: 1.5rem;
+    background: #fff;
+    border-radius: 14px;
+    border: 1px solid var(--ac-border);
+    box-shadow: 0 2px 12px rgba(30,45,73,.05);
+    transition: box-shadow .2s, transform .2s;
+  }
+
+  .ac-commit__item:hover {
+    box-shadow: 0 8px 28px rgba(30,45,73,.1);
+    transform: translateY(-2px);
+  }
+
+  .ac-commit__icon {
+    width: 42px; height: 42px; flex-shrink: 0;
+    border-radius: 10px;
+    background: rgba(200,146,42,.1);
+    border: 1px solid rgba(200,146,42,.2);
+    display: grid; place-items: center;
+    color: var(--ac-amber); font-size: .95rem;
+    transition: background .2s;
+  }
+
+  .ac-commit__item:hover .ac-commit__icon {
+    background: var(--ac-amber); color: #fff;
+  }
+
+  .ac-commit__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem; font-weight: 700;
+    color: var(--ac-navy); margin-bottom: .25rem;
+  }
+
+  .ac-commit__text {
+    font-family: var(--font-body);
+    font-size: .82rem; color: var(--ac-muted);
+    line-height: 1.6; margin: 0;
+  }
+
+  /* ── MAIN CONTENT ── */
+  .ac-body { padding: 5rem 0 6rem; background: #fff; }
+
+  .ac-prose {
+    font-family: var(--font-body);
+    font-size: .97rem; color: var(--ac-muted);
+    line-height: 1.85;
+    max-width: 72ch;
+  }
+
+  .ac-prose p { margin-bottom: 1.25rem; }
+  .ac-prose p:last-child { margin-bottom: 0; }
+
+  .ac-prose a {
+    color: var(--ac-amber);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .ac-prose a:hover { color: var(--ac-navy); }
+
+  .ac-section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--ac-navy);
+    margin: 2.5rem 0 .75rem;
+    padding-bottom: .5rem;
+    border-bottom: 1px solid var(--ac-border);
+  }
+
+  .ac-section-title:first-child { margin-top: 0; }
+
+  /* Conformance badge */
+  .ac-badge {
+    display: inline-flex; align-items: center; gap: .65rem;
+    padding: .7rem 1.25rem;
+    border-radius: 12px;
+    background: rgba(22,163,74,.07);
+    border: 1px solid rgba(22,163,74,.2);
+    margin-bottom: 1.5rem;
+  }
+
+  .ac-badge__dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--ac-green); flex-shrink: 0;
+  }
+
+  .ac-badge__text {
+    font-family: var(--font-body);
+    font-size: .82rem; font-weight: 600;
+    color: var(--ac-green);
+  }
+
+  /* Sidebar TOC */
+  .ac-toc {
+    position: sticky; top: 6rem;
+    background: var(--ac-cream);
+    border-radius: 16px;
+    padding: 1.75rem;
+    border: 1px solid var(--ac-border);
+  }
+
+  .ac-toc__heading {
+    font-family: var(--font-body);
+    font-size: .68rem; font-weight: 700;
+    letter-spacing: .18em; text-transform: uppercase;
+    color: var(--ac-amber);
+    margin-bottom: 1rem;
+    display: flex; align-items: center; gap: .5rem;
+  }
+
+  .ac-toc__heading::before {
+    content: ""; width: 20px; height: 2px;
+    background: var(--ac-amber); border-radius: 2px;
+  }
+
+  .ac-toc__list {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-direction: column; gap: .35rem;
+  }
+
+  .ac-toc__list a {
+    font-family: var(--font-body);
+    font-size: .85rem; color: var(--ac-muted);
+    text-decoration: none;
+    display: flex; align-items: center; gap: .55rem;
+    padding: .35rem .5rem; border-radius: 6px;
+    transition: background .15s, color .15s;
+  }
+
+  .ac-toc__list a::before {
+    content: ""; width: 5px; height: 5px;
+    border-radius: 50%; background: var(--ac-border);
+    flex-shrink: 0; transition: background .15s;
+  }
+
+  .ac-toc__list a:hover {
+    background: rgba(200,146,42,.08); color: var(--ac-navy);
+  }
+
+  .ac-toc__list a:hover::before { background: var(--ac-amber); }
+
+  /* Feedback card */
+  .ac-feedback {
+    background: var(--ac-navy);
+    border-radius: 16px;
+    padding: 2rem 2.25rem;
+    margin-top: 2.5rem;
+  }
+
+  .ac-feedback__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; font-weight: 700; color: #fff;
+    margin-bottom: .5rem;
+  }
+
+  .ac-feedback__text {
+    font-family: var(--font-body);
+    font-size: .875rem; color: rgba(255,255,255,.55);
+    line-height: 1.65; margin-bottom: 1.25rem;
+  }
+
+  .ac-feedback__btn {
+    display: inline-flex; align-items: center; gap: .5rem;
+    font-family: var(--font-body);
+    font-size: .85rem; font-weight: 700;
+    padding: .65rem 1.5rem; border-radius: 999px;
+    background: var(--ac-amber); color: #fff;
+    text-decoration: none; border: 2px solid var(--ac-amber);
+    transition: all .18s ease;
+  }
+
+  .ac-feedback__btn:hover { background: transparent; color: var(--ac-amber); }
+
+  @keyframes acUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 900px) {
+    .ac-commit__grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 576px) {
+    .ac-commit__grid { grid-template-columns: 1fr; }
+    .ac-toc { position: static; margin-bottom: 2.5rem; }
+  }
+
+</style>
+
+
+<!-- HERO -->
+<section class="ac-hero">
+  <div class="ac-hero__stripe"></div>
+  <div class="ac-hero__content">
+    <div class="container">
+      <p class="ac-hero__eyebrow">Inclusion &amp; Access</p>
+      <h1 class="ac-hero__title">Accessibility <em>Statement</em></h1>
+      <p class="ac-hero__meta">Last updated: January 1, 2026</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- COMMITMENT CARDS -->
+<section class="ac-commit">
+  <div class="container">
+    <div class="ac-commit__grid">
+
+      <div class="ac-commit__item">
+        <div class="ac-commit__icon"><i class="fas fa-universal-access"></i></div>
+        <div>
+          <p class="ac-commit__title">Built for Everyone</p>
+          <p class="ac-commit__text">
+            Designed to be usable by people of all abilities and assistive technology needs.
+          </p>
+        </div>
+      </div>
+
+      <div class="ac-commit__item">
+        <div class="ac-commit__icon"><i class="fas fa-sync-alt"></i></div>
+        <div>
+          <p class="ac-commit__title">Continuously Improving</p>
+          <p class="ac-commit__text">
+            We regularly review and update our site to improve accessibility over time.
+          </p>
+        </div>
+      </div>
+
+      <div class="ac-commit__item">
+        <div class="ac-commit__icon"><i class="fas fa-comments"></i></div>
+        <div>
+          <p class="ac-commit__title">We Want Your Feedback</p>
+          <p class="ac-commit__text">
+            If you encounter any barriers, please tell us — we take every report seriously.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- MAIN CONTENT -->
+<section class="ac-body">
+  <div class="container">
+    <div class="row g-5">
+
+      <!-- Sidebar -->
+      <div class="col-lg-3 order-lg-2">
+        <div class="ac-toc">
+          <p class="ac-toc__heading">On this page</p>
+          <ul class="ac-toc__list">
+            <li><a href="#commitment">Our Commitment</a></li>
+            <li><a href="#standards">Standards</a></li>
+            <li><a href="#features">Accessibility Features</a></li>
+            <li><a href="#known">Known Limitations</a></li>
+            <li><a href="#assistive">Assistive Technology</a></li>
+            <li><a href="#feedback">Report a Barrier</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="col-lg-9 order-lg-1">
+        <div class="ac-prose">
+
+          <h2 class="ac-section-title" id="commitment">Our Commitment</h2>
+          <p>
+            The Central Prairie Development Alliance (CPDA) is committed to ensuring that our 
+            website is accessible to all people, including those with visual, auditory, motor, 
+            or cognitive disabilities. We believe that digital inclusion is essential to our 
+            mission of building a stronger, more connected region for everyone.
+          </p>
+          <p>
+            We strive to meet or exceed applicable accessibility standards and to make our 
+            digital content usable by the widest possible audience, regardless of technology 
+            or ability.
+          </p>
+
+          <h2 class="ac-section-title" id="standards">Accessibility Standards</h2>
+
+          <div class="ac-badge">
+            <div class="ac-badge__dot"></div>
+            <span class="ac-badge__text">Targeting WCAG 2.1 Level AA conformance</span>
+          </div>
+
+          <p>
+            Our website aims to conform to the <strong>Web Content Accessibility Guidelines 
+            (WCAG) 2.1, Level AA</strong>, published by the World Wide Web Consortium (W3C). 
+            These guidelines explain how to make web content more accessible to people with 
+            disabilities.
+          </p>
+          <p>
+            We also follow guidance from the <em>Accessible Canada Act</em> and work toward 
+            alignment with the Government of Canada's Standard on Web Accessibility.
+          </p>
+
+          <h2 class="ac-section-title" id="features">Accessibility Features</h2>
+          <p>
+            Our website includes the following accessibility features:
+          </p>
+          <p>
+            <strong>Semantic HTML structure</strong> — Pages are built using proper HTML 
+            landmarks (header, main, nav, footer) to support screen reader navigation.
+          </p>
+          <p>
+            <strong>Keyboard navigation</strong> — All interactive elements are accessible 
+            using a keyboard alone, without requiring a mouse.
+          </p>
+          <p>
+            <strong>Colour contrast</strong> — Text and interactive elements meet minimum 
+            contrast ratio requirements to support users with low vision.
+          </p>
+          <p>
+            <strong>Alternative text</strong> — Meaningful images include descriptive 
+            alternative text. Decorative images are marked so screen readers skip them.
+          </p>
+          <p>
+            <strong>Resizable text</strong> — Text can be resized up to 200% without loss of 
+            content or functionality.
+          </p>
+          <p>
+            <strong>Descriptive links</strong> — Link text is written to be meaningful out of 
+            context (avoiding generic phrases like "click here").
+          </p>
+
+          <h2 class="ac-section-title" id="known">Known Limitations</h2>
+          <p>
+            While we strive for full accessibility, some content on our site may not yet fully 
+            meet WCAG 2.1 AA standards. Known areas we are actively working to improve include:
+          </p>
+          <p>
+            Some older PDF documents and third-party embedded content (such as maps and charts) 
+            may not be fully accessible. We are working to provide accessible alternatives for 
+            these items wherever possible.
+          </p>
+          <p>
+            We are committed to addressing all known barriers as part of our ongoing accessibility 
+            improvement plan.
+          </p>
+
+          <h2 class="ac-section-title" id="assistive">Assistive Technology Compatibility</h2>
+          <p>
+            Our website is designed to be compatible with the following assistive technologies:
+          </p>
+          <p>
+            Screen readers including NVDA, JAWS, and VoiceOver; keyboard-only navigation; 
+            browser zoom and text resizing tools; and high-contrast display modes.
+          </p>
+          <p>
+            We recommend using an up-to-date version of your preferred browser for the best 
+            accessible experience.
+          </p>
+
+          <h2 class="ac-section-title" id="feedback">Report a Barrier</h2>
+          <p>
+            We welcome feedback on the accessibility of our website. If you experience any 
+            barriers or have suggestions for improvement, please contact us. We aim to respond 
+            to accessibility feedback within <strong>5 business days</strong>.
+          </p>
+
+          <div class="ac-feedback">
+            <h3 class="ac-feedback__title">Encountered an accessibility barrier?</h3>
+            <p class="ac-feedback__text">
+              Use our contact form and include "Accessibility Feedback" in your message.
+              Please describe the barrier you encountered and the page where it occurred —
+              this helps us investigate and resolve it quickly.
+            </p>
+            <a href="/contact-us" class="ac-feedback__btn">
+              Send Feedback &nbsp;→
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}
