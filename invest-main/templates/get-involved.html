@@ -1,43 +1,962 @@
 {% extends "base.html" %}
-  
 {% block content %}
 
-<header class="header-2">
-  <div class="page-header min-vh-80 relative" style="background-image: url('{{ url_for('static', filename='assets/img/get-involved.jpg') }}')">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-7 text-end mx-auto">
-          <h1 class="text-white pt-3 mt-n5 text-dark" style="text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);">
-            Get Involved
-          </h1>
-          <p class="lead text-white mt-3" style="text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);">
-            Working Together to Build a Stronger Future for Our Region
-          </p>
-        </div>
-      </div>
-    </div>    
-  </div>
-</header>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&display=swap" rel="stylesheet">
 
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-lg-8">
-      <h2 class="mb-4 text-center">Who Can Join?</h2>
-      <ul class="list-group list-group-flush mb-4">
-        <li class="list-group-item">Local leaders</li>
-        <li class="list-group-item">Residents</li>
-        <li class="list-group-item">Businesses</li>
-        <li class="list-group-item">Indigenous communities</li>
-      </ul>
-      <h3 class="mb-3 text-center">Why Join?</h3>
-      <p class="text-center mb-4">
-        Influence the region's future and help shape a vibrant, inclusive community for generations to come.
-      </p>
-      <div class="d-flex justify-content-center gap-3 mb-5">
-        <a href="/join" class="btn btn-primary btn-lg">Join Us</a>
-        <a href="/contact-us" class="btn btn-outline-primary btn-lg">Subscribe to Updates</a>
+<style>
+
+  /* ══════════════════════════════════════════
+     DESIGN TOKENS
+     ══════════════════════════════════════════ */
+  :root {
+    --gi-navy:   #1E2D49;
+    --gi-navy2:  #162238;
+    --gi-amber:  #C8922A;
+    --gi-amber2: #e6a832;
+    --gi-cream:  #F5F0E8;
+    --gi-muted:  #5a6478;
+    --gi-border: rgba(30,45,73,0.10);
+  }
+
+  /* ══════════════════════════════════════════
+     HERO — split layout (left text / right image)
+     Matches About Us split-panel pattern
+     ══════════════════════════════════════════ */
+  .gi-hero {
+    min-height: 88vh;
+    background: var(--gi-navy);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .gi-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='4' height='4' fill='%231E2D49'/%3E%3Ccircle cx='1' cy='1' r='.6' fill='rgba(255,255,255,.025)'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .gi-hero__left {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 7rem 4rem 7rem 6rem;
+  }
+
+  .gi-hero__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: .65rem;
+    font-family: var(--font-body);
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--gi-amber);
+    margin-bottom: 1.75rem;
+    opacity: 0;
+    animation: giUp .7s .1s ease forwards;
+  }
+
+  .gi-hero__eyebrow::before {
+    content: "";
+    width: 28px; height: 2px;
+    background: var(--gi-amber);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .gi-hero__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 5vw, 5.2rem);
+    font-weight: 700;
+    line-height: 1.05;
+    color: #fff;
+    margin-bottom: 1.75rem;
+    opacity: 0;
+    animation: giUp .7s .2s ease forwards;
+  }
+
+  .gi-hero__title em {
+    font-style: italic;
+    color: var(--gi-amber);
+  }
+
+  .gi-hero__body {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.8;
+    color: rgba(255,255,255,.65);
+    max-width: 42ch;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: giUp .7s .3s ease forwards;
+  }
+
+  .gi-hero__cta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: giUp .7s .4s ease forwards;
+  }
+
+  .gi-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .55rem;
+    font-family: var(--font-body);
+    font-size: .9rem;
+    font-weight: 600;
+    padding: .85rem 1.75rem;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: all .2s ease;
+    letter-spacing: .02em;
+  }
+
+  .gi-btn--amber {
+    background: var(--gi-amber);
+    color: #fff;
+    border: 2px solid var(--gi-amber);
+  }
+
+  .gi-btn--amber:hover {
+    background: transparent;
+    color: var(--gi-amber);
+  }
+
+  .gi-btn--ghost {
+    background: transparent;
+    color: rgba(255,255,255,.75);
+    border: 2px solid rgba(255,255,255,.25);
+  }
+
+  .gi-btn--ghost:hover {
+    border-color: rgba(255,255,255,.6);
+    color: #fff;
+  }
+
+  .gi-btn--ghost-navy {
+    background: transparent;
+    color: var(--gi-navy);
+    border: 2px solid var(--gi-border);
+  }
+
+  .gi-btn--ghost-navy:hover {
+    background: var(--gi-navy);
+    color: #fff;
+    border-color: var(--gi-navy);
+  }
+
+  /* Hero stat strip */
+  .gi-hero__stats {
+    display: flex;
+    gap: 2.5rem;
+    margin-top: 3.5rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid rgba(255,255,255,.08);
+    opacity: 0;
+    animation: giUp .7s .5s ease forwards;
+  }
+
+  .gi-stat__num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--gi-amber);
+    line-height: 1;
+  }
+
+  .gi-stat__label {
+    font-family: var(--font-body);
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.38);
+    margin-top: .25rem;
+  }
+
+  /* Hero right: image */
+  .gi-hero__right {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .gi-hero__right img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    opacity: 0;
+    animation: giFade .9s .3s ease forwards;
+  }
+
+  .gi-hero__right::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg,
+      rgba(30,45,73,.5) 0%,
+      rgba(200,146,42,.12) 100%);
+    pointer-events: none;
+  }
+
+  .gi-hero__deco {
+    position: absolute;
+    bottom: 2rem; right: 2rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 9rem;
+    font-weight: 700;
+    color: rgba(255,255,255,.05);
+    line-height: 1;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* ══════════════════════════════════════════
+     SHARED SECTION STYLES
+     ══════════════════════════════════════════ */
+  .gi-section        { padding: 6rem 0; background: #fff; }
+  .gi-section--cream { background: var(--gi-cream); }
+  .gi-section--navy  { background: var(--gi-navy); }
+
+  .gi-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: .6rem;
+    font-family: var(--font-body);
+    font-size: .7rem;
+    font-weight: 600;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--gi-amber);
+    margin-bottom: 1rem;
+  }
+
+  .gi-eyebrow::before {
+    content: "";
+    width: 24px; height: 2px;
+    background: var(--gi-amber);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .gi-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 700;
+    color: var(--gi-navy);
+    line-height: 1.1;
+    margin-bottom: .75rem;
+  }
+
+  .gi-heading em       { font-style: italic; color: var(--gi-amber); }
+  .gi-heading--white   { color: #fff; }
+
+  .gi-lead {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--gi-muted);
+    line-height: 1.8;
+  }
+
+  .gi-lead--white { color: rgba(255,255,255,.62); }
+
+  .gi-divider {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+
+  .gi-divider__line { flex: 1; height: 1px; background: var(--gi-border); }
+  .gi-divider__line--white { background: rgba(255,255,255,.08); }
+
+  .gi-divider__label {
+    font-family: var(--font-body);
+    font-size: .65rem;
+    font-weight: 700;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--gi-muted);
+    white-space: nowrap;
+  }
+
+  .gi-divider__label--amber { color: var(--gi-amber); }
+
+  /* ══════════════════════════════════════════
+     WHO CAN JOIN — audience cards
+     ══════════════════════════════════════════ */
+  .gi-audience-card {
+    background: #fff;
+    border-radius: 18px;
+    border: 1px solid var(--gi-border);
+    box-shadow: 0 4px 24px rgba(30,45,73,.06);
+    padding: 2.25rem 2rem;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    transition: box-shadow .22s, transform .22s, border-color .22s;
+  }
+
+  .gi-audience-card:hover {
+    box-shadow: 0 12px 44px rgba(30,45,73,.12);
+    transform: translateY(-4px);
+    border-color: rgba(200,146,42,.3);
+  }
+
+  .gi-audience-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(to right, var(--gi-amber), transparent);
+    opacity: 0;
+    transition: opacity .22s;
+  }
+
+  .gi-audience-card:hover::before { opacity: 1; }
+
+  .gi-audience-card__icon {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    background: rgba(200,146,42,.1);
+    border: 1px solid rgba(200,146,42,.2);
+    display: grid;
+    place-items: center;
+    font-size: 1.2rem;
+    color: var(--gi-amber);
+    margin-bottom: 1.25rem;
+    transition: background .22s, color .22s;
+  }
+
+  .gi-audience-card:hover .gi-audience-card__icon {
+    background: var(--gi-amber);
+    color: #fff;
+  }
+
+  .gi-audience-card__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--gi-navy);
+    margin-bottom: .5rem;
+    line-height: 1.2;
+  }
+
+  .gi-audience-card__text {
+    font-family: var(--font-body);
+    font-size: .88rem;
+    color: var(--gi-muted);
+    line-height: 1.72;
+    margin: 0;
+  }
+
+  /* Ghost decorative number */
+  .gi-audience-card__num {
+    position: absolute;
+    bottom: -.75rem; right: 1rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 7rem;
+    font-weight: 700;
+    color: rgba(30,45,73,.04);
+    line-height: 1;
+    pointer-events: none;
+    transition: color .22s;
+  }
+
+  .gi-audience-card:hover .gi-audience-card__num {
+    color: rgba(200,146,42,.06);
+  }
+
+  /* ══════════════════════════════════════════
+     WHY JOIN — navy section, horizontal layout
+     ══════════════════════════════════════════ */
+  .gi-why-panel {
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 16px;
+    padding: 2rem 2.25rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    transition: background .2s, border-color .2s;
+  }
+
+  .gi-why-panel:hover {
+    background: rgba(255,255,255,.08);
+    border-color: rgba(200,146,42,.3);
+  }
+
+  .gi-why-panel__icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    background: rgba(200,146,42,.15);
+    border: 1px solid rgba(200,146,42,.25);
+    display: grid;
+    place-items: center;
+    color: var(--gi-amber);
+    font-size: 1rem;
+    flex-shrink: 0;
+    transition: background .2s;
+  }
+
+  .gi-why-panel:hover .gi-why-panel__icon {
+    background: var(--gi-amber);
+    color: #fff;
+  }
+
+  .gi-why-panel__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: .3rem;
+    line-height: 1.2;
+  }
+
+  .gi-why-panel__text {
+    font-family: var(--font-body);
+    font-size: .875rem;
+    color: rgba(255,255,255,.55);
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  /* ══════════════════════════════════════════
+     ACTION CTA CARDS (Join / Subscribe)
+     ══════════════════════════════════════════ */
+  .gi-action-card {
+    border-radius: 20px;
+    overflow: hidden;
+    height: 100%;
+    transition: box-shadow .25s, transform .25s;
+  }
+
+  .gi-action-card:hover {
+    box-shadow: 0 18px 55px rgba(30,45,73,.18);
+    transform: translateY(-4px);
+  }
+
+  .gi-action-card--amber {
+    background: linear-gradient(135deg, var(--gi-amber) 0%, var(--gi-amber2) 100%);
+  }
+
+  .gi-action-card--navy {
+    background: linear-gradient(135deg, var(--gi-navy) 0%, var(--gi-navy2) 100%);
+    border: 1px solid rgba(255,255,255,.08);
+  }
+
+  .gi-action-card__inner {
+    padding: 3rem 2.75rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Large decorative icon watermark */
+  .gi-action-card__watermark {
+    position: absolute;
+    bottom: -1.5rem; right: -1rem;
+    font-size: 9rem;
+    opacity: .07;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .gi-action-card__label {
+    font-family: var(--font-body);
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.6);
+    margin-bottom: 1rem;
+  }
+
+  .gi-action-card__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: .85rem;
+  }
+
+  .gi-action-card__title em {
+    font-style: italic;
+    opacity: .88;
+  }
+
+  .gi-action-card__text {
+    font-family: var(--font-body);
+    font-size: .9rem;
+    color: rgba(255,255,255,.7);
+    line-height: 1.75;
+    margin-bottom: 2rem;
+    flex: 1;
+  }
+
+  .gi-action-card__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    font-family: var(--font-body);
+    font-size: .88rem;
+    font-weight: 700;
+    padding: .8rem 1.75rem;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: all .2s ease;
+    letter-spacing: .03em;
+    align-self: flex-start;
+    position: relative;
+    z-index: 1;
+  }
+
+  .gi-action-card--amber .gi-action-card__btn {
+    background: #fff;
+    color: var(--gi-amber);
+    border: 2px solid #fff;
+  }
+
+  .gi-action-card--amber .gi-action-card__btn:hover {
+    background: transparent;
+    color: #fff;
+  }
+
+  .gi-action-card--navy .gi-action-card__btn {
+    background: var(--gi-amber);
+    color: #fff;
+    border: 2px solid var(--gi-amber);
+  }
+
+  .gi-action-card--navy .gi-action-card__btn:hover {
+    background: transparent;
+    color: var(--gi-amber);
+  }
+
+  /* ══════════════════════════════════════════
+     QUOTE BANNER
+     ══════════════════════════════════════════ */
+  .gi-quote {
+    padding: 5rem 0;
+    background: linear-gradient(135deg, var(--gi-navy) 0%, var(--gi-navy2) 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .gi-quote::before {
+    content: "\201C";
+    position: absolute;
+    top: -2rem; left: 3%;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22rem;
+    color: rgba(200,146,42,.05);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .gi-quote__text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.45rem, 2.5vw, 2.1rem);
+    font-style: italic;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.55;
+    margin-bottom: 1.5rem;
+  }
+
+  .gi-quote__attr {
+    font-family: var(--font-body);
+    font-size: .85rem;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--gi-amber);
+  }
+
+  /* ══════════════════════════════════════════
+     SCROLL REVEAL ANIMATIONS
+     ══════════════════════════════════════════ */
+  @keyframes giUp {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes giFade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  .gi-reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+
+  .gi-reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  .gi-reveal-group > * {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity .55s ease, transform .55s ease;
+  }
+
+  .gi-reveal-group.is-visible > *:nth-child(1) { opacity:1; transform:none; transition-delay:.05s; }
+  .gi-reveal-group.is-visible > *:nth-child(2) { opacity:1; transform:none; transition-delay:.15s; }
+  .gi-reveal-group.is-visible > *:nth-child(3) { opacity:1; transform:none; transition-delay:.25s; }
+  .gi-reveal-group.is-visible > *:nth-child(4) { opacity:1; transform:none; transition-delay:.35s; }
+
+  /* ══════════════════════════════════════════
+     RESPONSIVE
+     ══════════════════════════════════════════ */
+  @media (max-width: 900px) {
+    .gi-hero { grid-template-columns: 1fr; min-height: auto; }
+    .gi-hero__left { padding: 5rem 2rem 3rem; }
+    .gi-hero__right { height: 360px; }
+    .gi-hero__stats { gap: 1.5rem; }
+  }
+
+  @media (max-width: 576px) {
+    .gi-hero__title { font-size: 2.8rem; }
+    .gi-hero__stats { flex-wrap: wrap; gap: 1.25rem; }
+    .gi-section { padding: 4rem 0; }
+    .gi-action-card__inner { padding: 2rem 1.75rem; }
+  }
+
+</style>
+
+
+<!-- ══════════════════════════════════════════
+     HERO — split panel
+     ══════════════════════════════════════════ -->
+<section class="gi-hero" aria-label="Get Involved hero">
+
+  <div class="gi-hero__left">
+    <p class="gi-hero__eyebrow">Join the Alliance</p>
+    <h1 class="gi-hero__title">
+      Get<br><em>Involved</em>
+    </h1>
+    <p class="gi-hero__body">
+      Working Together to Build a Stronger Future for Our Region
+    </p>
+    <div class="gi-hero__cta">
+      <a href="/join"       class="gi-btn gi-btn--amber">Join Us &nbsp;→</a>
+      <a href="/contact-us" class="gi-btn gi-btn--ghost">Subscribe to Updates</a>
+    </div>
+    <div class="gi-hero__stats">
+      <div>
+        <div class="gi-stat__num">16</div>
+        <div class="gi-stat__label">Member Communities</div>
+      </div>
+      <div>
+        <div class="gi-stat__num">4</div>
+        <div class="gi-stat__label">Ways to Join</div>
+      </div>
+      <div>
+        <div class="gi-stat__num">2025</div>
+        <div class="gi-stat__label">Founded</div>
       </div>
     </div>
   </div>
-</div>
+
+  <div class="gi-hero__right">
+    <img src="{{ url_for('static', filename='assets/img/get-involved.jpg') }}"
+         alt="Community members collaborating"
+         loading="eager">
+    <span class="gi-hero__deco" aria-hidden="true">JOIN</span>
+  </div>
+
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     WHO CAN JOIN
+     ══════════════════════════════════════════ -->
+<section class="gi-section">
+  <div class="container">
+
+    <div class="row align-items-end mb-4 gi-reveal">
+      <div class="col-lg-6">
+        <p class="gi-eyebrow">Membership</p>
+        <h2 class="gi-heading">Who Can <em>Join?</em></h2>
+      </div>
+      <div class="col-lg-5 offset-lg-1">
+        <p class="gi-lead">
+          CPDA welcomes everyone who shares a stake in the future of
+          East-Central Saskatchewan. Whether you lead, live, work, or
+          represent — there is a place for you here.
+        </p>
+      </div>
+    </div>
+
+    <div class="gi-divider gi-reveal">
+      <div class="gi-divider__line"></div>
+      <span class="gi-divider__label">Open to All</span>
+      <div class="gi-divider__line"></div>
+    </div>
+
+    <div class="row g-4 gi-reveal-group">
+
+      <div class="col-lg-3 col-md-6">
+        <div class="gi-audience-card">
+          <div class="gi-audience-card__num">01</div>
+          <div class="gi-audience-card__icon">
+            <i class="fas fa-landmark"></i>
+          </div>
+          <h3 class="gi-audience-card__title">Local Leaders</h3>
+          <p class="gi-audience-card__text">
+            Mayors, councillors, and municipal administrators
+            driving decisions that shape their communities.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6">
+        <div class="gi-audience-card">
+          <div class="gi-audience-card__num">02</div>
+          <div class="gi-audience-card__icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <h3 class="gi-audience-card__title">Residents</h3>
+          <p class="gi-audience-card__text">
+            People who live and raise families across East-Central
+            Saskatchewan and care about its future.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6">
+        <div class="gi-audience-card">
+          <div class="gi-audience-card__num">03</div>
+          <div class="gi-audience-card__icon">
+            <i class="fas fa-briefcase"></i>
+          </div>
+          <h3 class="gi-audience-card__title">Businesses</h3>
+          <p class="gi-audience-card__text">
+            Entrepreneurs, employers, and industry partners who
+            invest in and grow alongside the regional economy.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6">
+        <div class="gi-audience-card">
+          <div class="gi-audience-card__num">04</div>
+          <div class="gi-audience-card__icon">
+            <i class="fas fa-feather-alt"></i>
+          </div>
+          <h3 class="gi-audience-card__title">Indigenous Communities</h3>
+          <p class="gi-audience-card__text">
+            First Nations, Métis communities, and Indigenous
+            organizations whose voices are essential to our region.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     WHY JOIN — navy background
+     ══════════════════════════════════════════ -->
+<section class="gi-section gi-section--navy">
+  <div class="container">
+
+    <div class="row align-items-end mb-5 gi-reveal">
+      <div class="col-lg-6">
+        <p class="gi-eyebrow">The Case for Joining</p>
+        <h2 class="gi-heading gi-heading--white">Why <em>Join?</em></h2>
+      </div>
+      <div class="col-lg-5 offset-lg-1">
+        <p class="gi-lead gi-lead--white">
+          Influence the region's future and help shape a vibrant,
+          inclusive community for generations to come.
+        </p>
+      </div>
+    </div>
+
+    <div class="gi-divider gi-reveal">
+      <div class="gi-divider__line gi-divider__line--white"></div>
+      <span class="gi-divider__label gi-divider__label--amber">What You Gain</span>
+      <div class="gi-divider__line gi-divider__line--white"></div>
+    </div>
+
+    <div class="row g-3 gi-reveal-group">
+
+      <div class="col-lg-6">
+        <div class="gi-why-panel">
+          <div class="gi-why-panel__icon"><i class="fas fa-microphone-alt"></i></div>
+          <div>
+            <h3 class="gi-why-panel__title">A Voice That Carries Further</h3>
+            <p class="gi-why-panel__text">
+              As part of a regional alliance, your perspective reaches
+              provincial and federal decision-makers with far greater
+              weight than any single community speaking alone.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="gi-why-panel">
+          <div class="gi-why-panel__icon"><i class="fas fa-network-wired"></i></div>
+          <div>
+            <h3 class="gi-why-panel__title">Regional Connections</h3>
+            <p class="gi-why-panel__text">
+              Connect with leaders, businesses, and community builders
+              across 16 member communities — building relationships that
+              open doors and create shared opportunities.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="gi-why-panel">
+          <div class="gi-why-panel__icon"><i class="fas fa-chess-king"></i></div>
+          <div>
+            <h3 class="gi-why-panel__title">Shape the Regional Agenda</h3>
+            <p class="gi-why-panel__text">
+              Participate in sub-committees and working groups that define
+              CPDA's priorities — from housing and transport to economic
+              development and cultural investment.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="gi-why-panel">
+          <div class="gi-why-panel__icon"><i class="fas fa-seedling"></i></div>
+          <div>
+            <h3 class="gi-why-panel__title">Build for Generations</h3>
+            <p class="gi-why-panel__text">
+              Help shape a vibrant, inclusive community for generations
+              to come — contributing to long-term prosperity and quality
+              of life across East-Central Saskatchewan.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     QUOTE BANNER
+     ══════════════════════════════════════════ -->
+<section class="gi-quote">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center" style="position:relative; z-index:1;">
+        <p class="gi-quote__text">
+          "We are turning shared challenges into shared opportunities —
+          shaping the future of our region, together."
+        </p>
+        <p class="gi-quote__attr">Sharon Rurak &nbsp;·&nbsp; Suncrest College</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     ACTION CARDS — Join Us / Subscribe
+     ══════════════════════════════════════════ -->
+<section class="gi-section gi-section--cream">
+  <div class="container">
+
+    <div class="row justify-content-center text-center mb-5 gi-reveal">
+      <div class="col-lg-6">
+        <p class="gi-eyebrow" style="justify-content:center;">Take the Next Step</p>
+        <h2 class="gi-heading">Ready to Make<br><em>a Difference?</em></h2>
+      </div>
+    </div>
+
+    <div class="row g-4 gi-reveal-group">
+
+      <div class="col-lg-6">
+        <div class="gi-action-card gi-action-card--amber">
+          <div class="gi-action-card__inner">
+            <div class="gi-action-card__watermark">
+              <i class="fas fa-handshake"></i>
+            </div>
+            <p class="gi-action-card__label">Become a Member</p>
+            <h3 class="gi-action-card__title">Join <em>Us</em></h3>
+            <p class="gi-action-card__text">
+              Become part of a regional alliance working collaboratively
+              to build a stronger, more connected East-Central Saskatchewan.
+              Your involvement matters — every voice shapes our shared future.
+            </p>
+            <a href="/join" class="gi-action-card__btn">
+              Join Us &nbsp;→
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="gi-action-card gi-action-card--navy">
+          <div class="gi-action-card__inner">
+            <div class="gi-action-card__watermark">
+              <i class="fas fa-envelope-open-text"></i>
+            </div>
+            <p class="gi-action-card__label">Stay Informed</p>
+            <h3 class="gi-action-card__title">Subscribe to <em>Updates</em></h3>
+            <p class="gi-action-card__text">
+              Not ready to join yet? Stay connected with CPDA's latest news,
+              events, and regional developments by subscribing to our updates.
+              You'll be the first to hear about new opportunities to get involved.
+            </p>
+            <a href="/contact-us" class="gi-action-card__btn">
+              Subscribe &nbsp;→
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     SCROLL REVEAL JS
+     ══════════════════════════════════════════ -->
+<script>
+(function () {
+  const els = document.querySelectorAll('.gi-reveal, .gi-reveal-group');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  els.forEach(el => observer.observe(el));
+})();
+</script>
+
 {% endblock %}
