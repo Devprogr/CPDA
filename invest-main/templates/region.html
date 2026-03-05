@@ -631,7 +631,7 @@
 
 <!-- ══════════════════════════════════════════
      CHART SCRIPTS
-     ══════════════════════════════════════════ */
+     ══════════════════════════════════════════ -->
 <script>
 
 /* ─── Shared palette ─────────────────────── */
@@ -740,156 +740,148 @@ function donutConfig({ labels, data, colors, centerLabel, dark }) {
    1. POPULATION CHART
    Horizontal bar — amber gradient bars
 ─────────────────────────────────────────────── */
-new Chart(document.getElementById('populationChart').getContext('2d'), {
-  type: 'bar',
-  data: {
-    labels: {{ years | tojson }},
-    datasets: [{
-      label: 'Population',
-      data: {{ populations | tojson }},
-      backgroundColor: [
-        'rgba(200,146,42,0.9)',
-        'rgba(200,146,42,0.75)',
-        'rgba(200,146,42,0.6)',
-        'rgba(200,146,42,0.45)'
-      ],
-      borderRadius: 6,
-      borderWidth: 0
-    }]
-  },
-  options: {
-    indexAxis: 'y',
-    responsive: true,
-    animation: { duration: 900 },
-    plugins: {
-      legend: { display: false },
-      tooltip: {
-        backgroundColor: 'rgba(30,45,73,0.92)',
-        titleColor: AMBER,
-        bodyColor: '#fff',
-        padding: 12,
-        cornerRadius: 8,
-        callbacks: {
-          label: ctx => ' ' + ctx.parsed.x.toLocaleString()
+(function() {
+  const years       = {{ years | tojson }};
+  const populations = {{ populations | tojson }};
+  new Chart(document.getElementById('populationChart').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: years,
+      datasets: [{
+        label: 'Population',
+        data: populations,
+        backgroundColor: [
+          'rgba(200,146,42,0.95)',
+          'rgba(200,146,42,0.75)',
+          'rgba(200,146,42,0.55)',
+          'rgba(200,146,42,0.38)'
+        ],
+        borderRadius: 6,
+        borderWidth: 0
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      animation: { duration: 900 },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(30,45,73,0.92)',
+          titleColor: AMBER, bodyColor: '#fff',
+          padding: 12, cornerRadius: 8,
+          callbacks: { label: ctx => ' ' + ctx.parsed.x.toLocaleString() }
+        },
+        datalabels: {
+          anchor: 'end', align: 'right',
+          color: NAVY,
+          font: { weight: '700', size: 13, family: "'Inter', sans-serif" },
+          formatter: v => v.toLocaleString()
         }
       },
-      datalabels: {
-        anchor: 'end',
-        align: 'right',
-        color: NAVY,
-        font: { weight: '700', size: 13, family: "'Inter', sans-serif" },
-        formatter: v => v.toLocaleString()
+      scales: {
+        x: {
+          min: 1000, max: 100000,
+          grid: { color: 'rgba(30,45,73,0.06)' },
+          ticks: { color: MUTED, font: { size: 11 }, callback: v => (v/1000)+'K' },
+          border: { display: false }
+        },
+        y: {
+          grid: { display: false },
+          ticks: { color: NAVY, font: { weight: '600', size: 12 } },
+          border: { display: false }
+        }
       }
     },
-    scales: {
-      x: {
-        min: 1000, max: 100000,
-        grid: { color: 'rgba(30,45,73,0.06)' },
-        ticks: {
-          color: MUTED,
-          font: { size: 11 },
-          callback: v => (v/1000)+'K'
-        },
-        border: { display: false }
-      },
-      y: {
-        grid: { display: false },
-        ticks: { color: NAVY, font: { weight: '600', size: 12 } },
-        border: { display: false }
-      }
-    }
-  },
-  plugins: [ChartDataLabels]
-});
+    plugins: [ChartDataLabels]
+  });
+})();
 
 /* ─────────────────────────────────────────────
    2. AGE PYRAMID
-   Horizontal mirrored bar
+   Horizontal mirrored bar — navy / amber
 ─────────────────────────────────────────────── */
-new Chart(document.getElementById('ageGroupChart').getContext('2d'), {
-  type: 'bar',
-  data: {
-    labels: {{ age_groups | tojson }},
-    datasets: [
-      {
-        label: 'Men+',
-        data: {{ men | tojson }},
-        backgroundColor: 'rgba(30,45,73,0.80)',
-        borderRadius: { topLeft: 0, topRight: 4, bottomLeft: 0, bottomRight: 4 },
-        borderWidth: 0
-      },
-      {
-        label: 'Women+',
-        data: {{ women | tojson }},
-        backgroundColor: 'rgba(200,146,42,0.80)',
-        borderRadius: { topLeft: 4, topRight: 0, bottomLeft: 4, bottomRight: 0 },
-        borderWidth: 0
-      }
-    ]
-  },
-  options: {
-    indexAxis: 'y',
-    responsive: true,
-    animation: { duration: 900 },
-    plugins: {
-      legend: {
-        display: true,
-        position: 'top',
-        labels: {
-          color: NAVY,
-          font: { size: 12, family: "'Inter', sans-serif" },
-          padding: 16,
-          boxWidth: 12, boxHeight: 12
-        }
-      },
-      tooltip: {
-        backgroundColor: 'rgba(30,45,73,0.92)',
-        titleColor: AMBER,
-        bodyColor: '#fff',
-        padding: 12,
-        cornerRadius: 8,
-        callbacks: {
-          label: ctx => ` ${ctx.dataset.label}: ${Math.abs(ctx.parsed.x).toLocaleString()}`
-        }
-      },
-      datalabels: { display: false }
-    },
-    scales: {
-      x: {
-        stacked: true,
-        grid: { color: 'rgba(30,45,73,0.06)' },
-        ticks: {
-          color: MUTED,
-          font: { size: 11 },
-          callback: v => Math.abs(v).toLocaleString()
+(function() {
+  const ageGroups = {{ age_groups | tojson }};
+  const men       = {{ men | tojson }};
+  const women     = {{ women | tojson }};
+  new Chart(document.getElementById('ageGroupChart').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: ageGroups,
+      datasets: [
+        {
+          label: 'Men+',
+          data: men,
+          backgroundColor: 'rgba(30,45,73,0.80)',
+          borderRadius: { topLeft: 0, topRight: 4, bottomLeft: 0, bottomRight: 4 },
+          borderWidth: 0
         },
-        border: { display: false }
+        {
+          label: 'Women+',
+          data: women,
+          backgroundColor: 'rgba(200,146,42,0.80)',
+          borderRadius: { topLeft: 4, topRight: 0, bottomLeft: 4, bottomRight: 0 },
+          borderWidth: 0
+        }
+      ]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      animation: { duration: 900 },
+      plugins: {
+        legend: {
+          display: true, position: 'top',
+          labels: {
+            color: NAVY,
+            font: { size: 12, family: "'Inter', sans-serif" },
+            padding: 16, boxWidth: 12, boxHeight: 12
+          }
+        },
+        tooltip: {
+          backgroundColor: 'rgba(30,45,73,0.92)',
+          titleColor: AMBER, bodyColor: '#fff',
+          padding: 12, cornerRadius: 8,
+          callbacks: {
+            label: ctx => ` ${ctx.dataset.label}: ${Math.abs(ctx.parsed.x).toLocaleString()}`
+          }
+        },
+        datalabels: { display: false }
       },
-      y: {
-        stacked: true,
-        grid: { display: false },
-        ticks: { color: NAVY, font: { size: 11 } },
-        border: { display: false }
+      scales: {
+        x: {
+          stacked: true,
+          grid: { color: 'rgba(30,45,73,0.06)' },
+          ticks: { color: MUTED, font: { size: 11 }, callback: v => Math.abs(v).toLocaleString() },
+          border: { display: false }
+        },
+        y: {
+          stacked: true,
+          grid: { display: false },
+          ticks: { color: NAVY, font: { size: 11 } },
+          border: { display: false }
+        }
       }
-    }
-  },
-  plugins: [ChartDataLabels]
-});
+    },
+    plugins: [ChartDataLabels]
+  });
+})();
 
 /* ─────────────────────────────────────────────
    3. INCOME DISTRIBUTION
-   Horizontal bar — two-tone navy/amber
+   Horizontal bar — peak bar highlighted in amber
 ─────────────────────────────────────────────── */
 (function() {
-  const incomeData = {{ households_2024 | tojson }};
+  const incomeLabels = {{ income_labels | tojson }};
+  const incomeData   = {{ households_2024 | tojson }};
   const maxVal = Math.max(...incomeData);
-  const colors = incomeData.map(v =>
-    v === maxVal ? AMBER : 'rgba(30,45,73,0.70)'
-  );
+  const colors = incomeData.map(v => v === maxVal ? AMBER : 'rgba(30,45,73,0.65)');
+
   new Chart(document.getElementById('incomeChart').getContext('2d'), {
     type: 'bar',
     data: {
-      labels: {{ income_labels | tojson }},
+      labels: incomeLabels,
       datasets: [{
         label: 'Number of Households',
         data: incomeData,
@@ -906,17 +898,12 @@ new Chart(document.getElementById('ageGroupChart').getContext('2d'), {
         legend: { display: false },
         tooltip: {
           backgroundColor: 'rgba(30,45,73,0.92)',
-          titleColor: AMBER,
-          bodyColor: '#fff',
-          padding: 12,
-          cornerRadius: 8,
-          callbacks: {
-            label: ctx => ' ' + ctx.parsed.x.toLocaleString() + ' households'
-          }
+          titleColor: AMBER, bodyColor: '#fff',
+          padding: 12, cornerRadius: 8,
+          callbacks: { label: ctx => ' ' + ctx.parsed.x.toLocaleString() + ' households' }
         },
         datalabels: {
-          anchor: 'end',
-          align: 'right',
+          anchor: 'end', align: 'right',
           color: MUTED,
           font: { size: 11, weight: '600', family: "'Inter', sans-serif" },
           formatter: v => v.toLocaleString()
@@ -925,10 +912,7 @@ new Chart(document.getElementById('ageGroupChart').getContext('2d'), {
       scales: {
         x: {
           grid: { color: 'rgba(30,45,73,0.06)' },
-          ticks: {
-            color: MUTED, font: { size: 11 },
-            callback: v => v.toLocaleString()
-          },
+          ticks: { color: MUTED, font: { size: 11 }, callback: v => v.toLocaleString() },
           border: { display: false }
         },
         y: {
